@@ -21,7 +21,7 @@ body.notes-on #viewport{right:400px}
 .slide.on{display:flex}
 .sh{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex:none}
 .ph{font-size:21px;font-weight:700;padding:4px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);white-space:nowrap}
-.ph.p1{color:var(--pink)}.ph.p2{color:var(--cyan)}.ph.p3{color:var(--green)}.ph.p4{color:var(--gold)}
+.ph.p5{color:var(--violet);border-color:#b49cff66}.ph.p1{color:var(--pink)}.ph.p2{color:var(--cyan)}.ph.p3{color:var(--green)}.ph.p4{color:var(--gold)}
 .sh h2{margin:0;font-size:44px;letter-spacing:-1.5px;font-weight:900;line-height:1.2}
 .sh .pg{margin-left:auto;color:var(--muted);font-size:20px;white-space:nowrap}
 .sb{flex:1;min-height:0;font-size:31px;line-height:1.45}
@@ -338,6 +338,34 @@ const TEACHER_HASH='1fa58357';
   <aside class="notes" data-time="3분">
     <h4>발문</h4><p class="say">“연주 시차가 절반(0.5″)이 되면 거리는?” — 표의 빈칸을 학생에게 먼저 묻고 <kbd>→</kbd>로 공개</p>
     <h4>참고</h4><ul><li>공식은 교과서 본문보다 한 걸음 나아간 내용이라 ‘반비례’ 수준으로만 다뤄도 됩니다.</li><li>단위 비교(마지막 공개): 1 AU = 1.496×10⁸ km, 1 pc = 206265 AU = 3.086×10¹³ km = 3.26광년. 교과서 본문 밖 심화 내용이라 “얼마나 먼 거리인지” 느끼게 하는 정도로만.</li><li>100 pc보다 먼 별은 연주 시차가 너무 작아 측정이 어려워요 (다른 출판사 교과서 내용).</li><li>가장 가까운 별(프록시마 센타우리): 연주 시차 약 0.77″ → 약 1.3 pc(4.2광년)</li></ul>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 연주 시차로 거리 계산">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>연주 시차로 거리 계산하기</h2><span class="pg">필요할 때만</span></div>
+  <div class="sb row" style="gap:22px">
+    <canvas id="advC" data-w="460" data-h="520" style="width:430px"></canvas>
+    <div class="col" style="font-size:26px">
+      <div class="box frag" style="font-size:26px">각이 아주 작으면 &nbsp;<b class="gold">r × p<sub>(라디안)</sub> = 1 AU</b></div>
+      <div class="box frag" style="font-size:26px">1 라디안 ≈ 57.3° = <b class="gold">206265″</b><br>→ p<sub>(라디안)</sub> = p″ ÷ 206265</div>
+      <div class="formula frag" style="font-size:32px;margin:6px 0 12px">r = 206265 ÷ p″ (AU)</div>
+      <div class="box frag" style="font-size:26px">p = 1″ → r = 206265 AU = <b class="gold">1 pc</b> ≈ 3.086×10<sup>13</sup> km</div>
+      <div class="formula frag" style="font-size:32px;margin:6px 0 12px">r = 1 ÷ p″ (pc)</div>
+      <div class="box frag" style="font-size:23px">⚠ 측정 오차 약 0.005″ → 시차가 이보다 커야 함 → 약 <b class="gold">100 pc 이내</b>만 측정 가능</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="(선택) 5분">
+    <h4>언제 쓰나</h4><p>교과서 범위를 넘는 심화 내용. 질문이 나오거나 시간이 남을 때, 또는 상위권 학생 대상. 필요 없으면 <kbd>M</kbd> 목록이나 <kbd>→</kbd>를 여러 번 눌러 넘기세요.</p>
+    <h4>설명 순서</h4>
+    <ol style="padding-left:18px;margin:0">
+      <li><b>그림:</b> 태양–지구(1 AU)가 밑변, 별까지의 거리 r이 아주 긴 변, 별에서의 꼭지각이 연주 시차 p. 각이 매우 작아 부채꼴로 볼 수 있음</li>
+      <li><b>호의 길이 = 반지름 × 각(라디안)</b> → 1 AU = r × p</li>
+      <li><b>라디안</b>: 반지름과 같은 길이의 호가 만드는 각 ≈ 57.3°. 360° = 2π 라디안. 57.3° × 3600 ≈ 206265″</li>
+      <li>p를 초(″)로 쓰면 r = 206265/p″ AU → p = 1″일 때 206265 AU를 <b>1 pc</b>로 정함 → r = 1/p″ pc</li>
+      <li>측정 오차가 약 0.005″라 시차 0.01″(100 pc) 정도가 한계. 예전 지상 관측은 약 0.05″ → 20 pc</li>
+    </ol>
+    <h4>질문 대비</h4><ul><li>“라디안이 뭐예요?” → 고등학교 수학에서 배움. ‘피자 조각의 테두리 길이가 반지름과 같을 때의 각’ 정도로</li><li>“더 먼 별은?” → 우주 망원경(히파르코스, 가이아)은 오차가 훨씬 작아 수천 pc까지도 측정. 더 먼 별은 2차시의 ‘밝기(등급)’를 이용</li></ul>
+    <p class="muted">근거: 천문학 교재 24장 ‘별의 연주 시차’ (식 24-1~24-3)</p>
   </aside>
 </section>
 
@@ -992,6 +1020,22 @@ renderT();draw();return{draw};})();
  glow(x,sun.x,sun.y,9,'255,190,80');txt(x,'태양',sun.x,sun.y+26,'#ffd166',14,'center',700);
  [[e1,'1월 지구','#ff7a90'],[e2,'7월 지구','#6ad1ff']].forEach(([e,l,c])=>{x.fillStyle='#4aa3ff';x.beginPath();x.arc(e.x,e.y,7,0,7);x.fill();txt(x,l,e.x,e.y+24,c,14,'center',700);});
  txt(x,'1 AU(지구–태양 거리)',sun.x+R/2,sun.y-14,'#9ba6d4',12,'center');x.strokeStyle='#9ba6d4';x.beginPath();x.moveTo(sun.x,sun.y);x.lineTo(e2.x,e2.y);x.stroke();})();
+
+// 심화: 연주 시차 기하
+(function(){const el=document.getElementById('advC');if(!el)return;const A=cv('advC'),x=A.x;bgStars(x,A.w,A.h,50,17,.5);
+ const sun={x:120,y:470},ea={x:330,y:470},st={x:120,y:60};
+ x.strokeStyle='#9ba6d4';x.lineWidth=2;x.beginPath();x.moveTo(sun.x,sun.y);x.lineTo(ea.x,ea.y);x.stroke();
+ x.strokeStyle='#ffd166';x.setLineDash([6,5]);x.beginPath();x.moveTo(st.x,st.y);x.lineTo(sun.x,sun.y);x.stroke();x.setLineDash([]);
+ x.strokeStyle='#6ad1ff';x.beginPath();x.moveTo(st.x,st.y);x.lineTo(ea.x,ea.y);x.stroke();
+ const a1=Math.PI/2,a2=Math.atan2(ea.y-st.y,ea.x-st.x);x.strokeStyle='#ffd166';x.lineWidth=3;x.beginPath();x.arc(st.x,st.y,70,a2,a1);x.stroke();x.lineWidth=1;
+ txt(x,'p',st.x+34,st.y+86,'#ffd166',18,'left',900);
+ x.strokeStyle='#ffffff55';x.beginPath();x.rect(sun.x,sun.y-14,14,14);x.stroke();
+ txt(x,'r',sun.x+12,300,'#ffd166',20,'left',900);txt(x,'별까지의',sun.x+12,330,'#ffd166',11,'left',700);txt(x,'거리',sun.x+12,348,'#ffd166',11,'left',700);x.save();
+ txt(x,'1 AU',(sun.x+ea.x)/2,sun.y+22,'#e9edff',15,'center',900);
+ glow(x,st.x,st.y,6,'255,220,120');txt(x,'별',st.x+16,st.y-6,'#ffe9a8',15,'left',900);
+ glow(x,sun.x,sun.y,8,'255,190,80');txt(x,'태양',sun.x-14,sun.y+4,'#ffd166',13,'right',700);
+ x.fillStyle='#4aa3ff';x.beginPath();x.arc(ea.x,ea.y,7,0,7);x.fill();txt(x,'지구',ea.x+12,ea.y-14,'#8cc6ff',13,'left',700);
+ txt(x,'※ 실제로는 r이 훨씬 길고 p는 매우 작음',12,20,'#9ba6d4',11);x.restore();})();
 
 // 해보기 A,B
 (function(){const H=cv('hbC');let mode=3;const r=rng(9),bg=[];for(let i=0;i<55;i++)bg.push([r()*560,r()*360,r()*1.3+.4]);
