@@ -672,8 +672,8 @@ $('#tC').addEventListener('input',e=>setT(+e.target.value));$$('.pset').forEach(
 
 // bar
 (function(){const B=cv('barC'),x=B.x;for(let i=0;i<=1120;i++){const c=35000-(i/1120)*32500;x.fillStyle=`rgb(${tcol(c)})`;x.fillRect(24+i,14,1.5,44);}
- [[35000,'청색 30000 ℃↑'],[10000,'백색 약 10000 ℃'],[6000,'황색 · 태양 약 6000 ℃'],[3000,'적색 3500 ℃↓']].forEach(([c,l])=>{const X=24+(35000-c)/32500*1120;txt(x,l,Math.min(Math.max(X,90),1080),78,'#eef1ff',16,'center',700);});
- txt(x,'◀ 표면 온도 높음',24,104,'#9ba6d4',14);txt(x,'표면 온도 낮음 ▶',1144,104,'#9ba6d4',14,'right');})();
+ [[35000,'청색 30000 ℃↑',76],[10000,'백색 약 10000 ℃',76],[6000,'황색(태양) 약 6000 ℃',108],[3000,'적색 3500 ℃↓',76]].forEach(([c,l,y])=>{const X=24+(35000-c)/32500*1120;x.fillStyle='#ffffff66';x.fillRect(X-1,58,2,y-70);txt(x,l,Math.min(Math.max(X,100),1070),y,'#eef1ff',15,'center',700);});
+ txt(x,'◀ 표면 온도 높음',36,36,'#0a0f1f',14,'left',900);txt(x,'표면 온도 낮음 ▶',1132,36,'#0a0f1f',14,'right',900);})();
 
 // Albireo
 (function(){const A=cv('albC'),x=A.x;bgStars(x,A.w,A.h,120,13,.8);const a=tcol(4100),b=tcol(12900);
