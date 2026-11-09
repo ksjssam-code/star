@@ -463,7 +463,7 @@ const st={d:2,m:1,snaps:{},play:false,rows:[]};
 const r=rng(7),bg=[];for(let i=0;i<70;i++)bg.push({x:r()*520,y:r()*340,s:r()*1.4+.3,a:r()*.6+.3});
 const topbg=[];for(let i=0;i<40;i++)topbg.push({x:r()*520,y:6+r()*18});
 const cols={'1월':'#ff7a90','7월':'#6ad1ff'};
-function earth(m){const th=Math.PI+(m-1)/12*2*Math.PI;return{x:SUN.x+R*Math.cos(th),y:SUN.y+RY*Math.sin(th)};}
+function earth(m){const th=Math.PI-(m-1)/12*2*Math.PI;return{x:SUN.x+R*Math.cos(th),y:SUN.y+RY*Math.sin(th)};}
 function star(){return{x:SUN.x,y:SUN.y-st.d*K};}
 function skyX(E){const s=star();return SKYC+SCALE*(s.x-E.x)/(E.y-s.y);}
 function line(x,a,b,ext){x.beginPath();x.moveTo(a.x,a.y);if(ext){const t=(0-a.y)/(b.y-a.y);x.lineTo(a.x+(b.x-a.x)*t,0);}else x.lineTo(b.x,b.y);x.stroke();}
