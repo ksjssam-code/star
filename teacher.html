@@ -983,27 +983,21 @@ document.addEventListener('pointerup',e=>{if(e.target.matches('input[type=range]
 $$('#stage button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>b.blur(),0)));
 
 /* ================== 1차시 ================== */
-// 지동설 도입 그림
-(function(){const el=document.getElementById('copC');if(!el)return;const C=cv('copC'),x=C.x;bgStars(x,C.w,C.h,60,41,.5);
- const sun={x:175,y:255},R=120,RY=40,st={x:175,y:70};const e1={x:sun.x-R,y:sun.y},e2={x:sun.x+R,y:sun.y};
- x.setLineDash([5,5]);x.strokeStyle='#4a5a99';x.beginPath();x.ellipse(sun.x,sun.y,R,RY,0,0,7);x.stroke();x.setLineDash([]);
- // orbit arrow (counterclockwise seen from north)
- x.strokeStyle='#8cc6ff';x.lineWidth=2;x.beginPath();x.ellipse(sun.x,sun.y,R,RY,0,Math.PI*0.62,Math.PI*0.88);x.stroke();
- const ax=sun.x+R*Math.cos(Math.PI*0.62),ay=sun.y+RY*Math.sin(Math.PI*0.62);x.fillStyle='#8cc6ff';x.beginPath();x.moveTo(ax+10,ay+3);x.lineTo(ax-2,ay-6);x.lineTo(ax-1,ay+8);x.closePath();x.fill();x.lineWidth=1;
- x.lineWidth=2;x.strokeStyle='#ff7a90';x.beginPath();x.moveTo(e1.x,e1.y);x.lineTo(st.x,st.y);x.stroke();x.strokeStyle='#6ad1ff';x.beginPath();x.moveTo(e2.x,e2.y);x.lineTo(st.x,st.y);x.stroke();x.lineWidth=1;
- glow(x,sun.x,sun.y,10,'255,190,80');txt(x,'태양',sun.x,sun.y+26,'#ffd166',13,'center',700);
- [[e1,'1월 지구','#ff7a90'],[e2,'7월 지구','#6ad1ff']].forEach(([e,l,c])=>{x.fillStyle='#4aa3ff';x.beginPath();x.arc(e.x,e.y,8,0,7);x.fill();txt(x,l,e.x,e.y+24,c,13,'center',900);});
- glow(x,st.x,st.y,6,'255,230,150');txt(x,'별',st.x+16,st.y-8,'#ffe9a8',14,'left',900);
- txt(x,'지동설: 지구가 공전',12,20,'#9ba6d4',12,'left',700);
- // sky panels
- function panel(px,py,w,h,title,col,shift){x.fillStyle='#0b1229';x.strokeStyle='#2a3666';x.beginPath();x.roundRect(px,py,w,h,10);x.fill();x.stroke();
-  const r=rng(5);for(let i=0;i<22;i++){x.fillStyle='rgba(220,228,255,.6)';x.beginPath();x.arc(px+8+r()*(w-16),py+28+r()*(h-36),r()*1.2+.4,0,7);x.fill();}
-  txt(x,title,px+10,py+15,col,12,'left',900);const cy=py+h/2+10,cx=px+w/2;
-  if(shift){x.strokeStyle='#ff7a90';x.lineWidth=2;x.beginPath();x.arc(cx-shift,cy,9,0,7);x.stroke();x.strokeStyle='#6ad1ff';x.beginPath();x.arc(cx+shift,cy,9,0,7);x.stroke();x.lineWidth=1;glow(x,cx-shift,cy,3.5,'255,230,150');glow(x,cx+shift,cy,3.5,'255,230,150');txt(x,'1월',cx-shift,cy+22,'#ff7a90',11,'center',700);txt(x,'7월',cx+shift,cy+22,'#6ad1ff',11,'center',700);}
-  else{x.strokeStyle='#ff7a90';x.lineWidth=2;x.beginPath();x.arc(cx,cy,11,0,7);x.stroke();x.strokeStyle='#6ad1ff';x.beginPath();x.arc(cx,cy,7,0,7);x.stroke();x.lineWidth=1;glow(x,cx,cy,3.5,'255,230,150');txt(x,'1월 = 7월 ?!',cx,cy+24,'#ffd166',11,'center',900);}}
- panel(400,20,280,140,'💭 지동설이 맞다면 (예상)','#e9edff',55);
- panel(400,175,280,140,'🔭 브라헤의 실제 관측','#ffd166',0);
- txt(x,'▶',380,92,'#9ba6d4',14,'center');txt(x,'▶',380,247,'#9ba6d4',14,'center');})();
+// 지동설 도입 그림 (지구 공전만)
+(function(){const el=document.getElementById('copC');if(!el)return;const C=cv('copC'),x=C.x;bgStars(x,C.w,C.h,90,41,.6);
+ const sun={x:350,y:175},R=250,RY=105;
+ x.setLineDash([6,6]);x.strokeStyle='#4a5a99';x.lineWidth=1.5;x.beginPath();x.ellipse(sun.x,sun.y,R,RY,0,0,7);x.stroke();x.setLineDash([]);
+ // 반시계 방향 화살표 (북쪽에서 볼 때)
+ x.strokeStyle='#8cc6ff';x.lineWidth=3;
+ [[0.62,0.86],[1.62,1.86]].forEach(([p,q])=>{x.beginPath();x.ellipse(sun.x,sun.y,R,RY,0,Math.PI*q,Math.PI*p,true);x.stroke();
+  const t=Math.PI*p,ax=sun.x+R*Math.cos(t),ay=sun.y+RY*Math.sin(t),dx=R*Math.sin(t),dy=-RY*Math.cos(t),L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;
+  x.fillStyle='#8cc6ff';x.beginPath();x.moveTo(ax+ux*14,ay+uy*14);x.lineTo(ax-uy*8,ay+ux*8);x.lineTo(ax+uy*8,ay-ux*8);x.closePath();x.fill();});
+ x.lineWidth=1;
+ glow(x,sun.x,sun.y,16,'255,190,80');txt(x,'태양',sun.x,sun.y+38,'#ffd166',15,'center',900);
+ [[Math.PI,'1월'],[Math.PI/2,'4월'],[0,'7월'],[-Math.PI/2,'10월']].forEach(([t,l])=>{const ex=sun.x+R*Math.cos(t),ey=sun.y+RY*Math.sin(t);
+  x.fillStyle='#4aa3ff';x.beginPath();x.arc(ex,ey,10,0,7);x.fill();x.strokeStyle='#bfe0ff';x.beginPath();x.arc(ex,ey,10,0,7);x.stroke();
+  txt(x,l,ex+(t===Math.PI?-18:t===0?18:0),ey+(t===Math.PI/2?26:t===-Math.PI/2?-24:0),'#8cc6ff',14,t===Math.PI?'right':t===0?'left':'center',900);});
+ txt(x,'지구는 태양 주위를 1년에 한 바퀴 공전 (북쪽에서 본 모습)',14,20,'#9ba6d4',12,'left',700);})();
 
 // Big Dipper
 (function(){const D=cv('dipC'),x=D.x;bgStars(x,D.w,D.h,90,21,.8);
