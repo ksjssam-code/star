@@ -103,6 +103,20 @@ textarea:focus{outline:2px solid var(--cyan);border-color:transparent}
 .lchips{display:flex;gap:6px;flex-wrap:wrap}
 .lchips button.on{background:var(--gold);color:#1a1300;border-color:var(--gold);font-weight:700}
 .notice{background:#ff7a9014;border:1px solid #ff7a9055;border-radius:10px;padding:10px 14px;font-size:15px}
+#m-qa.on~*{}
+body.qa-wide main{max-width:1500px}
+.qacols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}
+@media(max-width:1100px){.qacols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.qacols{grid-template-columns:1fr}}
+.qacol{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 10px 4px;min-height:120px}
+.qacol.mine{border-color:var(--gold)}
+.qacol h3{margin:2px 4px 6px;font-size:19px;display:flex;align-items:center;gap:8px}
+.qacol h3 .cnt{font-size:13px;color:var(--muted);font-weight:500}
+.qacol .qitem{margin:8px 0;padding:10px 12px}
+.qacol .qitem .qt{font-size:16px}
+.qacol .ans{font-size:15px}
+.qacol .aform{flex-direction:column}
+.ltag{font-size:11px;background:#6ad1ff22;color:var(--cyan);border-radius:6px;padding:0 6px}
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:13px}
 </style>
 </head>
@@ -350,15 +364,16 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
 <!-- ======================= 질문 게시판 ======================= -->
 <section class="module" id="m-qa">
-  <div class="mhead"><div class="tag">💬 함께 묻고 답하기</div><h1>질문 게시판</h1><span class="goal">궁금한 점을 질문하고, 친구 질문에 답을 달아 보기</span></div>
+  <div class="mhead"><div class="tag">💬 함께 묻고 답하기</div><h1>질문 게시판</h1><span class="goal">2-1~2-4반 모든 질문을 함께 보고, 어느 반 질문이든 답을 달 수 있음</span></div>
   <div class="step">
-    <div class="lchips" id="qaL"><button data-l="1" class="on">1차시 별까지의 거리</button><button data-l="2">2차시 등급과 밝기</button><button data-l="3">3차시 표면 온도와 색</button></div>
-    <div class="q c" style="margin-top:16px">새 질문 쓰기</div>
+    <div class="lchips" id="qaL"><button data-l="all" class="on">전체 차시</button><button data-l="1">1차시 별까지의 거리</button><button data-l="2">2차시 등급과 밝기</button><button data-l="3">3차시 표면 온도와 색</button></div>
+    <div class="q c" style="margin-top:16px">새 질문 쓰기 <span class="small muted" id="qaMine"></span></div>
+    <div class="btns" style="margin:0 0 8px"><select id="qaLsel"><option value="1">1차시 질문</option><option value="2">2차시 질문</option><option value="3">3차시 질문</option></select></div>
     <textarea id="qaNew" maxlength="500" placeholder="예: 연주 시차가 너무 작은 별은 거리를 어떻게 재나요?"></textarea>
-    <div class="btns"><button class="au" id="qaPost">질문 올리기</button><button id="qaRef">🔄 새로고침</button><span class="lockhint">게시판에는 '2-3반 학생'처럼 반만 표시됨</span></div>
+    <div class="btns"><button class="au" id="qaPost">질문 올리기</button><button id="qaRef">🔄 새로고침</button><span class="lockhint">게시판에는 '2-3반 학생'처럼 반만 표시됨 · 30초마다 자동 새로고침</span></div>
     <div class="msg" id="qaMsg"></div>
   </div>
-  <div id="qaList"></div>
+  <div class="qacols" id="qaList"></div>
 </section>
 </main>
 <footer>✦ 별 탐구실 · 중학교 과학 2 Ⅷ. 별과 우주 · 시뮬레이션의 거리·크기는 이해를 돕기 위해 과장됨</footer>
@@ -392,7 +407,7 @@ showWho();
 
 /* ---------- routing ---------- */
 const MODS=['t1','t2','t3','qa'];
-function route(){let h=location.hash.replace('#','');if(!MODS.includes(h))h='t1';MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();window.scrollTo(0,0);}
+function route(){let h=location.hash.replace('#','');if(!MODS.includes(h))h='t1';document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);
 
 /* ---------- predictions / reveal / autosave ---------- */
@@ -433,28 +448,40 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  catch(e){st.style.color='#ff7a90';st.textContent=e.message==='NOAPI'?'아직 제출 기능이 설정되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':'제출 실패: 인터넷 연결 확인 후 다시 시도하기';}
  b.disabled=false;});
 
-/* ---------- Q&A ---------- */
-let qaL='1',qaTimer;
-$$('#qaL button').forEach(b=>b.onclick=()=>{qaL=b.dataset.l;$$('#qaL button').forEach(x=>x.classList.toggle('on',x===b));loadQA();});
+/* ---------- Q&A (4개 반 열) ---------- */
+const CLS=['2-1','2-2','2-3','2-4'];
+let qaL='all',qaTimer;
+$$('#qaL button').forEach(b=>b.onclick=()=>{qaL=b.dataset.l;$$('#qaL button').forEach(x=>x.classList.toggle('on',x===b));if(qaL!=='all')$('#qaLsel').value=qaL;$('#qaList').innerHTML='';loadQA();});
 function fmtT(t){try{const d=new Date(t);return d.toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'})+' '+d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}catch(e){return'';}}
+function myCls(){return user&&CLS.includes(user.cls)?user.cls:null;}
 async function loadQA(){clearTimeout(qaTimer);const list=$('#qaList');
+ $('#qaMine').textContent=myCls()?'(내 질문은 '+myCls()+'반 열에 올라감)':'';
  if(!API_URL){list.innerHTML='<div class="notice">아직 게시판이 설정되지 않음 (선생님께 알리기)</div>';return;}
  if(!list.innerHTML)list.innerHTML='<p class="muted">불러오는 중…</p>';
- try{const j=await apiGet({action:'list',lesson:qaL});const qs=j.questions||[];
-  list.innerHTML=qs.length?'':'<p class="muted" style="padding:10px">아직 질문이 없음. 첫 질문을 올려 보기!</p>';
-  qs.forEach(q=>{const d=document.createElement('div');d.className='qitem';
-   d.innerHTML=`<div class="meta"><span>🙋 ${esc(q.who)}</span><span>${fmtT(q.time)}</span><span>답변 ${q.answers.length}</span></div><div class="qt">${esc(q.text)}</div>`+
-    q.answers.map(a=>`<div class="ans${a.who==='선생님'?' teacher':''}"><div class="meta"><span>${a.who==='선생님'?'👩‍🏫':'💬'} ${esc(a.who)}</span><span>${fmtT(a.time)}</span></div>${esc(a.text)}</div>`).join('')+
-    `<div class="aform"><textarea maxlength="500" placeholder="답 달기"></textarea><button class="pri">등록</button></div>`;
-   const ta=d.querySelector('.aform textarea'),bt=d.querySelector('.aform button');
-   bt.onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=ta.value.trim();if(!t)return;if(!user){$('#login').classList.add('on');return;}bt.disabled=true;try{await api({action:'answer',qid:q.id,cls:user.cls,num:user.num,name:user.name,text:t});loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: 다시 시도하기');}};
-   list.appendChild(d);});
+ const typing=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#qaList');
+ if(typing){qaTimer=setTimeout(loadQA,15000);return;} // 답을 쓰는 중이면 새로고침 미룸
+ try{const Ls=qaL==='all'?['1','2','3']:[qaL];
+  const res=await Promise.all(Ls.map(l=>apiGet({action:'list',lesson:l}).then(j=>(j.questions||[]).map(q=>Object.assign(q,{lesson:l})))));
+  const qs=[].concat(...res).sort((x,y)=>x.time<y.time?1:-1);
+  list.innerHTML='';
+  CLS.forEach(c=>{const mine=c===myCls();const col=document.createElement('div');col.className='qacol'+(mine?' mine':'');
+   const items=qs.filter(q=>q.who===c+'반 학생');
+   col.innerHTML=`<h3>${c}반 ${mine?'<span class="ltag" style="background:#ffd16633;color:#ffd166">우리 반</span>':''}<span class="cnt">질문 ${items.length}</span></h3>`+(items.length?'':'<p class="muted small" style="padding:4px 6px">아직 질문 없음</p>');
+   items.forEach(q=>{const d=document.createElement('div');d.className='qitem';
+    d.innerHTML=`<div class="meta"><span class="ltag">${q.lesson}차시</span><span>${fmtT(q.time)}</span><span>💬 ${q.answers.length}</span></div><div class="qt">${esc(q.text)}</div>`+
+     q.answers.map(x=>`<div class="ans${x.who==='선생님'?' teacher':''}"><div class="meta"><span>${x.who==='선생님'?'👩‍🏫':'💬'} ${esc(x.who)}</span><span>${fmtT(x.time)}</span></div>${esc(x.text)}</div>`).join('')+
+     `<div class="aform"><textarea maxlength="500" placeholder="답 달기 (어느 반이든 가능)"></textarea><button class="pri">답 등록</button></div>`;
+    const ta=d.querySelector('.aform textarea'),bt=d.querySelector('.aform button');
+    bt.onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=ta.value.trim();if(!t)return;if(!user){$('#login').classList.add('on');return;}bt.disabled=true;
+     try{await api({action:'answer',qid:q.id,cls:user.cls,num:user.num,name:user.name,text:t});ta.value='';ta.blur();loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: 다시 시도하기');}};
+    col.appendChild(d);});
+   list.appendChild(col);});
  }catch(e){list.innerHTML='<div class="notice">게시판을 불러오지 못함. 🔄 새로고침 누르기</div>';}
  if($('#m-qa').classList.contains('on'))qaTimer=setTimeout(loadQA,30000);}
 function alertMsg(t){$('#qaMsg').textContent=t;setTimeout(()=>$('#qaMsg').textContent='',4000);}
-$('#qaRef').onclick=loadQA;
+$('#qaRef').onclick=()=>{if(document.activeElement)document.activeElement.blur();loadQA();};
 $('#qaPost').onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=$('#qaNew').value.trim();if(!t){alertMsg('질문을 먼저 쓰기');return;}if(!user){$('#login').classList.add('on');return;}
- const b=$('#qaPost');b.disabled=true;try{await api({action:'question',lesson:qaL,cls:user.cls,num:user.num,name:user.name,text:t});$('#qaNew').value='';alertMsg('');loadQA();}catch(e){alertMsg(e.message==='NOAPI'?'게시판이 아직 설정되지 않음':'등록 실패: 다시 시도하기');}b.disabled=false;};
+ const b=$('#qaPost');b.disabled=true;try{await api({action:'question',lesson:$('#qaLsel').value,cls:user.cls,num:user.num,name:user.name,text:t});$('#qaNew').value='';alertMsg('');loadQA();}catch(e){alertMsg(e.message==='NOAPI'?'게시판이 아직 설정되지 않음':'등록 실패: 다시 시도하기');}b.disabled=false;};
 
 /* ================== 1차시 ================== */
 // Parallax sim
