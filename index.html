@@ -380,9 +380,11 @@ function bgStars(x,w,h,n,seed,a){const r=rng(seed);for(let i=0;i<n;i++){x.fillSt
 
 /* ---------- user ---------- */
 let user=null;try{user=JSON.parse(localStorage.getItem('starlab_user')||'null');}catch(e){}
-function showWho(){$('#who').innerHTML=user?`<b>${user.cls}반 ${user.num}번 ${esc(user.name)}</b><button id="chg">변경</button>`:'';const c=$('#chg');if(c)c.onclick=()=>{$('#login').classList.add('on');};}
+const PREVIEW=new URLSearchParams(location.search).has('preview');
+if(PREVIEW){user={cls:'교사',num:0,name:'미리보기'};document.documentElement.classList.add('preview');}
+function showWho(){if(PREVIEW){$('#who').innerHTML='<b>👩‍🏫 교사 미리보기</b> <span class="small">(제출·게시 안 됨, 게시판 읽기만)</span>';return;}$('#who').innerHTML=user?`<b>${user.cls}반 ${user.num}번 ${esc(user.name)}</b><button id="chg">변경</button>`:'';const c=$('#chg');if(c)c.onclick=()=>{$('#login').classList.add('on');};}
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-if(user){$('#lgCls').value=user.cls;$('#lgNum').value=user.num;$('#lgName').value=user.name;}else $('#login').classList.add('on');
+if(PREVIEW){}else if(user){$('#lgCls').value=user.cls;$('#lgNum').value=user.num;$('#lgName').value=user.name;}else $('#login').classList.add('on');
 $('#lgGo').onclick=()=>{const cls=$('#lgCls').value,num=parseInt($('#lgNum').value,10),name=$('#lgName').value.trim();
  if(!cls||!num||num<1||num>40||!name){$('#lgMsg').textContent='반·번호·이름을 모두 정확히 입력하기';return;}
  user={cls,num,name};try{localStorage.setItem('starlab_user',JSON.stringify(user));}catch(e){}$('#login').classList.remove('on');showWho();restore();};
@@ -394,7 +396,7 @@ function route(){let h=location.hash.replace('#','');if(!MODS.includes(h))h='t1'
 window.addEventListener('hashchange',route);
 
 /* ---------- predictions / reveal / autosave ---------- */
-function key(){return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
+function key(){if(PREVIEW)return 'starlab_ans_preview';return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
 function save(){const d={};$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
 function restore(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
  $$('textarea[data-f]').forEach(t=>{t.value=d['t:'+t.dataset.f]||'';});
@@ -422,7 +424,7 @@ function collect(sec){const out=[];$$('[data-f]',sec).forEach(el=>{let v='';
  else if(el.tagName==='TEXTAREA')v=el.value.trim();
  else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].map(td=>td.textContent).join(' / ')).filter(s=>!s.includes('아직')).join('\n');
  else v=el.textContent.trim();out.push([el.dataset.f,v]);});return out;}
-$$('.submitBtn').forEach(b=>b.onclick=async()=>{if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
+$$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
  const fields=collect(sec);const q=QZ[L]||[];const done=q.filter(x=>x!==null).length;fields.push(['스스로 확인(첫 시도 정답)',done?q.filter(x=>x===true).length+' / '+q.length+(done<q.length?' (미응답 '+(q.length-done)+')':''):'미응답']);
  const empty=fields.filter(f=>!f[1]).length;
  if(empty&&!b.dataset.confirm){b.dataset.confirm='1';st.style.color='#ff7a90';st.textContent=`빈칸 ${empty}개가 있음. 그래도 제출하려면 한 번 더 누르기`;return;}
@@ -445,13 +447,13 @@ async function loadQA(){clearTimeout(qaTimer);const list=$('#qaList');
     q.answers.map(a=>`<div class="ans${a.who==='선생님'?' teacher':''}"><div class="meta"><span>${a.who==='선생님'?'👩‍🏫':'💬'} ${esc(a.who)}</span><span>${fmtT(a.time)}</span></div>${esc(a.text)}</div>`).join('')+
     `<div class="aform"><textarea maxlength="500" placeholder="답 달기"></textarea><button class="pri">등록</button></div>`;
    const ta=d.querySelector('.aform textarea'),bt=d.querySelector('.aform button');
-   bt.onclick=async()=>{const t=ta.value.trim();if(!t)return;if(!user){$('#login').classList.add('on');return;}bt.disabled=true;try{await api({action:'answer',qid:q.id,cls:user.cls,num:user.num,name:user.name,text:t});loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: 다시 시도하기');}};
+   bt.onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=ta.value.trim();if(!t)return;if(!user){$('#login').classList.add('on');return;}bt.disabled=true;try{await api({action:'answer',qid:q.id,cls:user.cls,num:user.num,name:user.name,text:t});loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: 다시 시도하기');}};
    list.appendChild(d);});
  }catch(e){list.innerHTML='<div class="notice">게시판을 불러오지 못함. 🔄 새로고침 누르기</div>';}
  if($('#m-qa').classList.contains('on'))qaTimer=setTimeout(loadQA,30000);}
 function alertMsg(t){$('#qaMsg').textContent=t;setTimeout(()=>$('#qaMsg').textContent='',4000);}
 $('#qaRef').onclick=loadQA;
-$('#qaPost').onclick=async()=>{const t=$('#qaNew').value.trim();if(!t){alertMsg('질문을 먼저 쓰기');return;}if(!user){$('#login').classList.add('on');return;}
+$('#qaPost').onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=$('#qaNew').value.trim();if(!t){alertMsg('질문을 먼저 쓰기');return;}if(!user){$('#login').classList.add('on');return;}
  const b=$('#qaPost');b.disabled=true;try{await api({action:'question',lesson:qaL,cls:user.cls,num:user.num,name:user.name,text:t});$('#qaNew').value='';alertMsg('');loadQA();}catch(e){alertMsg(e.message==='NOAPI'?'게시판이 아직 설정되지 않음':'등록 실패: 다시 시도하기');}b.disabled=false;};
 
 /* ================== 1차시 ================== */

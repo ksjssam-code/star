@@ -808,6 +808,14 @@ const TEACHER_HASH='1fa58357';
 </div></div>
 <div hidden><span id="mText"></span><b id="cPeak"></b></div>
 
+<div id="stuOv" style="position:fixed;inset:0 0 52px 0;z-index:26;background:#0a0f1f;display:none;flex-direction:column">
+ <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid #2a3666;background:#0c1328;font-size:15px">
+  <b style="color:#ffd166">🧑‍🎓 학생 탐구활동 화면</b><span style="color:#9ba6d4">학생들이 보는 화면 그대로 · 미리보기라 제출·게시는 안 됨</span>
+  <a href="./" target="_blank" style="margin-left:auto;color:#6ad1ff;font-size:14px">새 탭에서 학생 주소 열기 ↗</a>
+  <button id="stuClose" style="font-size:14px;padding:6px 12px;background:#ffd166;color:#1a1300;border-color:#ffd166;font-weight:700">✕ 수업 화면으로</button>
+ </div>
+ <iframe id="stuFrame" title="학생 탐구" style="flex:1;border:0;width:100%;background:#0a0f1f"></iframe>
+</div>
 <div id="prog"></div>
 <aside id="notes"></aside>
 <div id="menu"></div>
@@ -831,7 +839,7 @@ const TEACHER_HASH='1fa58357';
   <button id="bMenu">☰ 목록</button>
   <button id="bNotes">📝 노트</button>
   <button id="bFull">⛶ 전체 화면</button>
-  <a href="./" target="_blank" style="color:#6ad1ff;font-size:14px;text-decoration:none;border:1px solid #2a3666;border-radius:10px;padding:7px 12px">🔗 학생용</a>
+  <button id="bStu" style="color:#6ad1ff">🧑‍🎓 학생 탐구</button>
   <button id="bHelp">?</button>
 </div>
 
@@ -894,7 +902,7 @@ tb.addEventListener('pointerup',()=>{if(tPress){clearTimeout(tPress);tToggle();}
 $('#bNext').onclick=next;$('#bPrev').onclick=prev;$('#bNotes').onclick=toggleNotes;$('#bMenu').onclick=toggleMenu;$('#bFull').onclick=full;
 $('#bHelp').onclick=()=>$('#help').classList.toggle('on');$('#helpClose').onclick=()=>$('#help').classList.remove('on');
 $$('#bar .les button').forEach(b=>b.onclick=()=>show(b.dataset.l,0,'fwd'));
-document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;
+document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;const so=document.getElementById('stuOv');if(so&&so.style.display==='flex')return;
  if(['ArrowRight','PageDown','Enter'].includes(e.key)||(e.key===' '&&t!=='BUTTON')){e.preventDefault();next();}
  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
  else if(e.key==='n'||e.key==='N'||e.key==='ㅜ')toggleNotes();
@@ -1119,6 +1127,12 @@ fit();
 }
 let __b=false;function __go(){if(__b)return;__b=true;__boot();}
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(__go);setTimeout(__go,1500);
+</script>
+<script>
+(function(){const ov=document.getElementById('stuOv'),fr=document.getElementById('stuFrame');
+ document.getElementById('bStu').onclick=()=>{const L=(document.querySelector('.lesson.on')||{}).id||'L1';const h='#t'+L.slice(1);
+  if(!fr.src)fr.src='./?preview=1'+h;else{try{fr.contentWindow.location.hash=h;}catch(e){}}ov.style.display='flex';};
+ document.getElementById('stuClose').onclick=()=>{ov.style.display='none';};})();
 </script>
 </body>
 </html>
