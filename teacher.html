@@ -229,15 +229,16 @@ const TEACHER_HASH='1fa58357';
 </section>
 
 <section class="slide" data-title="탐구 · 가상 천문대">
-  <div class="sh"><span class="ph p2">탐구</span><h2>가상 천문대: 별 S의 시차 측정</h2><span class="pg">280~281쪽</span></div>
+  <div class="sh"><span class="ph p2">탐구</span><h2>가상 천문대: 별 S·T의 시차 비교</h2><span class="pg">280~281쪽</span></div>
   <div class="sb">
     <div class="row" style="gap:16px">
       <div><canvas id="pxTop" data-w="520" data-h="320" style="width:584px"></canvas><div class="cap">▲ 위에서 본 모습 (거리 과장)</div></div>
       <div><canvas id="pxSky" data-w="520" data-h="320" style="width:584px"></canvas><div class="cap">▲ 밤하늘 사진 (격자 1칸) · 누르면 지금 달 촬영</div></div>
     </div>
-    <div class="row" style="gap:28px;align-items:center">
-      <div class="ctrl" style="flex:1"><label>거리</label><input type="range" id="pxD" min="1" max="5" step="0.5" value="2"><output id="pxDo">2 pc</output></div>
-      <div class="ctrl" style="flex:1"><label>시기</label><input type="range" id="pxM" min="1" max="12.99" step="0.01" value="1"><output id="pxMo">1월</output></div>
+    <div class="row" style="gap:18px;align-items:center">
+      <div class="ctrl" style="flex:1"><label style="color:#ffb35a">별 S</label><input type="range" id="pxD" min="1" max="5" step="0.5" value="2"><output id="pxDo" style="min-width:86px">2 pc</output></div>
+      <div class="ctrl" style="flex:1"><label style="color:#8fc8ff">별 T</label><input type="range" id="pxD2" min="1" max="5" step="0.5" value="4"><output id="pxD2o" style="min-width:86px">4 pc</output></div>
+      <div class="ctrl" style="flex:1"><label>시기</label><input type="range" id="pxM" min="1" max="12.99" step="0.01" value="1"><output id="pxMo" style="min-width:70px">1월</output></div>
     </div>
     <div class="btns">
       <button id="pxPlay">▶ 공전</button><button class="pri" id="pxJan">📷 1월 사진</button><button class="pri" id="pxJul">📷 7월 사진</button><button class="au" id="pxRec">✍ 기록</button><span class="msg" id="pxMsg" style="align-self:center"></span>
@@ -246,12 +247,12 @@ const TEACHER_HASH='1fa58357';
   <aside class="notes" data-time="10분">
     <h4>시연 순서 (교사 조작 + 학생 예측)</h4>
     <ol style="padding-left:18px;margin:0">
-      <li><b>2 pc</b>에서 [1월 사진] → [7월 사진]. 오른쪽 사진에서 별 S가 이동한 칸 수를 함께 세고 [기록].</li>
-      <li class="say" style="list-style:none;margin-left:-18px">“별을 <b>4 pc</b>로 더 멀리 보내면 이동한 칸 수는 어떻게 될까요? 몇 칸일까요?” → 예측을 받은 뒤 확인</li>
-      <li>1 pc, 3 pc, 5 pc도 측정해서 기록 (학생에게 조작을 맡겨도 좋아요)</li>
-      <li>[공전]으로 별 S가 1년 주기로 왔다 갔다 하는 모습 보여 주기</li>
+      <li class="say" style="list-style:none;margin-left:-18px">“가까운 별 S(2 pc)와 먼 별 T(4 pc)가 있어요. 6개월 뒤 사진에서 어느 별이 더 많이 움직일까요?” → 예측 받기</li>
+      <li>[1월 사진] → [7월 사진]. 오른쪽 사진에서 두 별의 이동 칸 수 비교 (S 6.8칸, T 3.4칸 → 거리 2배, 시차 ½) → [기록]</li>
+      <li>별 T를 5 pc, 별 S를 1 pc 등으로 바꿔 더 측정·기록 (학생에게 조작을 맡겨도 좋아요)</li>
+      <li>[공전]으로 두 별이 1년 주기로 왔다 갔다 하는 모습 비교 — 가까운 별이 더 크게 흔들림</li>
     </ol>
-    <h4>관찰 포인트</h4><ul><li>왼쪽 그림에서 1월·7월 시선이 별에서 만드는 각 = <b>시차</b></li><li>배경 별은 너무 멀어서 움직이지 않아요 (엄지 실험의 ‘벽’)</li><li>2 pc → 6칸, 4 pc → 3칸, 1 pc → 12칸</li></ul>
+    <h4>관찰 포인트</h4><ul><li>왼쪽 그림에서 1월·7월 시선이 별에서 만드는 각 = <b>시차</b></li><li>배경 별은 너무 멀어서 움직이지 않아요 (엄지 실험의 ‘벽’)</li><li>1 pc → 13.5칸, 2 pc → 6.8칸, 3 pc → 4.5칸, 4 pc → 3.4칸, 5 pc → 2.7칸 (거리 × 이동 = 13.5로 일정)</li><li>교과서 탐구(시차 측정 모형판의 별 S·T)와 같은 구성</li></ul>
     <h4>활동지로 쓸 경우</h4><p>학생들이 공책에 ‘거리 / 이동 칸 수’ 표를 그려 함께 기록하게 하세요.</p>
   </aside>
 </section>
@@ -259,12 +260,12 @@ const TEACHER_HASH='1fa58357';
 <section class="slide" data-title="탐구 결과 · 규칙 찾기">
   <div class="sh"><span class="ph p3">발견</span><h2>측정 결과에서 규칙 찾기</h2></div>
   <div class="sb row">
-    <div style="width:470px">
-      <table><thead><tr><th>거리<br>(pc)</th><th>이동<br>(칸)</th><th>거리<br>× 이동</th></tr></thead><tbody id="pxTb"></tbody></table>
+    <div style="width:520px">
+      <table><thead><tr><th>별</th><th>거리<br>(pc)</th><th>이동<br>(칸)</th><th>거리<br>× 이동</th></tr></thead><tbody id="pxTb"></tbody></table>
     </div>
     <div class="col">
-      <div class="q g">① 별이 멀어질수록 시차는?</div>
-      <div class="ans frag">멀수록 시차 <b>작아짐</b></div>
+      <div class="q g">① 시차가 더 큰 별은?</div>
+      <div class="ans frag">가까운 별 <b>S</b>의 시차가 더 큼<br>→ 멀수록 시차 <b>작아짐</b></div>
       <div class="q g frag">② ‘거리 × 이동’ 값은?</div>
       <div class="ans frag">거의 <b>일정</b><br>→ 거리와 시차는 <b>반비례</b></div>
     </div>
@@ -925,47 +926,56 @@ $$('#stage button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>b.b
  const lab=$('#dipLabels');lab.innerHTML=S.map(s=>`<span class="nmk" style="left:${s[1]*100}%;top:${s[2]*100}%;text-align:center;line-height:1.15"><b style="color:var(--gold);font-size:23px">${s[3]}광년</b><br>${s[0]}</span>`).join('');lab.style.cssText='position:absolute;inset:0';
 })();
 
-// Parallax sim
+// Parallax sim (별 S·T 두 개 비교)
 const PX=(function(){
 const T=cv('pxTop'),S=cv('pxSky');
 const SUN={x:260,y:292},R=44,RY=15,K=52,SCALE=160,CELL=20,SKYC=260;
-const st={d:2,m:1,snaps:{},play:false,rows:[]};
-const r=rng(7),bg=[];for(let i=0;i<70;i++)bg.push({x:r()*520,y:r()*340,s:r()*1.4+.3,a:r()*.6+.3});
+const STARS=[{id:'S',d:2,ox:-14,col:'255,170,90',hex:'#ffb35a',skyY:115},{id:'T',d:4,ox:14,col:'150,200,255',hex:'#8fc8ff',skyY:225}];
+const st={m:1,snaps:{},play:false,rows:[]};
+const r=rng(7),bg=[];for(let i=0;i<70;i++)bg.push({x:r()*520,y:r()*320,s:r()*1.4+.3,a:r()*.6+.3});
 const topbg=[];for(let i=0;i<40;i++)topbg.push({x:r()*520,y:6+r()*18});
-const cols={'1월':'#ff7a90','7월':'#6ad1ff'};
+const mcol={'1월':'#ff7a90','7월':'#6ad1ff'};
 function earth(m){const th=Math.PI-(m-1)/12*2*Math.PI;return{x:SUN.x+R*Math.cos(th),y:SUN.y+RY*Math.sin(th)};}
-function star(){return{x:SUN.x,y:SUN.y-st.d*K};}
-function skyX(E){const s=star();return SKYC+SCALE*(s.x-E.x)/(E.y-s.y);}
+function spos(s){return{x:SUN.x+s.ox*s.d,y:SUN.y-s.d*K};}
+function skyX(s,E){const p=spos(s);return SKYC+SCALE*(p.x-E.x)/(E.y-p.y);}
 function line(x,a,b,ext){x.beginPath();x.moveTo(a.x,a.y);if(ext){const t=(0-a.y)/(b.y-a.y);x.lineTo(a.x+(b.x-a.x)*t,0);}else x.lineTo(b.x,b.y);x.stroke();}
 function drawTop(){const x=T.x;x.clearRect(0,0,T.w,T.h);
  topbg.forEach(b=>{x.fillStyle='#cfd8ffbb';x.fillRect(b.x,b.y,1.6,1.6);});txt(x,'아주 먼 배경 별들',10,36,'#9ba6d4',12);
- const s=star(),E=earth(st.m);
+ const E=earth(st.m);
  x.setLineDash([4,4]);x.strokeStyle='#4a5a99';x.beginPath();x.ellipse(SUN.x,SUN.y,R,RY,0,0,7);x.stroke();x.setLineDash([]);
- const pts=[];Object.entries(st.snaps).forEach(([k,v])=>{const e=earth(v.m);pts.push(e);const c=cols[k]||'#b49cff';x.strokeStyle=c;line(x,e,s,0);x.fillStyle=c;x.beginPath();x.arc(e.x,e.y,4,0,7);x.fill();txt(x,k,e.x+(e.x<SUN.x?-10:10),e.y+12,c,13,e.x<SUN.x?'right':'left',700);});
- if(pts.length===2){const a1=Math.atan2(pts[0].y-s.y,pts[0].x-s.x),a2=Math.atan2(pts[1].y-s.y,pts[1].x-s.x);x.strokeStyle='#ffd166';x.lineWidth=2;x.beginPath();x.arc(s.x,s.y,24,Math.min(a1,a2),Math.max(a1,a2));x.stroke();x.lineWidth=1;txt(x,'시차',s.x+30,s.y+24,'#ffd166',13,'left',900);x.setLineDash([3,3]);x.strokeStyle='#ffd16699';x.beginPath();x.moveTo(s.x,s.y);x.lineTo(SUN.x,SUN.y);x.stroke();x.setLineDash([]);}
- x.strokeStyle='#ffffff55';line(x,E,s,1);
+ const snaps=Object.entries(st.snaps);
+ STARS.forEach(s=>{const p=spos(s);const pts=[];
+  snaps.forEach(([k,v])=>{const e=earth(v.m);pts.push(e);x.strokeStyle=mcol[k]||'#b49cff';x.globalAlpha=.75;line(x,e,p,0);x.globalAlpha=1;});
+  if(pts.length===2){const a1=Math.atan2(pts[0].y-p.y,pts[0].x-p.x),a2=Math.atan2(pts[1].y-p.y,pts[1].x-p.x);x.strokeStyle=s.hex;x.lineWidth=2.5;x.beginPath();x.arc(p.x,p.y,20,Math.min(a1,a2),Math.max(a1,a2));x.stroke();x.lineWidth=1;}
+  x.strokeStyle=`rgba(${s.col},.35)`;line(x,E,p,1);});
+ snaps.forEach(([k,v])=>{const e=earth(v.m),c=mcol[k]||'#b49cff';x.fillStyle=c;x.beginPath();x.arc(e.x,e.y,4,0,7);x.fill();txt(x,k,e.x+(e.x<SUN.x?-10:10),e.y+12,c,13,e.x<SUN.x?'right':'left',700);});
  glow(x,SUN.x,SUN.y,7,'255,190,80');txt(x,'태양',SUN.x-14,SUN.y+2,'#ffd166',12,'right');
- x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();if(Math.abs(E.x-SUN.x)<26)txt(x,'지구',E.x+12,E.y+(E.y>SUN.y?6:-8),'#8cc6ff',12,'left',700);else txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
- glow(x,s.x,s.y,5,'255,220,120');txt(x,'별 S ('+st.d+' pc)',s.x+14,s.y-8,'#ffe9a8',14,'left',700);}
+ x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();
+ if(Math.abs(E.x-SUN.x)<26)txt(x,'지구',E.x+12,E.y+(E.y>SUN.y?6:-8),'#8cc6ff',12,'left',700);else txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
+ STARS.forEach(s=>{const p=spos(s);glow(x,p.x,p.y,5,s.col);const right=s.ox>0;txt(x,'별 '+s.id+' ('+s.d+' pc)',p.x+(right?14:-14),p.y-8,s.hex,14,right?'left':'right',900);});}
 function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
  x.strokeStyle='#1c2650';for(let i=0;i<=S.w;i+=CELL){x.beginPath();x.moveTo(i,0);x.lineTo(i,S.h);x.stroke();}for(let j=0;j<=S.h;j+=CELL){x.beginPath();x.moveTo(0,j);x.lineTo(S.w,j);x.stroke();}
  bg.forEach(b=>{x.fillStyle=`rgba(220,228,255,${b.a})`;x.beginPath();x.arc(b.x,b.y,b.s,0,7);x.fill();});
- const Y=170,xs=[];Object.entries(st.snaps).forEach(([k,v])=>{xs.push(v.x);const c=cols[k]||'#b49cff';x.strokeStyle=c;x.lineWidth=2.5;x.beginPath();x.arc(v.x,Y,11,0,7);x.stroke();x.lineWidth=1;txt(x,k+' 사진',v.x,Y-26,c,14,'center',700);});
- if(xs.length===2){const a=Math.min(...xs),b=Math.max(...xs);x.strokeStyle='#ffd166';x.lineWidth=2;x.beginPath();x.moveTo(a,Y+32);x.lineTo(b,Y+32);x.moveTo(a,Y+25);x.lineTo(a,Y+39);x.moveTo(b,Y+25);x.lineTo(b,Y+39);x.stroke();x.lineWidth=1;txt(x,((b-a)/CELL).toFixed(1)+' 칸',(a+b)/2,Y+56,'#ffd166',20,'center',900);}
- glow(x,skyX(earth(st.m)),Y,4.5,'255,220,120');txt(x,'지금 '+Math.floor(st.m)+'월',10,16,'#9ba6d4',13);}
+ const E=earth(st.m);
+ STARS.forEach(s=>{const Y=s.skyY,xs=[];
+  Object.entries(st.snaps).forEach(([k,v])=>{const sx=v.x[s.id];xs.push(sx);const c=mcol[k]||'#b49cff';x.strokeStyle=c;x.lineWidth=2.5;x.beginPath();x.arc(sx,Y,10,0,7);x.stroke();x.lineWidth=1;txt(x,k,sx,Y-22,c,12,'center',700);});
+  if(xs.length===2){const a=Math.min(...xs),b=Math.max(...xs);x.strokeStyle=s.hex;x.lineWidth=2;x.beginPath();x.moveTo(a,Y+22);x.lineTo(b,Y+22);x.moveTo(a,Y+16);x.lineTo(a,Y+28);x.moveTo(b,Y+16);x.lineTo(b,Y+28);x.stroke();x.lineWidth=1;txt(x,s.id+': '+((b-a)/CELL).toFixed(1)+' 칸',(a+b)/2,Y+42,s.hex,17,'center',900);}
+  const cx=skyX(s,E);glow(x,cx,Y,4.5,s.col);txt(x,s.id,cx+12,Y-10,s.hex,13,'left',900);});
+ txt(x,'지금 '+Math.floor(st.m)+'월',10,16,'#9ba6d4',13);}
 function draw(){drawTop();drawSky();}
 function setM(m){st.m=m;$('#pxM').value=m;$('#pxMo').textContent=Math.floor(m)+'월';draw();}
 function stop(){st.play=false;$('#pxPlay').textContent='▶ 공전';}
-$('#pxD').addEventListener('input',e=>{st.d=+e.target.value;$('#pxDo').textContent=st.d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});
+[['#pxD','#pxDo',0],['#pxD2','#pxD2o',1]].forEach(([i,o,k])=>{const el=$(i);if(!el)return;el.addEventListener('input',e=>{STARS[k].d=+e.target.value;$(o).textContent=STARS[k].d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});});
 $('#pxM').addEventListener('input',e=>{stop();setM(+e.target.value);});
-function snap(m){setM(m);const k=Math.floor(m)+'월';if(Object.keys(st.snaps).length>=2&&!st.snaps[k])st.snaps={};st.snaps[k]={m,x:skyX(earth(m))};$('#pxMsg').textContent=k+' 사진을 찍었어요.';draw();}
+function snap(m){setM(m);const k=Math.floor(m)+'월';if(Object.keys(st.snaps).length>=2&&!st.snaps[k])st.snaps={};const E=earth(m),xs={};STARS.forEach(s=>xs[s.id]=skyX(s,E));st.snaps[k]={m,x:xs};$('#pxMsg').textContent=k+' 사진을 찍었어요.';draw();}
 $('#pxJan').onclick=()=>{stop();snap(1);};$('#pxJul').onclick=()=>{stop();snap(7);};
 S.c.addEventListener('click',()=>{stop();snap(st.m);});
 $('#pxPlay').onclick=()=>{st.play=!st.play;$('#pxPlay').textContent=st.play?'⏸ 멈춤':'▶ 공전';if(st.play)loop();};
 function loop(){if(!st.play)return;let m=st.m+0.04;if(m>=13)m=1;setM(m);requestAnimationFrame(loop);}
 $('#pxRec').onclick=()=>{const j=st.snaps['1월'],u=st.snaps['7월'];if(!j||!u){$('#pxMsg').textContent='1월과 7월 사진을 모두 찍어야 기록할 수 있어요.';return;}
- const sh=Math.abs(u.x-j.x)/CELL;st.rows=st.rows.filter(r=>r.d!==st.d);st.rows.push({d:st.d,sh});st.rows.sort((a,b)=>a.d-b.d);renderT();$('#pxMsg').textContent=`기록 완료 (${st.rows.length}개)`;};
-function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="3" class="muted">아직 기록이 없어요</td></tr>';}
+ STARS.forEach(s=>{const sh=Math.abs(u.x[s.id]-j.x[s.id])/CELL;st.rows=st.rows.filter(r=>!(r.id===s.id&&r.d===s.d));st.rows.push({id:s.id,d:s.d,sh});});
+ st.rows.sort((a,b)=>a.d-b.d||(a.id<b.id?-1:1));renderT();$('#pxMsg').textContent=`별 S·T 기록 완료 (${st.rows.length}줄)`;};
+function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td style="color:${r.id==='S'?'#ffb35a':'#8fc8ff'};font-weight:900">${r.id}</td><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">아직 기록이 없어요</td></tr>';}
 renderT();draw();return{draw};})();
 
 // annual parallax concept diagram
