@@ -475,7 +475,7 @@ function drawTop(){const x=T.x;x.clearRect(0,0,T.w,T.h);
  if(pts.length===2){const a1=Math.atan2(pts[0].y-s.y,pts[0].x-s.x),a2=Math.atan2(pts[1].y-s.y,pts[1].x-s.x);x.strokeStyle='#ffd166';x.lineWidth=2;x.beginPath();x.arc(s.x,s.y,24,Math.min(a1,a2),Math.max(a1,a2));x.stroke();x.lineWidth=1;txt(x,'시차',s.x+30,s.y+24,'#ffd166',13,'left',900);x.setLineDash([3,3]);x.strokeStyle='#ffd16699';x.beginPath();x.moveTo(s.x,s.y);x.lineTo(SUN.x,SUN.y);x.stroke();x.setLineDash([]);}
  x.strokeStyle='#ffffff55';line(x,E,s,1);
  glow(x,SUN.x,SUN.y,7,'255,190,80');txt(x,'태양',SUN.x-14,SUN.y+2,'#ffd166',12,'right');
- x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
+ x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();if(Math.abs(E.x-SUN.x)<26)txt(x,'지구',E.x+12,E.y+(E.y>SUN.y?6:-8),'#8cc6ff',12,'left',700);else txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
  glow(x,s.x,s.y,5,'255,220,120');txt(x,'별 S ('+st.d+' pc)',s.x+14,s.y-8,'#ffe9a8',14,'left',700);}
 function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
  x.strokeStyle='#1c2650';for(let i=0;i<=S.w;i+=CELL){x.beginPath();x.moveTo(i,0);x.lineTo(i,S.h);x.stroke();}for(let j=0;j<=S.h;j+=CELL){x.beginPath();x.moveTo(0,j);x.lineTo(S.w,j);x.stroke();}
