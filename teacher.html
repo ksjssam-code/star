@@ -586,13 +586,14 @@ const TEACHER_HASH='1fa58357';
 <section class="slide" data-title="탐구 B · 등급 예측">
   <div class="sh"><span class="ph p1">탐구</span><h2>별의 밝기를 숫자로 — 등급</h2><span class="pg">286~287쪽</span></div>
   <div class="sb">
-    <div class="box">히파르코스: 가장 밝은 별 <b class="gold">1등급</b> ~ 가장 어두운 별 <b class="gold">6등급</b><br>1등급 별은 6등급 별보다 <b class="gold">100배</b> 밝음</div>
+    <div class="box">🏛 기원전 2세기 그리스 <b class="gold">히파르코스</b><br>맨눈으로 별 약 1000개 분류 · 가장 밝은 별 <b class="gold">1등급</b> ~ 겨우 보이는 별 <b class="gold">6등급</b></div>
+    <div class="box">🔭 나중에 측정해 보니 1등급 별은 6등급 별보다 <b class="gold">100배</b> 밝음</div>
     <div class="q"><span class="gold">1등급 차이</span>는 몇 배?</div>
     <div class="vote" id="v22" data-ans="1"><button class="vo">100÷5 = 20배</button><button class="vo">약 2.5배</button><button class="vo">약 16배</button></div>
     <div class="vhint">다음 화면에서 계산으로 확인!</div>
   </div>
   <aside class="notes" data-time="2분">
-    <h4>예상 반응·오개념</h4><p>많은 학생이 ‘20배’를 골라요 (나누기로 생각). 계산기 활동으로 “곱하기”라는 점을 스스로 찾게 합니다.</p>
+    <h4>배경</h4><p>히파르코스(기원전 2세기): 별 약 1000개의 목록을 만들며 맨눈 밝기로 1~6등성 분류 — 객관적 측정이 아닌 눈대중 분류였음.</p><h4>예상 반응·오개념</h4><p>많은 학생이 ‘20배’를 골라요 (나누기로 생각). 계산기 활동으로 “곱하기”라는 점을 스스로 찾게 합니다.</p>
     <p class="say">“20배라면 2등급 차이는 몇 배가 될까요?” → 20×20=400배?! 5등급 차이는 320만 배가 돼 버려요.</p>
   </aside>
 </section>
@@ -603,8 +604,9 @@ const TEACHER_HASH='1fa58357';
     <div class="col">
       <div class="q c">2.5를 계속 곱해 보자!</div>
       <div class="btns"><button class="pri" id="mulBtn" style="font-size:33px;padding:14px 26px">× 2.5</button><button id="mulReset">처음부터</button></div>
-      <div id="mulOut" style="font-size:59px;font-weight:900;margin-top:16px;color:var(--gold)"></div>
+      <div id="mulOut" style="font-size:52px;font-weight:900;margin-top:8px;color:var(--gold)"></div>
       <div class="ans frag" data-show="v22" style="margin-top:14px">1등급 차이 = 약 <b>2.5배</b><br>등급이 <b>작을수록</b> 밝은 별</div>
+      <div class="box frag" style="font-size:28px">📜 1856년 <b class="gold">포그슨</b>: 이 관계를 수치로 정함<br>1등급 차 = 100<sup>1/5</sup> ≈ <b class="gold">2.512배</b></div>
     </div>
     <div style="width:420px">
       <table><thead><tr><th>등급 차</th><th>밝기 비</th></tr></thead><tbody id="mulTb"></tbody></table>
@@ -612,7 +614,7 @@ const TEACHER_HASH='1fa58357';
   </div>
   <aside class="notes" data-time="3분">
     <p>버튼을 한 번 누를 때마다 표가 한 줄씩 채워집니다(2.5, 6.3, 16, 40, 100). 학생들에게 다음 값을 먼저 계산해서 말하게 하세요.</p>
-    <p>참고: 정확한 값은 100<sup>1/5</sup> ≈ 2.512</p>
+    <p>마지막 <kbd>→</kbd>: 포그슨(1856) 공개. 히파르코스의 등급은 눈대중(정성적)이었고, 포그슨이 “5등급 차 = 100배”를 기준으로 정량화함.</p><p>정확한 값은 100<sup>1/5</sup> ≈ 2.512. ※ 일부 교재에 2.521로 적힌 것은 오타.</p><p>심화로 다룰 경우: 밝기 비 = 100<sup>(m₁−m₂)/5</sup>, m₁ − m₂ = −2.5 log(l₁/l₂) — 중학교 범위 밖.</p>
   </aside>
 </section>
 
