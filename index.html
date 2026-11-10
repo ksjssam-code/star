@@ -350,17 +350,17 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
     <h2><span class="badge b2">2-A 실험 ②</span> 왜 '제곱'일까? 빛이 퍼지는 넓이</h2>
     <div class="grid2" style="align-items:start">
       <div>
-        <p style="margin:0 0 6px"><b>🧰 준비물</b>: 휴대폰 손전등, 두꺼운 종이(가운데 <b>1 cm × 1 cm 정사각형 구멍</b>), 모눈종이(1 cm 칸), 자</p>
+        <p style="margin:0 0 6px"><b>🧰 준비물</b>: 휴대폰 손전등, 두꺼운 종이(가운데 <b>지름 약 1 cm 동그란 구멍</b>), 흰 종이, 자</p>
         <ol style="margin:0;padding-left:22px;line-height:1.75">
-          <li>모눈종이를 벽(또는 세운 책)에 붙이기</li>
-          <li>구멍 뚫은 종이를 손전등 바로 앞에 붙여 빛이 <b>네모 구멍</b>으로만 나가게 하기</li>
-          <li>손전등과 종이는 그대로 두고, 구멍에서 모눈종이까지 <b>10 cm</b> → 빛이 비친 칸 수 세기</li>
-          <li>모눈종이를 <b>20 cm, 30 cm</b>로 멀리하며 칸 수 세기</li>
+          <li>흰 종이를 벽(또는 세운 책)에 붙이기</li>
+          <li>구멍 뚫은 종이를 손전등 바로 앞에 붙여 빛이 <b>동그란 구멍</b>으로만 나가게 하기</li>
+          <li>손전등과 종이는 그대로 두고, 구멍에서 흰 종이까지 <b>10 cm</b> → 빛이 비친 <b>원의 지름</b>을 자로 재기</li>
+          <li>흰 종이를 <b>20, 30, 40 cm</b>로 멀리하며 지름 재기 (주변을 어둡게 하면 경계가 잘 보임)</li>
         </ol>
       </div>
       <div class="notice" style="background:#6ad1ff12;border-color:#6ad1ff44;font-size:15px;line-height:1.7">
-        🤔 <b>먼저 예상해 보기</b><br>거리가 2배가 되면 빛이 비친 넓이(칸 수)는 몇 배가 될까?<br>
-        <input maxlength="20" id="spPred" placeholder="내 예상: 예) ○배" style="margin-top:6px;width:100%;font-family:inherit;font-size:17px;font-weight:700;padding:8px 10px;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:8px">
+        🤔 <b>먼저 예상해 보기</b><br>거리가 2배가 되면 빛이 비친 원의 <b>지름</b>은 몇 배? <b>넓이</b>는 몇 배?<br>
+        <input maxlength="30" id="spPred" placeholder="내 예상: 지름 ○배, 넓이 ○배" style="margin-top:6px;width:100%;font-family:inherit;font-size:17px;font-weight:700;padding:8px 10px;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:8px">
       </div>
     </div>
     <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;background:#050913;border:1px solid #2a3666;border-radius:12px;margin-top:12px" font-family="Noto Sans KR, sans-serif">
@@ -371,36 +371,36 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   <text x="73" y="96" fill="#ffd166" font-size="14" font-weight="900" text-anchor="middle">손전등</text>
   <rect x="96" y="118" width="10" height="110" fill="#b08a5a"/><rect x="96" y="164" width="10" height="12" fill="#050913"/>
   <text x="112" y="76" fill="#e0b98a" font-size="13" font-weight="700">두꺼운 종이</text>
-  <text x="112" y="92" fill="#e0b98a" font-size="12">(1 cm × 1 cm 구멍)</text>
+  <text x="112" y="92" fill="#e0b98a" font-size="12">(지름 약 1 cm 동그란 구멍)</text>
   <line x1="106" y1="102" x2="102" y2="116" stroke="#e0b98a"/>
   <polygon points="106,164 640,92 640,248 106,176" fill="#ffe9a8" opacity="0.13"/>
   <line x1="106" y1="164" x2="640" y2="92" stroke="#ffe9a8" stroke-opacity="0.55" stroke-dasharray="4 4"/>
   <line x1="106" y1="176" x2="640" y2="248" stroke="#ffe9a8" stroke-opacity="0.55" stroke-dasharray="4 4"/>
-  <!-- screen at 10 cm (solid) -->
   <rect x="284" y="110" width="10" height="120" fill="#e9edff"/>
   <rect x="284" y="146" width="10" height="46" fill="#ffd166"/>
-  <text x="289" y="102" fill="#e9edff" font-size="13" font-weight="700" text-anchor="middle">모눈종이</text>
-  <!-- ghost screens -->
+  <text x="289" y="102" fill="#e9edff" font-size="13" font-weight="700" text-anchor="middle">흰 종이</text>
   <g opacity="0.45"><rect x="460" y="100" width="10" height="150" fill="none" stroke="#e9edff" stroke-dasharray="5 4" stroke-width="2"/><rect x="636" y="80" width="10" height="182" fill="none" stroke="#e9edff" stroke-dasharray="5 4" stroke-width="2"/></g>
-  <g font-size="13" font-weight="700" text-anchor="middle"><text x="289" y="294" fill="#ff7a90">10 cm</text><text x="465" y="294" fill="#ff7a90">20 cm</text><text x="641" y="294" fill="#ff7a90">30 cm</text></g>
+  <g font-size="13" font-weight="700" text-anchor="middle"><text x="289" y="294" fill="#ff7a90">10 cm</text><text x="465" y="294" fill="#ff7a90">20 cm</text><text x="641" y="294" fill="#ff7a90">30 cm …</text></g>
   <g stroke="#ff7a90" stroke-width="1.5"><line x1="101" y1="280" x2="641" y2="280"/><line x1="289" y1="275" x2="289" y2="285"/><line x1="465" y1="275" x2="465" y2="285"/><line x1="641" y1="275" x2="641" y2="285"/><line x1="101" y1="275" x2="101" y2="285"/></g>
-  <text x="550" y="64" fill="#9ba6d4" font-size="13" text-anchor="middle">모눈종이를 20 cm, 30 cm로 멀리하며 반복</text>
-  <text x="790" y="88" fill="#9ba6d4" font-size="13" font-weight="700" text-anchor="middle">정면에서 본 모눈종이</text>
-  <g stroke="#3b4a80" stroke-width="1">
-    <rect x="720" y="100" width="140" height="140" fill="#e9edff"/>
-    <line x1="740" y1="100" x2="740" y2="240"/><line x1="760" y1="100" x2="760" y2="240"/><line x1="780" y1="100" x2="780" y2="240"/><line x1="800" y1="100" x2="800" y2="240"/><line x1="820" y1="100" x2="820" y2="240"/><line x1="840" y1="100" x2="840" y2="240"/>
-    <line x1="720" y1="120" x2="860" y2="120"/><line x1="720" y1="140" x2="860" y2="140"/><line x1="720" y1="160" x2="860" y2="160"/><line x1="720" y1="180" x2="860" y2="180"/><line x1="720" y1="200" x2="860" y2="200"/><line x1="720" y1="220" x2="860" y2="220"/>
-  </g>
-  <rect x="780" y="160" width="20" height="20" fill="#ffd166" opacity="0.85"/>
-  <text x="790" y="258" fill="#ffd166" font-size="12" font-weight="700" text-anchor="middle">빛이 비친 칸 수 세기</text>
+  <text x="550" y="64" fill="#9ba6d4" font-size="13" text-anchor="middle">흰 종이를 20, 30, 40 cm로 멀리하며 반복</text>
+  <text x="790" y="88" fill="#9ba6d4" font-size="13" font-weight="700" text-anchor="middle">정면에서 본 흰 종이</text>
+  <rect x="720" y="100" width="140" height="140" rx="4" fill="#e9edff"/>
+  <circle cx="790" cy="170" r="34" fill="#ffd166" opacity="0.85"/>
+  <circle cx="790" cy="170" r="34" fill="none" stroke="#c99a00" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="756" y1="224" x2="824" y2="224" stroke="#ff7a90" stroke-width="2"/>
+  <line x1="756" y1="216" x2="756" y2="232" stroke="#ff7a90" stroke-width="2"/><line x1="824" y1="216" x2="824" y2="232" stroke="#ff7a90" stroke-width="2"/>
+  <text x="790" y="258" fill="#ffd166" font-size="12" font-weight="700" text-anchor="middle">빛이 비친 원의 지름을 자로 재기</text>
 </svg>
-
-    <table class="intab" style="margin-top:12px"><thead><tr><th>거리 (cm)</th><th>빛이 비친 칸 수</th><th>10 cm 때와 비교한 넓이 (몇 배?)</th><th>한 칸이 받는 빛 (몇 분의 1?)</th></tr></thead><tbody id="spIn" data-f="실험2 퍼지는 넓이(거리cm/칸 수/넓이 배/한 칸의 빛)"><tr><td><input inputmode="decimal" maxlength="5" value="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="1"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="20"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="30"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr></tbody></table>
-    <div class="grid2" style="margin-top:12px"><div><canvas id="gSp" data-w="560" data-h="340"></canvas><div class="cap">▲ 내가 측정한 거리–빛이 비친 칸 수 그래프</div></div>
-      <div><div class="q g" style="margin-top:0">빛의 세기가 거리의 '제곱'에 반비례하는 까닭은?</div>
-      <textarea data-f="발견-왜 제곱인가" placeholder="빛이 퍼지는 넓이와 관련지어 쓰기" style="min-height:110px"></textarea>
-      <div class="btns"><button class="rv" data-t="r21b">정리 확인</button></div>
-      <div class="reveal" id="r21b">거리 2배 → 넓이 <b>4배</b>(가로 2배 × 세로 2배), 3배 → <b>9배</b> · 같은 양의 빛이 넓게 퍼지므로 한 칸이 받는 빛은 <b>1/4, 1/9</b> → 거리의 <b>제곱</b>에 반비례</div></div></div>
+    <p class="small muted" style="margin:12px 0 0">✍ 10 cm일 때를 1로 보고, 지름은 몇 배인지 · <b>넓이는 몇 배인지</b>(지름이 □배면 넓이는?) · 같은 넓이(한 곳)가 받는 빛은 몇 분의 1인지 써 보기</p>
+    <table class="intab"><thead><tr><th>거리 (cm)</th><th>원의 지름 (cm)</th><th>지름은 몇 배?<br><span class="small">(10 cm = 1)</span></th><th>넓이는 몇 배?<br><span class="small">(10 cm = 1)</span></th><th>한 곳이 받는 빛<br><span class="small">(몇 분의 1?)</span></th></tr></thead><tbody id="spIn" data-f="실험2 빛이 퍼지는 넓이(거리cm/지름cm/지름 배/넓이 배/한 곳의 빛)"><tr><td><input inputmode="decimal" maxlength="5" value="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10" placeholder="1"></td><td><input inputmode="decimal" maxlength="10" placeholder="1"></td><td><input maxlength="10" placeholder="1"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="20"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="30"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="40"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr></tbody></table>
+    <div class="grid2" style="margin-top:12px">
+      <div><canvas id="gSp" data-w="560" data-h="340"></canvas><div class="cap">▲ 내가 측정한 거리–지름 그래프</div></div>
+      <div><canvas id="gSp2" data-w="560" data-h="340"></canvas><div class="cap">▲ 거리–넓이 비 그래프 (내 지름 값으로 자동 계산)</div></div>
+    </div>
+    <div class="q g">지름과 넓이 그래프 모양을 비교해 보고, 빛의 세기가 거리의 '제곱'에 반비례하는 까닭을 써 보기</div>
+    <textarea data-f="발견-왜 제곱인가" placeholder="거리가 2배 → 지름은? → 넓이는? → 한 곳이 받는 빛은?" style="min-height:100px"></textarea>
+    <div class="btns"><button class="rv" data-t="r21b">정리 확인</button></div>
+    <div class="reveal" id="r21b">거리 2배 → 지름 <b>2배</b> → 넓이 2 × 2 = <b>4배</b> (3배 → 9배) · 같은 양의 빛이 4배 넓게 퍼지므로 한 곳이 받는 빛은 <b>1/4</b> → 빛의 세기는 거리의 <b>제곱</b>에 반비례</div>
     <div hidden><canvas id="luxC" data-w="1168" data-h="230"></canvas><input type="range" id="luxD" min="0.5" max="2" step="0.1" value="0.5"><output id="luxDo"></output><button id="luxRec"></button><button id="luxClr"></button><table><tbody id="luxTb"></tbody></table><canvas id="spreadC" data-w="760" data-h="250"></canvas><input type="range" id="spD" min="1" max="3" step="1" value="1"><output id="spDo"></output></div>
   </div>
 
@@ -673,7 +673,8 @@ function plot(id,pts,o){const el=document.getElementById(id);if(!el)return;const
 function drawGraphs(){const lr=rows('luxIn');
  plot('gLux',lr.map(r=>[r[0],r[1]]),{title:'거리에 따른 빛의 세기',xl:'광원으로부터의 거리 (cm)',yl:'빛의 세기 (lx)',col:'#ffd166'});
  plot('gLux2',lr.map(r=>[r[0],r[1]*Math.pow(r[0]/100,2)]),{title:'빛의 세기 × 거리² (거리는 m로 계산)',xl:'광원으로부터의 거리 (cm)',yl:'빛의 세기 × 거리² (lx·m²)',col:'#6ad1ff'});
- const sr=rows('spIn');plot('gSp',sr.map(r=>[r[0],r[1]]),{title:'거리에 따른 빛이 비친 칸 수',xl:'거리 (cm)',yl:'빛이 비친 칸 수',col:'#63e6a3',ydef:10});}
+ const sr=rows('spIn');plot('gSp',sr.map(r=>[r[0],r[1]]),{title:'거리에 따른 빛이 비친 원의 지름',xl:'거리 (cm)',yl:'원의 지름 (cm)',col:'#63e6a3',ydef:10});
+ const base=sr.find(r=>isFinite(r[1])&&r[1]>0);plot('gSp2',base?sr.map(r=>[r[0],Math.pow(r[1]/base[1],2)]):[],{title:'거리에 따른 넓이 비 (첫 줄 = 1)',xl:'거리 (cm)',yl:'넓이는 몇 배?',col:'#b49cff',ydef:10});}
 document.addEventListener('input',e=>{if(e.target.closest&&(e.target.closest('#luxIn')||e.target.closest('#spIn')))drawGraphs();});
 /* ---------- 등급 차 밝기 비 확인 ---------- */
 $('#mulChk').onclick=()=>{const ans=[2.5,6.25,15.6,39,97.7];let ok=0;const ins=[...$('#mulIn').querySelectorAll('input')];
@@ -696,7 +697,7 @@ function collect(sec){const out=[];$$('[data-f]',sec).forEach(el=>{let v='';
  else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('calc')).map(td=>{const i=td.querySelector('input,select');return i?i.value.trim():td.textContent;}).join(' / ')).filter(s=>!s.includes('아직')&&s.replace(/[\s\/]/g,'').length>1).join('\n');
  else v=el.textContent.trim();out.push([el.dataset.f,v]);});return out;}
 $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
- const fields=collect(sec).concat(L==='2'?[['실험2 예상(거리 2배→넓이)',($('#spPred')||{}).value||'']]:[]).concat(faFields(L));
+ const fields=collect(sec).concat(L==='2'?[['실험2 예상(거리 2배→지름·넓이)',($('#spPred')||{}).value||'']]:[]).concat(faFields(L));
  const empty=fields.filter(f=>!f[1]).length;
  if(empty&&!b.dataset.confirm){b.dataset.confirm='1';st.style.color='#ff7a90';st.textContent=`빈칸 ${empty}개가 있음. 그래도 제출하려면 한 번 더 누르기`;return;}
  delete b.dataset.confirm;b.disabled=true;st.style.color='#9ba6d4';st.textContent='제출 중…';
