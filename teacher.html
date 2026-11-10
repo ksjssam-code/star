@@ -287,7 +287,7 @@ const TEACHER_HASH='1fa58357';
 </section>
 
 <section class="slide" data-title="탐구 · 가상 천문대">
-  <div class="sh"><span class="ph p2">탐구</span><h2>가상 천문대: 별 S·T의 시차 비교</h2><span class="pg">280~281쪽</span></div>
+  <div class="sh"><span class="ph p2">탐구</span><h2>가상 천문대: 별 S·T·U의 시차 비교</h2><span class="pg">280~281쪽</span></div>
   <div class="sb">
     <div class="row" style="gap:16px">
       <div><canvas id="pxTop" data-w="520" data-h="320" style="width:584px"></canvas><div class="cap">▲ 위에서 본 모습 (거리 과장)</div></div>
@@ -296,17 +296,19 @@ const TEACHER_HASH='1fa58357';
     <div class="row" style="gap:18px;align-items:center">
       <div class="ctrl" style="flex:1"><label style="color:#ffb35a">별 S</label><input type="range" id="pxD" min="1" max="5" step="0.5" value="2"><output id="pxDo" style="min-width:86px">2 pc</output></div>
       <div class="ctrl" style="flex:1"><label style="color:#8fc8ff">별 T</label><input type="range" id="pxD2" min="1" max="5" step="0.5" value="4"><output id="pxD2o" style="min-width:86px">4 pc</output></div>
-      <div class="ctrl" style="flex:1"><label>시기</label><input type="range" id="pxM" min="1" max="12.99" step="0.01" value="1"><output id="pxMo" style="min-width:70px">1월</output></div>
+      <div class="ctrl" style="flex:1"><label style="color:#7be3a0">별 U</label><input type="range" id="pxD3" min="1" max="5" step="0.5" value="5"><output id="pxD3o" style="min-width:86px">5 pc</output></div>
     </div>
-    <div class="btns">
-      <button id="pxPlay">▶ 공전</button><button class="pri" id="pxJan">📷 1월 사진</button><button class="pri" id="pxJul">📷 7월 사진</button><button class="au" id="pxRec">✍ 기록</button><span class="msg" id="pxMsg" style="align-self:center"></span>
+    <div class="row" style="gap:14px;align-items:center;margin-top:6px">
+      <div class="ctrl" style="flex:1;margin:0"><label>시기</label><input type="range" id="pxM" min="1" max="12.99" step="0.01" value="1"><output id="pxMo" style="min-width:70px">1월</output></div>
+      <div class="btns" style="margin:0"><button id="pxPlay">▶ 공전</button><button class="pri" id="pxJan">📷 1월</button><button class="pri" id="pxJul">📷 7월</button><button class="au" id="pxRec">✍ 기록</button></div>
     </div>
+    <div class="msg" id="pxMsg" style="margin-top:4px"></div>
   </div>
   <aside class="notes" data-time="10분">
     <h4>시연 순서 (교사 조작 + 학생 예측)</h4>
     <ol style="padding-left:18px;margin:0">
-      <li class="say" style="list-style:none;margin-left:-18px">“가까운 별 S(2 pc)와 먼 별 T(4 pc)가 있어요. 6개월 뒤 사진에서 어느 별이 더 많이 움직일까요?” → 예측 받기</li>
-      <li>[1월 사진] → [7월 사진]. 오른쪽 사진에서 두 별의 이동 칸 수 비교 (S 6.8칸, T 3.4칸 → 거리 2배, 시차 ½) → [기록]</li>
+      <li class="say" style="list-style:none;margin-left:-18px">“거리가 다른 별 S(2 pc), T(4 pc), U(5 pc)가 있어요. 6개월 뒤 사진에서 어느 별이 가장 많이 움직일까요?” → 예측 받기</li>
+      <li>[1월 사진] → [7월 사진]. 오른쪽 사진에서 두 별의 이동 칸 수 비교 (S 6.8칸, T 3.4칸, U 2.7칸 → 거리 2배, 시차 ½) → [기록]</li>
       <li>별 T를 5 pc, 별 S를 1 pc 등으로 바꿔 더 측정·기록 (학생에게 조작을 맡겨도 좋아요)</li>
       <li>[공전]으로 두 별이 1년 주기로 왔다 갔다 하는 모습 비교 — 가까운 별이 더 크게 흔들림</li>
     </ol>
@@ -322,8 +324,8 @@ const TEACHER_HASH='1fa58357';
       <table><thead><tr><th>별</th><th>거리<br>(pc)</th><th>이동<br>(칸)</th><th>거리<br>× 이동</th></tr></thead><tbody id="pxTb"></tbody></table>
     </div>
     <div class="col">
-      <div class="q g">① 시차가 더 큰 별은?</div>
-      <div class="ans frag">가까운 별 <b>S</b>의 시차가 더 큼<br>→ 멀수록 시차 <b>작아짐</b></div>
+      <div class="q g">① 시차가 가장 큰 별은?</div>
+      <div class="ans frag">가장 가까운 별 <b>S</b>의 시차가 가장 큼<br>→ 멀수록 시차 <b>작아짐</b></div>
       <div class="q g frag">② ‘거리 × 이동’ 값은?</div>
       <div class="ans frag">거의 <b>일정</b><br>→ 거리와 시차는 <b>반비례</b></div>
     </div>
@@ -1049,7 +1051,7 @@ $$('#stage button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>b.b
 const PX=(function(){
 const T=cv('pxTop'),S=cv('pxSky');
 const SUN={x:260,y:292},R=44,RY=15,K=52,SCALE=160,CELL=20,SKYC=260;
-const STARS=[{id:'S',d:2,ox:-14,col:'255,170,90',hex:'#ffb35a',skyY:115},{id:'T',d:4,ox:14,col:'150,200,255',hex:'#8fc8ff',skyY:225}];
+const STARS=[{id:'S',d:2,ox:-14,col:'255,170,90',hex:'#ffb35a',skyY:80},{id:'T',d:4,ox:14,col:'150,200,255',hex:'#8fc8ff',skyY:165},{id:'U',d:5,ox:0,col:'130,230,160',hex:'#7be3a0',skyY:250}];
 const st={m:1,snaps:{},play:false,rows:[]};
 const r=rng(7),bg=[];for(let i=0;i<70;i++)bg.push({x:r()*520,y:r()*320,s:r()*1.4+.3,a:r()*.6+.3});
 const topbg=[];for(let i=0;i<40;i++)topbg.push({x:r()*520,y:6+r()*18});
@@ -1071,7 +1073,7 @@ function drawTop(){const x=T.x;x.clearRect(0,0,T.w,T.h);
  glow(x,SUN.x,SUN.y,7,'255,190,80');txt(x,'태양',SUN.x-14,SUN.y+2,'#ffd166',12,'right');
  x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();
  if(Math.abs(E.x-SUN.x)<26)txt(x,'지구',E.x+12,E.y+(E.y>SUN.y?6:-8),'#8cc6ff',12,'left',700);else txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
- STARS.forEach(s=>{const p=spos(s);glow(x,p.x,p.y,5,s.col);const right=s.ox>0;txt(x,'별 '+s.id+' ('+s.d+' pc)',p.x+(right?14:-14),p.y-8,s.hex,14,right?'left':'right',900);});}
+ STARS.forEach(s=>{const p=spos(s);glow(x,p.x,p.y,5,s.col);const right=s.ox>=0;txt(x,'별 '+s.id+' ('+s.d+' pc)',p.x+(right?14:-14),p.y-8,s.hex,14,right?'left':'right',900);});}
 function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
  x.strokeStyle='#1c2650';for(let i=0;i<=S.w;i+=CELL){x.beginPath();x.moveTo(i,0);x.lineTo(i,S.h);x.stroke();}for(let j=0;j<=S.h;j+=CELL){x.beginPath();x.moveTo(0,j);x.lineTo(S.w,j);x.stroke();}
  bg.forEach(b=>{x.fillStyle=`rgba(220,228,255,${b.a})`;x.beginPath();x.arc(b.x,b.y,b.s,0,7);x.fill();});
@@ -1084,7 +1086,7 @@ function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
 function draw(){drawTop();drawSky();}
 function setM(m){st.m=m;$('#pxM').value=m;$('#pxMo').textContent=Math.floor(m)+'월';draw();}
 function stop(){st.play=false;$('#pxPlay').textContent='▶ 공전';}
-[['#pxD','#pxDo',0],['#pxD2','#pxD2o',1]].forEach(([i,o,k])=>{const el=$(i);if(!el)return;el.addEventListener('input',e=>{STARS[k].d=+e.target.value;$(o).textContent=STARS[k].d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});});
+[['#pxD','#pxDo',0],['#pxD2','#pxD2o',1],['#pxD3','#pxD3o',2]].forEach(([i,o,k])=>{const el=$(i);if(!el)return;el.addEventListener('input',e=>{STARS[k].d=+e.target.value;$(o).textContent=STARS[k].d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});});
 $('#pxM').addEventListener('input',e=>{stop();setM(+e.target.value);});
 function snap(m){setM(m);const k=Math.floor(m)+'월';if(Object.keys(st.snaps).length>=2&&!st.snaps[k])st.snaps={};const E=earth(m),xs={};STARS.forEach(s=>xs[s.id]=skyX(s,E));st.snaps[k]={m,x:xs};$('#pxMsg').textContent=k+' 사진을 찍었어요.';draw();}
 $('#pxJan').onclick=()=>{stop();snap(1);};$('#pxJul').onclick=()=>{stop();snap(7);};
@@ -1093,8 +1095,8 @@ $('#pxPlay').onclick=()=>{st.play=!st.play;$('#pxPlay').textContent=st.play?'⏸
 function loop(){if(!st.play)return;let m=st.m+0.04;if(m>=13)m=1;setM(m);requestAnimationFrame(loop);}
 $('#pxRec').onclick=()=>{const j=st.snaps['1월'],u=st.snaps['7월'];if(!j||!u){$('#pxMsg').textContent='1월과 7월 사진을 모두 찍어야 기록할 수 있어요.';return;}
  STARS.forEach(s=>{const sh=Math.abs(u.x[s.id]-j.x[s.id])/CELL;st.rows=st.rows.filter(r=>!(r.id===s.id&&r.d===s.d));st.rows.push({id:s.id,d:s.d,sh});});
- st.rows.sort((a,b)=>a.d-b.d||(a.id<b.id?-1:1));renderT();$('#pxMsg').textContent=`별 S·T 기록 완료 (${st.rows.length}줄)`;};
-function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td style="color:${r.id==='S'?'#ffb35a':'#8fc8ff'};font-weight:900">${r.id}</td><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">아직 기록이 없어요</td></tr>';}
+ st.rows.sort((a,b)=>a.d-b.d||(a.id<b.id?-1:1));renderT();$('#pxMsg').textContent=`별 S·T·U 기록 완료 (${st.rows.length}줄)`;};
+function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td style="color:${({S:'#ffb35a',T:'#8fc8ff',U:'#7be3a0'})[r.id]};font-weight:900">${r.id}</td><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">아직 기록이 없어요</td></tr>';}
 renderT();draw();return{draw};})();
 
 // annual parallax concept diagram

@@ -199,14 +199,15 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   </div>
 
   <div class="step">
-    <h2><span class="badge b2">2 탐구하기</span> 가상 천문대에서 별 S·T 관측</h2>
-    <p class="small muted">가까운 별 S와 먼 별 T를 함께 관측: ① 1월·7월 사진 찍기 → ② 두 별의 이동 칸 수 확인 → ③ 아래 표에 직접 입력. 거리를 바꿔 더 측정하기</p>
+    <h2><span class="badge b2">2 탐구하기</span> 가상 천문대에서 별 S·T·U 관측</h2>
+    <p class="small muted">거리가 다른 별 S·T·U를 함께 관측: ① 1월·7월 사진 찍기 → ② 두 별의 이동 칸 수 확인 → ③ 아래 표에 직접 입력. 거리를 바꿔 더 측정하기</p>
     <div class="grid2">
       <div><canvas id="pxTop" data-w="520" data-h="320"></canvas><div class="cap">▲ 위에서 본 모습 (거리 과장)</div></div>
       <div><canvas id="pxSky" data-w="520" data-h="320"></canvas><div class="cap">▲ 밤하늘 사진 (격자 1칸) · 누르면 지금 달 촬영</div></div>
     </div>
     <div class="ctrl"><label>별 S 거리</label><input type="range" id="pxD" min="1" max="5" step="0.5" value="2"><output id="pxDo">2 pc</output>
       <label>별 T 거리</label><input type="range" id="pxD2" min="1" max="5" step="0.5" value="4"><output id="pxD2o">4 pc</output>
+      <label>별 U 거리</label><input type="range" id="pxD3" min="1" max="5" step="0.5" value="5"><output id="pxD3o">5 pc</output>
       <label>관측 시기</label><input type="range" id="pxM" min="1" max="12.99" step="0.01" value="1"><output id="pxMo">1월</output></div>
     <div class="btns"><button id="pxPlay">▶ 공전</button><button class="pri" id="pxJan">📷 1월 사진</button><button class="pri" id="pxJul">📷 7월 사진</button><button class="au" id="pxRec" style="display:none">✍ 기록</button></div>
     <div class="msg" id="pxMsg"></div>
@@ -218,7 +219,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
   <div class="step">
     <h2><span class="badge b3">3 발견 정리</span> 규칙 찾기</h2>
-    <div class="q g">① 가까운 별 S와 먼 별 T 중 시차(이동 칸 수)가 큰 별은? 멀어질수록 시차는?</div>
+    <div class="q g">① 별 S·T·U 중 시차(이동 칸 수)가 가장 큰 별은? 멀어질수록 시차는?</div>
     <textarea data-f="발견-멀수록 시차" placeholder="관찰 결과"></textarea>
     <div class="btns"><button class="rv" data-t="r12">정리 확인</button></div>
     <div class="reveal" id="r12">멀수록 시차 <b>작아짐</b></div>
@@ -456,7 +457,7 @@ window.addEventListener('hashchange',route);
 function key(){if(PREVIEW)return 'starlab_ans_preview';return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
 function save(){const d={tbl:tableVals()};$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
 function restore(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
- $('#pxIn').innerHTML='';const tv=(d.tbl&&d.tbl.length)?d.tbl:[['S','','',''],['T','','',''],['S','','',''],['T','','','']];tv.forEach(v=>addRow(v));
+ $('#pxIn').innerHTML='';const tv=(d.tbl&&d.tbl.length)?d.tbl:[['S','','',''],['T','','',''],['U','','',''],['S','','',''],['T','','',''],['U','','','']];tv.forEach(v=>addRow(v));
  $$('textarea[data-f]').forEach(t=>{t.value=d['t:'+t.dataset.f]||'';});
  $$('.predict[data-f]').forEach(p=>p.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',d['p:'+p.dataset.f]===b.textContent)));lockRv();}
 $$('.predict').forEach(g=>g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{g.querySelectorAll('button').forEach(o=>o.classList.remove('sel'));b.classList.add('sel');save();})));
@@ -468,7 +469,7 @@ $$('.rv').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.da
 
 /* ---------- 측정표 직접 입력 ---------- */
 function addRow(v){v=v||['','','',''];const tr=document.createElement('tr');
- tr.innerHTML=`<td><select><option value="">선택</option><option>S</option><option>T</option></select></td><td><input inputmode="decimal" maxlength="8"></td><td><input inputmode="decimal" maxlength="8"></td><td><input inputmode="decimal" maxlength="10"></td>`;
+ tr.innerHTML=`<td><select><option value="">선택</option><option>S</option><option>T</option><option>U</option></select></td><td><input inputmode="decimal" maxlength="8"></td><td><input inputmode="decimal" maxlength="8"></td><td><input inputmode="decimal" maxlength="10"></td>`;
  const f=[...tr.querySelectorAll('select,input')];f.forEach((e,i)=>e.value=v[i]||'');f.forEach(e=>e.addEventListener('input',save));$('#pxIn').appendChild(tr);}
 function tableVals(){return [...$('#pxIn').querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('select,input')].map(e=>e.value.trim()));}
 $('#pxAddRow').onclick=()=>{addRow();save();};
@@ -537,7 +538,7 @@ $('#qaPost').onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서�
 const PX=(function(){
 const T=cv('pxTop'),S=cv('pxSky');
 const SUN={x:260,y:292},R=44,RY=15,K=52,SCALE=160,CELL=20,SKYC=260;
-const STARS=[{id:'S',d:2,ox:-14,col:'255,170,90',hex:'#ffb35a',skyY:115},{id:'T',d:4,ox:14,col:'150,200,255',hex:'#8fc8ff',skyY:225}];
+const STARS=[{id:'S',d:2,ox:-14,col:'255,170,90',hex:'#ffb35a',skyY:80},{id:'T',d:4,ox:14,col:'150,200,255',hex:'#8fc8ff',skyY:165},{id:'U',d:5,ox:0,col:'130,230,160',hex:'#7be3a0',skyY:250}];
 const st={m:1,snaps:{},play:false,rows:[]};
 const r=rng(7),bg=[];for(let i=0;i<70;i++)bg.push({x:r()*520,y:r()*320,s:r()*1.4+.3,a:r()*.6+.3});
 const topbg=[];for(let i=0;i<40;i++)topbg.push({x:r()*520,y:6+r()*18});
@@ -559,7 +560,7 @@ function drawTop(){const x=T.x;x.clearRect(0,0,T.w,T.h);
  glow(x,SUN.x,SUN.y,7,'255,190,80');txt(x,'태양',SUN.x-14,SUN.y+2,'#ffd166',12,'right');
  x.fillStyle='#4aa3ff';x.beginPath();x.arc(E.x,E.y,6,0,7);x.fill();
  if(Math.abs(E.x-SUN.x)<26)txt(x,'지구',E.x+12,E.y+(E.y>SUN.y?6:-8),'#8cc6ff',12,'left',700);else txt(x,'지구',E.x,E.y-14,'#8cc6ff',12,'center',700);
- STARS.forEach(s=>{const p=spos(s);glow(x,p.x,p.y,5,s.col);const right=s.ox>0;txt(x,'별 '+s.id+' ('+s.d+' pc)',p.x+(right?14:-14),p.y-8,s.hex,14,right?'left':'right',900);});}
+ STARS.forEach(s=>{const p=spos(s);glow(x,p.x,p.y,5,s.col);const right=s.ox>=0;txt(x,'별 '+s.id+' ('+s.d+' pc)',p.x+(right?14:-14),p.y-8,s.hex,14,right?'left':'right',900);});}
 function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
  x.strokeStyle='#1c2650';for(let i=0;i<=S.w;i+=CELL){x.beginPath();x.moveTo(i,0);x.lineTo(i,S.h);x.stroke();}for(let j=0;j<=S.h;j+=CELL){x.beginPath();x.moveTo(0,j);x.lineTo(S.w,j);x.stroke();}
  bg.forEach(b=>{x.fillStyle=`rgba(220,228,255,${b.a})`;x.beginPath();x.arc(b.x,b.y,b.s,0,7);x.fill();});
@@ -572,7 +573,7 @@ function drawSky(){const x=S.x;x.clearRect(0,0,S.w,S.h);
 function draw(){drawTop();drawSky();}
 function setM(m){st.m=m;$('#pxM').value=m;$('#pxMo').textContent=Math.floor(m)+'월';draw();}
 function stop(){st.play=false;$('#pxPlay').textContent='▶ 공전';}
-[['#pxD','#pxDo',0],['#pxD2','#pxD2o',1]].forEach(([i,o,k])=>{const el=$(i);if(!el)return;el.addEventListener('input',e=>{STARS[k].d=+e.target.value;$(o).textContent=STARS[k].d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});});
+[['#pxD','#pxDo',0],['#pxD2','#pxD2o',1],['#pxD3','#pxD3o',2]].forEach(([i,o,k])=>{const el=$(i);if(!el)return;el.addEventListener('input',e=>{STARS[k].d=+e.target.value;$(o).textContent=STARS[k].d+' pc';st.snaps={};$('#pxMsg').textContent='거리가 바뀌었어요. 사진을 다시 찍으세요.';draw();});});
 $('#pxM').addEventListener('input',e=>{stop();setM(+e.target.value);});
 function snap(m){setM(m);const k=Math.floor(m)+'월';if(Object.keys(st.snaps).length>=2&&!st.snaps[k])st.snaps={};const E=earth(m),xs={};STARS.forEach(s=>xs[s.id]=skyX(s,E));st.snaps[k]={m,x:xs};$('#pxMsg').textContent=k+' 사진을 찍었어요.';draw();}
 $('#pxJan').onclick=()=>{stop();snap(1);};$('#pxJul').onclick=()=>{stop();snap(7);};
@@ -581,8 +582,8 @@ $('#pxPlay').onclick=()=>{st.play=!st.play;$('#pxPlay').textContent=st.play?'⏸
 function loop(){if(!st.play)return;let m=st.m+0.04;if(m>=13)m=1;setM(m);requestAnimationFrame(loop);}
 $('#pxRec').onclick=()=>{const j=st.snaps['1월'],u=st.snaps['7월'];if(!j||!u){$('#pxMsg').textContent='1월과 7월 사진을 모두 찍어야 기록할 수 있어요.';return;}
  STARS.forEach(s=>{const sh=Math.abs(u.x[s.id]-j.x[s.id])/CELL;st.rows=st.rows.filter(r=>!(r.id===s.id&&r.d===s.d));st.rows.push({id:s.id,d:s.d,sh});});
- st.rows.sort((a,b)=>a.d-b.d||(a.id<b.id?-1:1));renderT();$('#pxMsg').textContent=`별 S·T 기록 완료 (${st.rows.length}줄)`;};
-function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td style="color:${r.id==='S'?'#ffb35a':'#8fc8ff'};font-weight:900">${r.id}</td><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">아직 기록이 없어요</td></tr>';}
+ st.rows.sort((a,b)=>a.d-b.d||(a.id<b.id?-1:1));renderT();$('#pxMsg').textContent=`별 S·T·U 기록 완료 (${st.rows.length}줄)`;};
+function renderT(){$('#pxTb').innerHTML=st.rows.length?st.rows.map(r=>`<tr><td style="color:${({S:'#ffb35a',T:'#8fc8ff',U:'#7be3a0'})[r.id]};font-weight:900">${r.id}</td><td>${r.d}</td><td>${r.sh.toFixed(1)}</td><td class="hl">${(r.d*r.sh).toFixed(1)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">아직 기록이 없어요</td></tr>';}
 renderT();draw();return{draw};})();
 
 // annual parallax concept diagram
