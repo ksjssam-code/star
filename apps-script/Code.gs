@@ -10,7 +10,8 @@
  * 4. 나오는 "웹 앱 URL"을 index.html 맨 아래쪽 API_URL 에 붙여 넣기
  *
  * 시트는 처음 사용할 때 자동으로 만들어짐
- *   - 1차시 탐구 / 2차시 탐구 / 3차시 탐구 : 학생별 탐구 결과 (다시 제출하면 같은 줄이 최신 내용으로 바뀜)
+ *   - 1차시 탐구 / 2차시 탐구 / 3차시 탐구 : 학생별 탐구 결과 (반·번호 순 자동 정렬, 다시 제출하면 같은 줄이 최신 내용으로 바뀜)
+ *   - 시트 상단 메뉴 [⭐ 별 탐구실] → [탐구 결과 반·번호 순으로 정렬]로 언제든 다시 정렬 가능
  *   - 질문 / 답변 : 질문 게시판 (부적절한 글은 '숨김' 칸 체크 → 게시판에서 사라짐)
  *   - 선생님 답변 달기: '답변' 시트 맨 아래 줄에 질문 ID를 복사하고, 반 칸에 "교사"라고 쓰면 게시판에 "선생님"으로 표시됨
  */
@@ -39,6 +40,20 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+/* ---------------- 시트 메뉴: 반·번호 순 정렬 ---------------- */
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('⭐ 별 탐구실')
+    .addItem('탐구 결과 반·번호 순으로 정렬', 'sortAllSheets')
+    .addToUi();
+}
+function sortAllSheets() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ['1차시 탐구', '2차시 탐구', '3차시 탐구'].forEach(function (n) {
+    const s = ss.getSheetByName(n);
+    if (s) sortByClassNum_(s);
+  });
 }
 
 /* ---------------- 탐구 결과 제출 ---------------- */
