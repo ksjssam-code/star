@@ -54,7 +54,7 @@ th{background:var(--panel2);color:var(--muted);font-weight:500}
 td.hl{color:var(--gold);font-weight:700}
 textarea{width:100%;min-height:70px;font-family:inherit;font-size:17px;background:#0b1229;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
 textarea:focus{outline:2px solid var(--cyan);border-color:transparent}
-.intab td{padding:4px}.intab input,.intab select{width:100%;text-align:center;font-size:18px;font-weight:700;font-family:inherit;padding:6px;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:6px}
+.intab td{padding:4px}#hbIn input{width:100%;text-align:center;font-size:18px;font-weight:700;font-family:inherit;padding:6px;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:6px}.intab input,.intab select{width:100%;text-align:center;font-size:18px;font-weight:700;font-family:inherit;padding:6px;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:6px}
 .intab input:focus{outline:2px solid var(--cyan)}
 .reveal{display:none;background:#63e6a314;border:1px solid #63e6a355;border-radius:10px;padding:12px 16px;margin-top:10px}
 .reveal.show{display:block}
@@ -281,28 +281,34 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
   <div class="step">
     <h2><span class="badge b2">2-A 탐구</span> 거리에 따른 빛의 세기</h2>
-    <p class="small muted">0.5 m, 1.0 m, 1.5 m, 2.0 m에서 측정하고 기록하기</p>
+    <p class="small muted">0.5 m, 1.0 m, 1.5 m, 2.0 m에서 측정하고 표에 <b>직접 기록·계산</b>하기</p>
     <canvas id="luxC" data-w="1168" data-h="230"></canvas>
     <div class="ctrl"><label>전구까지 거리</label><input type="range" id="luxD" min="0.5" max="2" step="0.1" value="0.5"><output id="luxDo">0.5 m</output></div>
-    <div class="btns"><button class="au" id="luxRec">✍ 기록</button><button id="luxClr">표 지우기</button></div>
-    <table><thead><tr><th>거리 (m)</th><th>세기 (lx)</th><th>거리²</th><th>세기 × 거리²</th></tr></thead><tbody id="luxTb" data-f="측정표(거리/세기/거리²/곱)"></tbody></table>
+    <div hidden><button id="luxRec"></button><button id="luxClr"></button><table><tbody id="luxTb"></tbody></table></div>
+    <table class="intab"><thead><tr><th>거리 (m)</th><th>빛의 세기 (lx)</th><th>거리²</th><th>세기 × 거리²</th></tr></thead><tbody id="luxIn" data-f="측정표(거리/세기/거리²/곱)"><tr><td><b>0.5</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>1.0</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>1.5</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>2.0</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr></tbody></table>
     <div class="q g">빛의 세기와 거리 사이의 규칙은?</div>
     <textarea data-f="발견-빛의 세기와 거리" placeholder="규칙"></textarea>
     <div class="btns"><button class="rv" data-t="r21">정리 확인</button></div>
     <div class="reveal" id="r21">'세기 × 거리²' 일정 → 빛의 세기는 <b>거리의 제곱에 반비례</b></div>
-    <div class="q c">왜 '제곱'일까? 빛이 퍼지는 넓이 관찰</div>
+    <div class="q c">왜 '제곱'일까? 거리를 바꾸며 빛이 퍼지는 넓이를 관찰하고 표에 써 보기</div>
     <canvas id="spreadC" data-w="760" data-h="250"></canvas>
     <div class="ctrl"><label>거리</label><input type="range" id="spD" min="1" max="3" step="1" value="1"><output id="spDo">1배</output></div>
+    <table class="intab" style="max-width:640px"><thead><tr><th>거리</th><th>빛을 받는 칸 수</th><th>한 칸이 받는 빛 (처음의 몇 분의 1?)</th></tr></thead><tbody id="spIn" data-f="퍼지는 넓이(거리/칸 수/한 칸의 빛)"><tr><td><b>1배</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/2"></td></tr><tr><td><b>2배</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/2"></td></tr><tr><td><b>3배</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/2"></td></tr></tbody></table>
+    <textarea data-f="발견-왜 제곱인가" placeholder="빛의 세기가 거리의 '제곱'에 반비례하는 까닭" style="margin-top:8px"></textarea>
+    <div class="btns"><button class="rv" data-t="r21b">정리 확인</button></div>
+    <div class="reveal" id="r21b">거리 2배 → <b>4칸</b>, 3배 → <b>9칸</b>에 같은 양의 빛이 퍼짐 → 한 칸이 받는 빛은 <b>1/4, 1/9</b> → 거리의 <b>제곱</b>에 반비례</div>
   </div>
 
   <div class="step">
     <h2><span class="badge b2">2-B 탐구</span> 별의 밝기를 숫자로 — 등급</h2>
-    <p>히파르코스: 가장 밝은 별 1등급 ~ 가장 어두운 별 6등급 · 1등급은 6등급보다 <b>100배</b> 밝음</p>
+    <p>🏛 기원전 2세기 히파르코스: 맨눈으로 별 약 1000개를 가장 밝은 별 1등급 ~ 겨우 보이는 별 6등급으로 분류 · 측정해 보니 1등급은 6등급보다 <b>100배</b> 밝음</p>
     <div class="q">1등급 차이는 몇 배? (예측)</div>
     <div class="btns predict" data-f="예측-1등급 차이"><button>100÷5 = 20배</button><button>약 2.5배</button><button>약 16배</button></div>
-    <div class="q c">2.5를 계속 곱해 보기</div>
-    <div class="btns"><button class="pri" id="mulBtn">× 2.5</button><button id="mulReset">처음부터</button><span id="mulOut" style="font-size:24px;font-weight:900;color:var(--gold);align-self:center;margin-left:8px"></span></div>
-    <table style="max-width:420px"><thead><tr><th>등급 차</th><th>밝기 비</th></tr></thead><tbody id="mulTb"></tbody></table>
+    <div class="q c">1등급 차이가 2.5배라면? 2.5를 계속 곱해서 밝기 비를 직접 계산해 쓰기</div>
+    <div hidden><button id="mulBtn"></button><button id="mulReset"></button><span id="mulOut"></span><table><tbody id="mulTb"></tbody></table></div>
+    <table class="intab" style="max-width:560px"><thead><tr><th>등급 차</th><th>계산</th><th>밝기 비 (약 몇 배?)</th></tr></thead><tbody id="mulIn" data-f="등급 차별 밝기 비(직접 계산)"><tr><td><b>1</b></td><td class="small muted calc">2.5</td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>2</b></td><td class="small muted calc">2.5 × 2.5</td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>3</b></td><td class="small muted calc">2.5 × 2.5 × 2.5</td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>4</b></td><td class="small muted calc">2.5 × 2.5 × 2.5 × 2.5</td><td><input inputmode="decimal" maxlength="10"></td></tr><tr><td><b>5</b></td><td class="small muted calc">2.5 × 2.5 × 2.5 × 2.5 × 2.5</td><td><input inputmode="decimal" maxlength="10"></td></tr></tbody></table>
+    <div class="btns"><button class="pri" id="mulChk">계산 확인</button><span class="msg" id="mulMsg" style="align-self:center"></span></div>
+    <p class="small" id="pogson" style="display:none;color:var(--green)">📜 1856년 <b>포그슨</b>: 5등급 차 = 100배가 되도록 1등급 차를 100<sup>1/5</sup> ≈ <b>2.512배</b>로 정함</p>
     <div class="grid2" style="margin-top:12px"><div><canvas id="mag2C" data-w="640" data-h="400"></canvas></div>
       <div><div class="ctrl" style="grid-template-columns:auto 1fr auto 1fr"><label>A</label><select id="mA"></select><label>B</label><select id="mB"></select></div>
       <div class="chips"><div class="chip">등급 차 <b id="mDiff">-</b></div><div class="chip">밝기 비 <b id="mRatio">-</b></div></div><p class="small" id="mText"></p></div></div>
@@ -318,7 +324,9 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
     <div class="btns"><select id="stSel"><option value="sirius">시리우스</option><option value="betel">베텔게우스</option><option value="sun">태양</option></select><button id="to10">📍 10 pc로</button><button class="pri" id="toReal">🌌 실제 거리로</button></div>
     <canvas id="magC" data-w="1168" data-h="280"></canvas>
     <div class="ctrl"><label>별까지 거리</label><input type="range" id="dist" min="-5.7" max="3" step="0.01" value="1"><output id="disto">10 pc</output></div>
-    <div class="chips"><div class="chip">겉보기 <b id="mApp">-</b></div><div class="chip">절대 <b id="mAbs">-</b></div><div class="chip">겉보기−절대 <b id="mDm">-</b></div></div>
+    <div class="chips"><div class="chip">겉보기 <b id="mApp">-</b></div><div class="chip">절대 <b id="mAbs">-</b></div><div class="chip" hidden>겉보기−절대 <b id="mDm">-</b></div></div>
+    <p class="small muted" style="margin:4px 0 0">별을 <b>실제 거리로</b> 옮긴 뒤 등급을 읽어 표에 쓰고, 겉보기 − 절대를 직접 계산하기</p>
+    <table class="intab"><thead><tr><th>별</th><th>겉보기 등급<br><span class="small">(실제 거리)</span></th><th>절대 등급</th><th>겉보기 − 절대</th><th>10 pc보다</th></tr></thead><tbody id="mcIn" data-f="겉보기·절대 등급표(겉보기/절대/차/거리)"><tr><td><b>시리우스</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr><tr><td><b>베텔게우스</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr></tbody></table>
     <div class="q g">① 10 pc에서 겉보기·절대 등급의 관계 ② 10 pc보다 가까우면/멀면? ③ 실제로 더 밝은 별은?</div>
     <textarea data-f="발견-겉보기·절대 등급" placeholder="①, ②, ③" style="min-height:100px"></textarea>
     <div class="btns"><button class="rv" data-t="r23">정리 확인</button></div>
@@ -327,10 +335,11 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
   <div class="step">
     <h2><span class="badge b3">해 보기</span> 등급으로 별의 거리 비교 (287쪽)</h2>
-    <table><thead><tr><th>별</th><th>알타이르</th><th>아르크투루스</th><th>리겔</th></tr></thead><tbody><tr><td>겉보기 등급</td><td>0.77</td><td>−0.04</td><td>0.12</td></tr><tr><td>절대 등급</td><td>2.2</td><td>−0.3</td><td>−6.8</td></tr></tbody></table>
+    <table><thead><tr><th>별</th><th>알타이르</th><th>아르크투루스</th><th>리겔</th></tr></thead><tbody><tr><td>겉보기 등급</td><td>0.77</td><td>−0.04</td><td>0.12</td></tr><tr><td>절대 등급</td><td>2.2</td><td>−0.3</td><td>−6.8</td></tr></tbody>
+    <tbody id="hbIn" class="intab" data-f="해보기-겉보기−절대(알타이르/아르크투루스/리겔)"><tr><td><b>겉보기 − 절대</b> <span class="small muted calc">(직접 계산)</span></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr></tbody></table>
     <div class="q c">가장 밝게 보이는 별과 실제로 가장 밝은 별은?</div>
     <textarea data-f="해보기-밝게 보이는 별/실제 밝은 별" placeholder="내 답"></textarea>
-    <div class="q c">가까운 별부터 순서대로 누르기</div>
+    <div class="q c">계산한 값을 보고 가까운 별부터 순서대로 누르기 — 어떤 값을 보고 판단했는지도 생각해 보기</div>
     <div class="cards" id="distCards"></div>
     <div class="btns"><button class="pri" id="distChk">순서 확인</button><button id="distReset">다시</button></div>
     <div class="msg" id="distMsg" data-f="해보기-거리 순서 결과"></div>
@@ -432,6 +441,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ
 function __boot(){
 const $=s=>document.querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
 const FONT='"Noto Sans KR",sans-serif';
+window.STU=true;
 function cv(id){const c=document.getElementById(id),w=+c.dataset.w,h=+c.dataset.h,d=Math.max(2,window.devicePixelRatio||1);c.width=w*d;c.height=h*d;const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{c,x,w,h};}
 function rng(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646;};}
 function txt(x,s,X,Y,col,size,align,weight){x.fillStyle=col||'#eef1ff';x.font=(weight||500)+' '+Math.round((size||13)*1.3)+'px '+FONT;x.textAlign=align||'left';x.textBaseline='middle';x.fillText(s,X,Y);}
@@ -459,12 +469,14 @@ window.addEventListener('hashchange',route);
 
 /* ---------- predictions / reveal / autosave ---------- */
 function key(){if(PREVIEW)return 'starlab_ans_preview';return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
-function save(){const d={tbl:tableVals()};$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
+function save(){const d={tbl:tableVals(),tbs:{}};$$('tbody[data-f]').forEach(tb=>{if(tb.id!=='pxIn')d.tbs[tb.id]=[...tb.querySelectorAll('input,select')].map(e=>e.value);});$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
 function restore(){if(typeof faRender==='function'&&FA_DATA){['1','2','3'].forEach(L=>{if(document.getElementById('quiz'+L))faRender('quiz'+L,L);});}let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
+ $$('tbody[data-f]').forEach(tb=>{if(tb.id==='pxIn')return;const v=(d.tbs||{})[tb.id]||[];tb.querySelectorAll('input,select').forEach((e,i)=>e.value=v[i]||'');});
  $('#pxIn').innerHTML='';const tv=(d.tbl&&d.tbl.length)?d.tbl:[['S','','',''],['T','','',''],['U','','',''],['S','','',''],['T','','',''],['U','','','']];tv.forEach(v=>addRow(v));
  $$('textarea[data-f]').forEach(t=>{t.value=d['t:'+t.dataset.f]||'';});
  $$('.predict[data-f]').forEach(p=>p.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',d['p:'+p.dataset.f]===b.textContent)));lockRv();}
 $$('.predict').forEach(g=>g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{g.querySelectorAll('button').forEach(o=>o.classList.remove('sel'));b.classList.add('sel');save();})));
+document.addEventListener('input',e=>{if(e.target.closest&&e.target.closest('tbody[data-f]')&&!e.target.closest('#pxIn')){clearTimeout(saveT);saveT=setTimeout(save,400);}});document.addEventListener('change',e=>{if(e.target.closest&&e.target.closest('tbody[data-f]'))save();});
 let saveT;document.addEventListener('input',e=>{if(e.target.matches('textarea[data-f]')){clearTimeout(saveT);saveT=setTimeout(save,400);lockRv();}});
 // 정리 확인: 바로 위 칸에 내 생각을 써야 열림
 function rvField(b){let el=b.parentElement.previousElementSibling;while(el&&el.tagName!=='TEXTAREA')el=el.previousElementSibling;return el;}
@@ -533,6 +545,10 @@ function faGrade(L,root,silent){const items=FA_DATA[L],st=FA[L];
  if(st.passed)root.querySelectorAll('.item.fa').forEach((d,i)=>{const it=items[i];if(it.t==='essay'){d.querySelector('.fb').innerHTML='✍ 작성 완료 · <b>예시 답</b>: '+it.model;}});}
 function faFields(L){const st=FA[L]||faLoad(L),items=FA_DATA[L];const ess=items.findIndex(it=>it.t==='essay');
  return [['형성평가 첫 채점(자동 4문항)',st.first?st.firstScore+' / 4':'미응시'],['형성평가 문항별 첫 결과',st.first?st.first.map((x,i)=>(i+1)+'번 '+x).join(', '):''],['형성평가 시도 횟수',String(st.attempts||0)],['형성평가 통과',st.passed?'통과':'미통과'],['형성평가 서술형',((st.ans||{})[ess]||{}).v||'']];}
+/* ---------- 등급 차 밝기 비 확인 ---------- */
+$('#mulChk').onclick=()=>{const ans=[2.5,6.25,15.6,39,97.7];let ok=0;const ins=[...$('#mulIn').querySelectorAll('input')];
+ ins.forEach((e,i)=>{const v=parseFloat(String(e.value).replace(/[^0-9.]/g,''));const g=isFinite(v)&&Math.abs(v-ans[i])/ans[i]<=0.12;e.style.borderColor=e.value?(g?'#63e6a3':'#ff7a90'):'';if(g)ok++;});
+ $('#mulMsg').style.color=ok===5?'#63e6a3':'#ff7a90';$('#mulMsg').textContent=ok===5?'⭕ 모두 맞음! 2.5를 5번 곱하면 약 100':`${ok}/5 맞음 · 빨간 칸 다시 계산하기`;if(ok===5)$('#pogson').style.display='block';};
 /* ---------- quiz ---------- */
 const QZ={};
 function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]=items.map(()=>null);root.innerHTML='<h3 style="margin:18px 0 6px">스스로 확인하기</h3>';
@@ -547,7 +563,7 @@ async function apiGet(params){if(!API_URL)throw new Error('NOAPI');const r=await
 function collect(sec){const out=[];$$('[data-f]',sec).forEach(el=>{let v='';
  if(el.classList.contains('predict')){const s=el.querySelector('button.sel');v=s?s.textContent:'';}
  else if(el.tagName==='TEXTAREA')v=el.value.trim();
- else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].map(td=>{const i=td.querySelector('input,select');return i?i.value.trim():td.textContent;}).join(' / ')).filter(s=>!s.includes('아직')&&s.replace(/[\s\/]/g,'').length>1).join('\n');
+ else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('calc')).map(td=>{const i=td.querySelector('input,select');return i?i.value.trim():td.textContent;}).join(' / ')).filter(s=>!s.includes('아직')&&s.replace(/[\s\/]/g,'').length>1).join('\n');
  else v=el.textContent.trim();out.push([el.dataset.f,v]);});return out;}
 $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
  const fields=collect(sec).concat(faFields(L));
@@ -697,8 +713,8 @@ function drawSp(){const x=P.x;x.clearRect(0,0,P.w,P.h);const sx=40,sy=125,u=80,h
  for(let k=1;k<=3;k++){const X=sx+k*u*1.45;x.strokeStyle=k===sp?'#ffd166':'#2a3666';x.lineWidth=k===sp?3:1;x.beginPath();x.moveTo(X,sy-half*k);x.lineTo(X,sy+half*k);x.stroke();txt(x,'거리 '+k,X,sy+half*3+18,k===sp?'#ffd166':'#9ba6d4',14,'center',700);}
  x.lineWidth=1;const X=sx+sp*u*1.45;x.fillStyle='rgba(255,220,130,.18)';x.beginPath();x.moveTo(sx,sy);x.lineTo(X,sy-half*sp);x.lineTo(X,sy+half*sp);x.closePath();x.fill();glow(x,sx,sy,7,'255,220,140');
  const gx=430,gy=20,cell=64,n=sp,a=1/(n*n);
- for(let i=0;i<3;i++)for(let j=0;j<3;j++){const lit=i<n&&j<n;x.fillStyle=lit?`rgba(255,215,110,${0.15+0.85*a})`:'#0b1229';x.fillRect(gx+i*cell,gy+j*cell,cell-4,cell-4);if(lit)txt(x,a===1?'1':'1/'+(n*n),gx+i*cell+cell/2-2,gy+j*cell+cell/2-2,a===1?'#1a1300':'#ffe9a8',18,'center',900);}
- txt(x,'빛을 받는 칸 '+n*n+'칸',gx+cell*1.5,gy+cell*3+18,'#ffd166',17,'center',900);}
+ for(let i=0;i<3;i++)for(let j=0;j<3;j++){const lit=i<n&&j<n;x.fillStyle=lit?`rgba(255,215,110,${0.15+0.85*a})`:'#0b1229';x.fillRect(gx+i*cell,gy+j*cell,cell-4,cell-4);if(lit&&!window.STU)txt(x,a===1?'1':'1/'+(n*n),gx+i*cell+cell/2-2,gy+j*cell+cell/2-2,a===1?'#1a1300':'#ffe9a8',18,'center',900);}
+ if(!window.STU)txt(x,'빛을 받는 칸 '+n*n+'칸',gx+cell*1.5,gy+cell*3+18,'#ffd166',17,'center',900);else txt(x,'정면에서 본 스크린',gx+cell*1.5,gy+cell*3+18,'#9ba6d4',14,'center',700);}
 $('#spD').addEventListener('input',e=>{sp=+e.target.value;$('#spDo').textContent=sp+'배';drawSp();});drawSp();
 
 // multiply
