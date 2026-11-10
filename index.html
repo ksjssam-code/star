@@ -71,6 +71,10 @@ textarea:focus{outline:2px solid var(--cyan);border-color:transparent}
 .quiz .opts button.ok{background:#63e6a333;border-color:var(--green)}
 .quiz .opts button.no{background:#ff7a9026;border-color:var(--pink)}
 .quiz .fb{font-size:15px;margin-top:8px;display:none}.quiz .fb.show{display:block}
+.quiz .opts button.sel{background:#6ad1ff26;border-color:var(--cyan);font-weight:700}
+.quiz .item.fa.ok{border-color:var(--green)}.quiz .item.fa.no{border-color:var(--pink)}
+.quiz .item.fa .fa-in{background:#0b1229;color:var(--gold);font-weight:700}
+.ltag{font-size:12px;background:#6ad1ff22;color:var(--cyan);border-radius:6px;padding:1px 7px;font-weight:700}
 .chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 .chip{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:15px}
 .chip b{color:var(--gold);font-size:20px;font-variant-numeric:tabular-nums}
@@ -244,7 +248,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   </div>
 
   <div class="step">
-    <h2><span class="badge b4">4 개념 확인</span> 연주 시차</h2>
+    <h2><span class="badge b4">4 개념 확인 · 형성평가</span> 연주 시차</h2>
     <div class="grid2"><div><canvas id="apC" data-w="520" data-h="460"></canvas></div>
     <div class="concept"><ul>
       <li><b>시차</b>: 서로 다른 두 지점에서 한 물체를 볼 때 생기는 방향 차이</li>
@@ -333,7 +337,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   </div>
 
   <div class="step">
-    <h2><span class="badge b4">3 개념 확인</span> 별의 등급과 밝기</h2>
+    <h2><span class="badge b4">3 개념 확인 · 형성평가</span> 별의 등급과 밝기</h2>
     <div class="concept"><ul>
       <li>빛의 세기는 거리의 <b>제곱에 반비례</b> → 겉보기 밝기 ∝ 실제 밝기 ÷ 거리²</li>
       <li>등급 작을수록 밝음 · 1등급 차 약 2.5배 · 5등급 차 100배</li>
@@ -389,7 +393,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   </div>
 
   <div class="step">
-    <h2><span class="badge b4">3 개념 확인</span> 별의 표면 온도와 색</h2>
+    <h2><span class="badge b4">3 개념 확인 · 형성평가</span> 별의 표면 온도와 색</h2>
     <canvas id="barC" data-w="1168" data-h="130"></canvas>
     <div class="concept"><ul>
       <li>별의 색은 <b>표면 온도</b>에 따라 다름 → 색을 보면 표면 온도를 알 수 있음</li>
@@ -456,7 +460,7 @@ window.addEventListener('hashchange',route);
 /* ---------- predictions / reveal / autosave ---------- */
 function key(){if(PREVIEW)return 'starlab_ans_preview';return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
 function save(){const d={tbl:tableVals()};$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
-function restore(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
+function restore(){if(typeof faRender==='function'&&FA_DATA){['1','2','3'].forEach(L=>{if(document.getElementById('quiz'+L))faRender('quiz'+L,L);});}let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
  $('#pxIn').innerHTML='';const tv=(d.tbl&&d.tbl.length)?d.tbl:[['S','','',''],['T','','',''],['U','','',''],['S','','',''],['T','','',''],['U','','','']];tv.forEach(v=>addRow(v));
  $$('textarea[data-f]').forEach(t=>{t.value=d['t:'+t.dataset.f]||'';});
  $$('.predict[data-f]').forEach(p=>p.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',d['p:'+p.dataset.f]===b.textContent)));lockRv();}
@@ -473,6 +477,62 @@ function addRow(v){v=v||['','','',''];const tr=document.createElement('tr');
  const f=[...tr.querySelectorAll('select,input')];f.forEach((e,i)=>e.value=v[i]||'');f.forEach(e=>e.addEventListener('input',save));$('#pxIn').appendChild(tr);}
 function tableVals(){return [...$('#pxIn').querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('select,input')].map(e=>e.value.trim()));}
 $('#pxAddRow').onclick=()=>{addRow();save();};
+/* ---------- 형성평가 (5문항: 객관식 2 + 두 단계 1 + 단답형 1 + 서술형 1) ---------- */
+const FA_DATA={
+'1':[
+ {t:'mc',q:'별까지의 거리가 멀수록 연주 시차는?',o:['작아진다','커진다','변하지 않는다','별의 밝기에 따라 다르다'],a:0,h:'가상 천문대 표에서 거리가 2배일 때 이동 칸 수가 어떻게 변했는지 떠올려 보기'},
+ {t:'mc',q:'연주 시차가 0.25″인 별까지의 거리는?',o:['0.25 pc','2.5 pc','4 pc','25 pc'],a:2,h:'거리(pc) = 1 ÷ 연주 시차(″)'},
+ {t:'two',q:'별 A의 연주 시차는 0.5″, 별 B는 0.1″이다. 지구에서 더 가까운 별은?',o:['별 A','별 B','같다'],a:0,rq:'그렇게 생각한 까닭은?',ro:['연주 시차가 클수록 가깝기 때문','연주 시차가 작을수록 가깝기 때문','연주 시차와 거리는 관계가 없기 때문'],ra:0,h:'엄지 실험: 눈에 가까운 엄지가 더 크게 움직였음'},
+ {t:'short',q:'연주 시차가 1″인 별까지의 거리를 1 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)(이)라고 한다.',acc:['pc','파섹','1pc','1파섹','parsec'],h:'영어 약자 두 글자의 거리 단위'},
+ {t:'essay',q:'별의 시차를 측정할 때 6개월 간격으로 관측하는 까닭을 쓰시오.',model:'6개월 간격이면 지구가 공전 궤도의 양 끝에 있어 두 관측 지점 사이가 가장 멀다. 그래서 시차가 가장 크게 측정되어 정확하게 잴 수 있다.'}],
+'2':[
+ {t:'mc',q:'1등급 별은 6등급 별보다 약 몇 배 밝은가?',o:['약 5배','약 20배','약 100배','약 2.5배'],a:2,h:'히파르코스의 등급: 5등급 차이의 밝기 비'},
+ {t:'mc',q:'2등급 별은 5등급 별보다 약 몇 배 밝은가?',o:['약 2.5배','약 6.3배','약 16배','약 40배'],a:2,h:'등급 차가 3이면 2.5를 3번 곱하기'},
+ {t:'two',q:'별 A(겉보기 등급 1, 절대 등급 3)와 별 B(겉보기 등급 2, 절대 등급 −1) 중 실제로 더 밝은 별은?',o:['별 A','별 B','같다'],a:1,rq:'그렇게 생각한 까닭은?',ro:['절대 등급이 더 작기 때문','겉보기 등급이 더 작기 때문','지구에서 더 가까이 있기 때문'],ra:0,h:'실제 밝기는 같은 거리(10 pc)에 놓고 비교한 등급으로 판단'},
+ {t:'short',q:'겉보기 등급과 절대 등급이 같은 별은 지구로부터 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) pc 떨어져 있다.',acc:['10','10pc','십'],h:'절대 등급의 기준 거리'},
+ {t:'essay',q:'전구에서 2배 멀어지면 빛의 세기는 몇 배가 되는지 쓰고, 그 까닭을 빛이 퍼지는 넓이로 설명하시오.',model:'¼배가 된다. 거리가 2배가 되면 같은 양의 빛이 4배 넓은 면적에 퍼지므로 단위 면적이 받는 빛의 세기는 ¼이 된다.'}],
+'3':[
+ {t:'mc',q:'표면 온도가 가장 높은 별의 색은?',o:['적색','황색','백색','청색'],a:3,h:'용암이 식을 때 색 변화와 시뮬레이션 결과 떠올리기'},
+ {t:'mc',q:'표면 온도가 약 6000 ℃인 태양의 색은?',o:['청백색','백색','황색','적색'],a:2,h:'교과서 개념 정리의 태양'},
+ {t:'two',q:'오리온자리의 베텔게우스(적색)와 리겔(청백색) 중 표면 온도가 더 높은 별은?',o:['베텔게우스','리겔','같다'],a:1,rq:'그렇게 생각한 까닭은?',ro:['푸른색을 띨수록 표면 온도가 높기 때문','붉은색을 띨수록 표면 온도가 높기 때문','더 밝게 보이기 때문'],ra:0,h:'별의 색은 무엇에 따라 달라지는지 떠올리기'},
+ {t:'short',q:'별의 색은 별의 표면 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)에 따라 달라진다.',acc:['온도','표면온도'],h:'용암의 색을 바꾼 것'},
+ {t:'essay',q:'약 50억 년 뒤 태양의 표면 온도가 훨씬 낮아지면 태양의 색은 어떻게 변할지 쓰고, 그 까닭을 설명하시오.',model:'황색에서 주황색, 적색으로 변할 것이다. 별의 색은 표면 온도에 따라 달라지며, 표면 온도가 낮을수록 붉은색을 띠기 때문이다.'}]};
+const FA={};
+function faKey(L){return key()+'_fa'+L;}
+function faLoad(L){let d=null;try{d=JSON.parse(localStorage.getItem(faKey(L))||'null');}catch(e){}return d||{ans:{},first:null,attempts:0,passed:false};}
+function faSave(L){try{localStorage.setItem(faKey(L),JSON.stringify(FA[L]));}catch(e){}}
+function norm(t){return String(t||'').replace(/[\s()]/g,'').toLowerCase();}
+function faRender(el,L){const items=FA_DATA[L];const st=FA[L]=faLoad(L);const root=document.getElementById(el);
+ root.innerHTML=`<h3 style="margin:18px 0 4px">📝 형성평가 (5문항)</h3><p class="small muted" style="margin:0 0 6px">모두 풀고 [채점하기]. 처음 채점한 점수가 선생님께 전달됨. 틀린 문제는 힌트를 보고 다시 풀어 <b>모두 맞히면 통과</b>!</p><div class="fa-st" id="faSt${L}"></div>`;
+ items.forEach((it,i)=>{const d=document.createElement('div');d.className='item fa';d.dataset.i=i;
+  let h=`<p>${i+1}. <span class="ltag">${{mc:'객관식',two:'두 단계',short:'단답형',essay:'서술형'}[it.t]}</span> ${it.q}</p>`;
+  if(it.t==='mc'||it.t==='two')h+=`<div class="opts" data-g="a">${it.o.map((o,j)=>`<button data-j="${j}">${o}</button>`).join('')}</div>`;
+  if(it.t==='two')h+=`<p style="margin:10px 0 6px;font-weight:500">└ ${it.rq}</p><div class="opts" data-g="r">${it.ro.map((o,j)=>`<button data-j="${j}">${o}</button>`).join('')}</div>`;
+  if(it.t==='short')h+=`<input type="text" class="fa-in" maxlength="20" placeholder="답 입력" style="width:220px">`;
+  if(it.t==='essay')h+=`<textarea class="fa-ta" maxlength="600" placeholder="까닭까지 써 보기"></textarea>`;
+  h+=`<div class="fb"></div>`;d.innerHTML=h;
+  const a=st.ans[i]||{};
+  d.querySelectorAll('.opts').forEach(g=>{const k=g.dataset.g;g.querySelectorAll('button').forEach(b=>{if(a[k]===+b.dataset.j)b.classList.add('sel');b.onclick=()=>{if(st.passed)return;g.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');(st.ans[i]=st.ans[i]||{})[k]=+b.dataset.j;d.classList.remove('ok','no');faSave(L);};});});
+  const inp=d.querySelector('.fa-in,.fa-ta');if(inp){inp.value=a.v||'';inp.addEventListener('input',()=>{(st.ans[i]=st.ans[i]||{}).v=inp.value;d.classList.remove('ok','no');faSave(L);});if(st.passed)inp.readOnly=true;}
+  root.appendChild(d);});
+ const bar=document.createElement('div');bar.className='btns';bar.innerHTML=`<button class="au" id="faGo${L}">✔ 채점하기</button>`;root.appendChild(bar);
+ document.getElementById('faGo'+L).onclick=()=>faGrade(L,root);
+ if(st.first)faGrade(L,root,true);}
+function faCheck(it,a){a=a||{};if(it.t==='mc')return a.a===it.a;if(it.t==='two')return a.a===it.a&&a.r===it.ra;if(it.t==='short')return it.acc.map(norm).includes(norm(a.v));if(it.t==='essay')return norm(a.v).length>=10;}
+function faAnswered(it,a){a=a||{};if(it.t==='mc')return a.a!=null;if(it.t==='two')return a.a!=null&&a.r!=null;return norm(a.v).length>0;}
+function faGrade(L,root,silent){const items=FA_DATA[L],st=FA[L];
+ const miss=items.filter((it,i)=>!faAnswered(it,st.ans[i])).length;
+ if(miss&&!silent){document.getElementById('faSt'+L).innerHTML=`<span style="color:#ff7a90">아직 풀지 않은 문제 ${miss}개</span>`;return;}
+ const res=items.map((it,i)=>faCheck(it,st.ans[i]));
+ if(!silent){st.attempts++;if(!st.first){st.first=res.slice(0,4).map(x=>x?'O':'X');st.firstScore=res.slice(0,4).filter(Boolean).length;}}
+ root.querySelectorAll('.item.fa').forEach((d,i)=>{const it=items[i],ok=res[i],fb=d.querySelector('.fb');d.classList.toggle('ok',ok);d.classList.toggle('no',!ok);fb.classList.add('show');
+  if(it.t==='essay')fb.innerHTML=ok?(st.passed||res.every(Boolean)?`✍ 작성 완료 · <b>예시 답</b>: ${it.model}`:'✍ 작성 완료 (선생님이 확인)'):'❗ 10자 이상 까닭까지 쓰기';
+  else fb.innerHTML=ok?'⭕ 정답':`❌ 다시 생각해 보기 · 💡 ${it.h}`;});
+ st.passed=res.every(Boolean);faSave(L);
+ document.getElementById('faSt'+L).innerHTML=`<div class="chips"><div class="chip">첫 채점 <b>${st.firstScore} / 4</b></div><div class="chip">시도 <b>${st.attempts}</b>회</div>${st.passed?'<div class="chip" style="border-color:#63e6a3">🎉 <b style="color:#63e6a3">통과!</b></div>':'<div class="chip">통과까지 <b>'+res.filter(x=>!x).length+'</b>문제</div>'}</div>`+(st.passed?'<p class="small" style="color:#63e6a3;margin:4px 0">아래 [제출]을 눌러 선생님께 보내기</p>':'');
+ if(st.passed)root.querySelectorAll('.item.fa').forEach((d,i)=>{const it=items[i];if(it.t==='essay'){d.querySelector('.fb').innerHTML='✍ 작성 완료 · <b>예시 답</b>: '+it.model;}});}
+function faFields(L){const st=FA[L]||faLoad(L),items=FA_DATA[L];const ess=items.findIndex(it=>it.t==='essay');
+ return [['형성평가 첫 채점(자동 4문항)',st.first?st.firstScore+' / 4':'미응시'],['형성평가 문항별 첫 결과',st.first?st.first.map((x,i)=>(i+1)+'번 '+x).join(', '):''],['형성평가 시도 횟수',String(st.attempts||0)],['형성평가 통과',st.passed?'통과':'미통과'],['형성평가 서술형',((st.ans||{})[ess]||{}).v||'']];}
 /* ---------- quiz ---------- */
 const QZ={};
 function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]=items.map(()=>null);root.innerHTML='<h3 style="margin:18px 0 6px">스스로 확인하기</h3>';
@@ -490,7 +550,7 @@ function collect(sec){const out=[];$$('[data-f]',sec).forEach(el=>{let v='';
  else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].map(td=>{const i=td.querySelector('input,select');return i?i.value.trim():td.textContent;}).join(' / ')).filter(s=>!s.includes('아직')&&s.replace(/[\s\/]/g,'').length>1).join('\n');
  else v=el.textContent.trim();out.push([el.dataset.f,v]);});return out;}
 $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
- const fields=collect(sec);const q=QZ[L]||[];const done=q.filter(x=>x!==null).length;fields.push(['스스로 확인(첫 시도 정답)',done?q.filter(x=>x===true).length+' / '+q.length+(done<q.length?' (미응답 '+(q.length-done)+')':''):'미응답']);
+ const fields=collect(sec).concat(faFields(L));
  const empty=fields.filter(f=>!f[1]).length;
  if(empty&&!b.dataset.confirm){b.dataset.confirm='1';st.style.color='#ff7a90';st.textContent=`빈칸 ${empty}개가 있음. 그래도 제출하려면 한 번 더 누르기`;return;}
  delete b.dataset.confirm;b.disabled=true;st.style.color='#9ba6d4';st.textContent='제출 중…';
@@ -739,21 +799,7 @@ $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';}
 
 
 
-quiz('quiz1','1',[
- {q:'멀리 있는 별일수록 연주 시차는?',o:['작아짐','커짐','변화 없음'],a:0,e:'연주 시차는 거리에 반비례'},
- {q:'연주 시차가 0.5″인 별까지의 거리는?',o:['0.5 pc','1 pc','2 pc','5 pc'],a:2,e:'1 ÷ 0.5 = 2 pc'},
- {q:'연주 시차 0.2″인 별 A와 0.1″인 별 B 중 가까운 별은?',o:['별 A','별 B','같음'],a:0,e:'연주 시차가 클수록 가까움 (A 5 pc, B 10 pc)'},
- {q:'별 S의 위치가 1년 주기로 변하는 까닭은?',o:['별 S의 움직임','지구의 공전','지구의 자전'],a:1,e:'지구가 1년에 한 바퀴 공전하기 때문'}]);
-quiz('quiz2','2',[
- {q:'등급이 작을수록 별의 밝기는?',o:['밝음','어두움'],a:0,e:'등급 수치가 작을수록 밝음'},
- {q:'겉보기 등급 = 절대 등급인 별까지의 거리는?',o:['1 pc','10 pc','100 pc'],a:1,e:'절대 등급은 10 pc 기준'},
- {q:'3등급 별은 6등급 별보다 약 몇 배 밝을까?',o:['약 3배','약 7.5배','약 16배','약 100배'],a:2,e:'2.5 × 2.5 × 2.5 ≈ 16배'},
- {q:'[사고력] 100 pc에 있는 별 S의 겉보기 등급이 6등급. 절대 등급은?',o:['1등급','4등급','6등급','11등급'],a:0,e:'10 pc로 옮기면 100배 밝아짐 → 5등급 작아져 1등급'}]);
-quiz('quiz3','3',[
- {q:'청색 별은 적색 별보다 표면 온도가?',o:['높음','낮음','같음'],a:0,e:'푸른빛일수록 표면 온도 높음'},
- {q:'표면 온도 약 6000 ℃인 태양의 색은?',o:['청백색','황색','적색'],a:1,e:'태양은 황색 별'},
- {q:'별의 표면 온도는 무엇을 보고 알 수 있을까?',o:['크기','색','밝기'],a:1,e:'별의 색으로 표면 온도 비교'},
- {q:'[사고력] 유리 공예에서 더 뜨거운 부분은?',o:['하얗게 빛나는 부분','붉게 빛나는 부분','같음'],a:0,e:'온도가 높아질수록 적색에서 점차 백색'}]);
+faRender('quiz1','1');faRender('quiz2','2');faRender('quiz3','3');
 
 restore();route();
 }
