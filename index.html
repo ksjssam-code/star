@@ -288,7 +288,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
           <li>책상 위에 줄자를 펴고, 0 cm에 <b>광원 휴대폰</b>(손전등 켜기)을 세워 고정</li>
           <li><b>조도 센서 휴대폰</b>을 광원에서 <b>20 cm</b>에 두고 센서가 광원을 향하게 하기</li>
           <li>주변을 어둡게 하고 빛의 세기(lx) 측정 → 표에 기록</li>
-          <li>40 cm, 60 cm, 80 cm로 옮기며 측정·기록</li>
+          <li><b>30 cm부터 90 cm까지 10 cm씩</b> 옮기며 측정·기록 (거리 8개 이상)</li>
         </ol>
       </div>
       <div class="notice" style="background:#6ad1ff12;border-color:#6ad1ff44;font-size:15px;line-height:1.7">
@@ -326,7 +326,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   <text x="280" y="58" fill="#9ba6d4" font-size="12" text-anchor="middle">조도 측정 앱</text>
   <!-- ghost positions -->
   <g opacity="0.35"><rect x="433" y="96" width="24" height="120" rx="6" fill="none" stroke="#63e6a3" stroke-dasharray="5 4" stroke-width="2"/><rect x="598" y="96" width="24" height="120" rx="6" fill="none" stroke="#63e6a3" stroke-dasharray="5 4" stroke-width="2"/><rect x="763" y="96" width="24" height="120" rx="6" fill="none" stroke="#63e6a3" stroke-dasharray="5 4" stroke-width="2"/></g>
-  <text x="610" y="78" fill="#9ba6d4" font-size="14" text-anchor="middle">→ 40, 60, 80 cm로 옮기며 측정</text>
+  <text x="610" y="78" fill="#9ba6d4" font-size="14" text-anchor="middle">→ 10 cm씩 옮기며 90 cm까지 측정</text>
   <!-- distance arrow -->
   <line x1="110" y1="270" x2="268" y2="270" stroke="#ff7a90" stroke-width="2"/><polygon points="268,270 258,265 258,275" fill="#ff7a90"/><polygon points="110,270 120,265 120,275" fill="#ff7a90"/>
   <text x="189" y="292" fill="#ff7a90" font-size="13" font-weight="700" text-anchor="middle">손전등 ~ 센서 거리</text>
@@ -334,7 +334,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 </svg>
 
     <p class="small muted" style="margin:12px 0 0">✍ 측정값을 입력하고 <b>거리²</b>(거리를 m로 바꿔서: 20 cm = 0.2 m)과 <b>빛의 세기 × 거리²</b>을 직접 계산하기 · 20 cm에서의 빛의 세기를 1로 볼 때 다른 거리의 빛의 세기의 비를 <b>분수</b>로 써 보기 (예: 1/2)</p>
-    <table class="intab"><thead><tr><th>거리 (cm)</th><th>빛의 세기 (lx)</th><th>거리² (m²)</th><th>빛의 세기 × 거리²</th><th>빛의 세기의 비<br><span class="small">(20 cm = 1)</span></th></tr></thead><tbody id="luxIn" data-f="실험1 측정표(거리cm/빛의 세기lx/거리²m²/세기×거리²/세기의 비)"><tr><td><input inputmode="decimal" maxlength="5" value="20"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10" placeholder="예: 0.04"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="1"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="40"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="60"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="80"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr></tbody></table>
+    <table class="intab"><thead><tr><th>거리 (cm)</th><th>빛의 세기 (lx)</th><th>거리² (m²)</th><th>빛의 세기 × 거리²</th><th>빛의 세기의 비<br><span class="small">(20 cm = 1)</span></th></tr></thead><tbody id="luxIn" data-f="실험1 측정표(거리cm/빛의 세기lx/거리²m²/세기×거리²/세기의 비)"><tr><td><input inputmode="decimal" maxlength="5" value="20"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10" placeholder="예: 0.04"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="1"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="30"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="40"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="50"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="60"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="70"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="80"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr><tr><td><input inputmode="decimal" maxlength="5" value="90"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td></tr></tbody></table>
+    <div class="btns"><button id="luxAdd">+ 거리 줄 추가</button><span class="lockhint">거리를 8개 이상 측정하면 결과를 더 믿을 수 있음</span></div>
     <div class="grid2" style="margin-top:12px">
       <div><canvas id="gLux" data-w="560" data-h="340"></canvas><div class="cap">▲ 내가 측정한 거리–빛의 세기 그래프</div></div>
       <div><canvas id="gLux2" data-w="560" data-h="340"></canvas><div class="cap">▲ 거리–(빛의 세기 × 거리²) 그래프 (자동 계산)</div></div>
@@ -575,7 +576,7 @@ window.addEventListener('hashchange',route);
 function key(){if(PREVIEW)return 'starlab_ans_preview';return user?'starlab_ans_'+user.cls+'_'+user.num:'starlab_ans_guest';}
 function save(){const d={tbl:tableVals(),tbs:{},spPred:($('#spPred')||{}).value||''};$$('tbody[data-f]').forEach(tb=>{if(tb.id!=='pxIn')d.tbs[tb.id]=[...tb.querySelectorAll('input,select')].map(e=>e.value);});$$('textarea[data-f]').forEach(t=>d['t:'+t.dataset.f]=t.value);$$('.predict[data-f]').forEach(p=>{const s=p.querySelector('button.sel');if(s)d['p:'+p.dataset.f]=s.textContent;});try{localStorage.setItem(key(),JSON.stringify(d));}catch(e){}}
 function restore(){if(typeof faRender==='function'&&FA_DATA){['1','2','3'].forEach(L=>{if(document.getElementById('quiz'+L))faRender('quiz'+L,L);});}let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}');}catch(e){}
- $$('tbody[data-f]').forEach(tb=>{if(tb.id==='pxIn')return;const v=(d.tbs||{})[tb.id];if(!v)return;tb.querySelectorAll('input,select').forEach((e,i)=>{if(v[i]!=null)e.value=v[i];});});if($('#spPred'))$('#spPred').value=d.spPred||'';
+ $$('tbody[data-f]').forEach(tb=>{if(tb.id==='pxIn')return;const v=(d.tbs||{})[tb.id];if(!v)return;if(tb.id==='luxIn'&&typeof luxAddRow==='function'){while(tb.querySelectorAll('input').length<v.length)luxAddRow();}tb.querySelectorAll('input,select').forEach((e,i)=>{if(v[i]!=null)e.value=v[i];});});if($('#spPred'))$('#spPred').value=d.spPred||'';
  $('#pxIn').innerHTML='';const tv=(d.tbl&&d.tbl.length)?d.tbl:[['S','','',''],['T','','',''],['U','','',''],['S','','',''],['T','','',''],['U','','','']];tv.forEach(v=>addRow(v));
  $$('textarea[data-f]').forEach(t=>{t.value=d['t:'+t.dataset.f]||'';});
  $$('.predict[data-f]').forEach(p=>p.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',d['p:'+p.dataset.f]===b.textContent)));lockRv();}
@@ -650,6 +651,10 @@ function faGrade(L,root,silent){const items=FA_DATA[L],st=FA[L];
 function faFields(L){const st=FA[L]||faLoad(L),items=FA_DATA[L];const ess=items.findIndex(it=>it.t==='essay');
  return [['형성평가 첫 채점(자동 4문항)',st.first?st.firstScore+' / 4':'미응시'],['형성평가 문항별 첫 결과',st.first?st.first.map((x,i)=>(i+1)+'번 '+x).join(', '):''],['형성평가 시도 횟수',String(st.attempts||0)],['형성평가 통과',st.passed?'통과':'미통과'],['형성평가 서술형',((st.ans||{})[ess]||{}).v||'']];}
 /* ---------- 실험 그래프 ---------- */
+function luxRowHTML(){return `<td><input inputmode="decimal" maxlength="5"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td>`;}
+function luxAddRow(){const tr=document.createElement('tr');tr.innerHTML=luxRowHTML();$('#luxIn').appendChild(tr);}
+$('#luxAdd').onclick=()=>{luxAddRow();save();};
+
 function numv(v){v=String(v||'').replace(/,/g,'').trim();if(!v)return NaN;if(v.includes('/')){const[a,b]=v.split('/').map(Number);return b?a/b:NaN;}return parseFloat(v);}
 function rows(tb){return [...$('#'+tb).querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('input')].map(e=>numv(e.value)));}
 function plot(id,pts,o){const el=document.getElementById(id);if(!el)return;const C=cv(id),x=C.x,W=C.w,H=C.h;x.fillStyle='#050913';x.fillRect(0,0,W,H);
