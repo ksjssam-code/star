@@ -29,7 +29,9 @@ const HEAD_BG = '#fff2cc';
 const R_HEAD = ['반', '번호', '이름', '닉네임', 'PIN', '점수 보정', '등록 시각', '현재 점수', '등급'];
 const Q_HEAD = ['ID', '작성 시각', '차시', '반', '번호', '이름', '내용', '숨김', '말머리', '익명', '좋은 글'];
 const A_HEAD = ['ID', '질문 ID', '작성 시각', '반', '번호', '이름', '답변', '숨김', '좋은 글'];
-const TAGS = ['질문', '궁금해', '해 보고 싶은 탐구', '생각한 점'];
+const TAGS = ['궁금해요', '해 보고 싶은 탐구', '새로 알게 된 점'];
+const TAG_OLD = { '질문': '궁금해요', '궁금해': '궁금해요', '생각한 점': '새로 알게 된 점' };
+function tagOf_(t) { t = String(t || ''); t = TAG_OLD[t] || t; return TAGS.indexOf(t) >= 0 ? t : '궁금해요'; }
 const LEVELS = [[0, '성운', '☁️'], [5, '적색 별', '🔴'], [15, '주황색 별', '🟠'], [30, '황색 별', '🟡'], [50, '백색 별', '⚪'], [75, '청백색 별', '🔷'], [100, '청색 별', '💙'], [140, '초신성', '💥']];
 const PTS = { submit: 5, pass: 5, perfect: 3, post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
 
@@ -278,11 +280,11 @@ function sortByClassNum_(s, startCol) {
 function addQuestion_(d, me) {
   const L = String(d.lesson);
   const text = clip_(d.text, 500).trim();
-  const tag = TAGS.indexOf(d.tag) >= 0 ? d.tag : '질문';
+  const tag = tagOf_(d.tag);
   if (['1', '2', '3'].indexOf(L) < 0 || !text) return { ok: false, error: '내용 확인' };
   const s = sheet_('질문', Q_HEAD);
   ensureHead_(s, Q_HEAD);
-  s.appendRow([safe_(newId_()), new Date(), L, safe_(d.cls), Number(d.num), safe_(clip_(d.name, 20)), safe_(text), false, safe_(tag), (tag === '질문' && d.anon === true), false]);
+  s.appendRow([safe_(newId_()), new Date(), L, safe_(d.cls), Number(d.num), safe_(clip_(d.name, 20)), safe_(text), false, safe_(tag), (tag === '궁금해요' && d.anon === true), false]);
   const r = s.getLastRow();
   s.getRange(r, 8).insertCheckboxes(); s.getRange(r, 10).insertCheckboxes(); s.getRange(r, 11).insertCheckboxes();
   return { ok: true };
@@ -314,7 +316,7 @@ function listQuestions_(lesson) {
     const w = who(r[3], r[4], r[9] === true);
     return {
       id: String(r[0]), time: iso_(r[1]), lesson: String(r[2]), cls: String(r[3]), who: w.who, icon: w.icon,
-      tag: TAGS.indexOf(String(r[8])) >= 0 ? String(r[8]) : '질문', good: r[10] === true, text: String(r[6]),
+      tag: tagOf_(r[8]), good: r[10] === true, text: String(r[6]),
       answers: as.filter(function (a) { return String(a[1]) === String(r[0]); })
         .map(function (a) { const aw = who(a[3], a[4], false); return { time: iso_(a[2]), who: aw.who, icon: aw.icon, good: a[8] === true, text: String(a[6]) }; })
         .sort(function (x, y) { return x.time < y.time ? -1 : 1; })
