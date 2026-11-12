@@ -32,8 +32,8 @@ const A_HEAD = ['ID', '질문 ID', '작성 시각', '반', '번호', '이름', '
 const TAGS = ['궁금해요', '해 보고 싶은 탐구', '오늘의 발견'];
 const TAG_OLD = { '질문': '궁금해요', '궁금해': '궁금해요', '생각한 점': '오늘의 발견', '새로 알게 된 점': '오늘의 발견' };
 function tagOf_(t) { t = String(t || ''); t = TAG_OLD[t] || t; return TAGS.indexOf(t) >= 0 ? t : '궁금해요'; }
-const LEVELS = [[0, '성운', '☁️'], [5, '적색 별', '🔴'], [15, '주황색 별', '🟠'], [30, '황색 별', '🟡'], [50, '백색 별', '⚪'], [75, '청백색 별', '🔷'], [100, '청색 별', '💙'], [140, '초신성', '💥']];
-const PTS = { submit: 5, pass: 5, perfect: 3, post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
+const LEVELS = [[0, '성운', '☁️'], [5, '적색 별', '🔴'], [12, '주황색 별', '🟠'], [22, '황색 별', '🟡'], [35, '백색 별', '⚪'], [50, '청백색 별', '🔷'], [70, '청색 별', '💙'], [100, '초신성', '💥']];
+const PTS = { post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
 
 function doGet(e) {
   const p = (e && e.parameter) || {};
@@ -193,19 +193,7 @@ function pointsOf_(cls, num) { return allPoints_()[key_(cls, num)] || 0; }
 function allPoints_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet(), pts = {};
   const add = function (k, v) { pts[k] = (pts[k] || 0) + v; };
-  // 탐구 제출 · 형성평가
-  ['1', '2', '3'].forEach(function (L) {
-    const s = ss.getSheetByName(L + '차시 탐구');
-    if (!s || s.getLastRow() < 2) return;
-    const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
-    const h = v[0].map(String), iPass = h.indexOf('형성평가 통과'), iFirst = h.indexOf('형성평가 첫 채점(자동 4문항)');
-    for (let i = 1; i < v.length; i++) {
-      const k = key_(v[i][1], v[i][2]);
-      add(k, PTS.submit);
-      if (iPass >= 0 && String(v[i][iPass]) === '통과') add(k, PTS.pass);
-      if (iFirst >= 0 && String(v[i][iFirst]).replace(/\s/g, '') === '4/4') add(k, PTS.perfect);
-    }
-  });
+  // 등급 점수는 호기심 은하 활동 + 선생님 보정만 반영 (탐구 제출·형성평가는 제외)
   // 게시판 (하루 상한)
   const daily = {};
   const board = function (rows, iCls, iNum, iTime, iText, iHide, iGood, base) {

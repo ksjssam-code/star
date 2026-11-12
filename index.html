@@ -165,10 +165,9 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 </div></div>
 <div id="lvHelp" class="ovl2"><div class="card">
   <h2 style="margin:0 0 6px">⭐ 별 등급 안내</h2>
-  <p class="small muted" style="margin:0 0 8px">활동할수록 별의 <b>표면 온도</b>가 올라가요! (3차시 내용 복습)</p>
+  <p class="small muted" style="margin:0 0 8px"><b>호기심 은하</b>에서 묻고 답할수록 별의 <b>표면 온도</b>가 올라가요! (3차시 내용 복습)</p>
   <table><thead><tr><th>등급</th><th>필요 점수</th></tr></thead><tbody id="lvTb"></tbody></table>
   <table style="margin-top:10px"><thead><tr><th>활동</th><th>점수</th></tr></thead><tbody>
-    <tr><td>차시 탐구 결과 제출</td><td>+5</td></tr><tr><td>형성평가 통과 / 첫 채점 만점</td><td>+5 / +3</td></tr>
     <tr><td>호기심 은하 글쓰기 (10자 이상)</td><td>+2</td></tr><tr><td>친구 글에 답 달기 (10자 이상)</td><td>+3</td></tr>
     <tr><td>선생님이 고른 ⭐ 좋은 글</td><td>+5</td></tr></tbody></table>
   <p class="small muted" style="margin:6px 0 0">※ 게시판 점수는 하루 10점까지 · 숨김 처리된 글은 점수에서 빠짐</p>
@@ -588,7 +587,7 @@ function bgStars(x,w,h,n,seed,a){const r=rng(seed);for(let i=0;i<n;i++){x.fillSt
 let user=null;try{user=JSON.parse(localStorage.getItem('starlab_user')||'null');}catch(e){}
 const PREVIEW=new URLSearchParams(location.search).has('preview');
 if(PREVIEW){user={cls:'교사',num:0,name:'미리보기'};document.documentElement.classList.add('preview');}
-const LV=[[0,'성운','☁️'],[5,'적색 별','🔴'],[15,'주황색 별','🟠'],[30,'황색 별','🟡'],[50,'백색 별','⚪'],[75,'청백색 별','🔷'],[100,'청색 별','💙'],[140,'초신성','💥']];
+const LV=[[0,'성운','☁️'],[5,'적색 별','🔴'],[12,'주황색 별','🟠'],[22,'황색 별','🟡'],[35,'백색 별','⚪'],[50,'청백색 별','🔷'],[70,'청색 별','💙'],[100,'초신성','💥']];
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function saveUser(){try{localStorage.setItem('starlab_user',JSON.stringify(user));}catch(e){}}
 function setPoints(j){if(!user||j==null||j.points==null)return;user.points=j.points;user.level=j.level;saveUser();showWho();}
