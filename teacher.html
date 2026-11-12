@@ -610,7 +610,7 @@ const TEACHER_HASH='1fa58357';
   <div class="sb row">
     <div class="col">
       <div class="q c">2.5를 계속 곱해 보자!</div>
-      <div class="btns"><button class="pri" id="mulBtn" style="font-size:33px;padding:14px 26px">× 2.5</button><button id="mulReset">처음부터</button></div>
+      <div class="btns"><button class="pri" id="mulBtn" style="font-size:33px;padding:14px 26px">× 2.5</button><button id="mulBig" style="font-size:26px">× 100 (5등급 더)</button><button id="mulReset">처음부터</button></div>
       <div id="mulOut" style="font-size:52px;font-weight:900;margin-top:8px;color:var(--gold)"></div>
       <div class="ans frag" data-show="v22" style="margin-top:14px">1등급 차이 = 약 <b>2.5배</b><br>등급이 <b>작을수록</b> 밝은 별</div>
       <div class="box frag" style="font-size:28px">📜 1856년 <b class="gold">포그슨</b>: 이 관계를 수치로 정함<br>1등급 차 = 100<sup>1/5</sup> ≈ <b class="gold">2.512배</b></div>
@@ -620,7 +620,7 @@ const TEACHER_HASH='1fa58357';
     </div>
   </div>
   <aside class="notes" data-time="3분">
-    <p>버튼을 한 번 누를 때마다 표가 한 줄씩 채워집니다(2.5, 6.3, 16, 40, 100). 학생들에게 다음 값을 먼저 계산해서 말하게 하세요.</p>
+    <p>버튼을 한 번 누를 때마다 표가 한 줄씩 채워집니다(2.5, 6.3, 16, 40, 100). 학생들에게 다음 값을 먼저 계산해서 말하게 하세요.</p><p>100배에 도달하면 <b>× 100 (5등급 더)</b> 버튼이 나타남 → “10등급 차는 몇 배?” 먼저 발문 → 100×100 = 1만 배, 15등급 = 100만 배, 20등급 = 1억 배. 5등급마다 100배씩 곱해진다는 규칙 확인.</p>
     <p>마지막 <kbd>→</kbd>: 포그슨(1856) 공개. 히파르코스의 등급은 눈대중(정성적)이었고, 포그슨이 “5등급 차 = 100배”를 기준으로 정량화함.</p><p>정확한 값은 100<sup>1/5</sup> ≈ 2.512. ※ 일부 교재에 2.521로 적힌 것은 오타.</p><p>심화로 다룰 경우: 밝기 비 = 100<sup>(m₁−m₂)/5</sup>, m₁ − m₂ = −2.5 log(l₁/l₂) — 중학교 범위 밖.</p>
   </aside>
 </section>
@@ -1208,8 +1208,10 @@ function drawSp(){const x=P.x;x.clearRect(0,0,P.w,P.h);const sx=40,sy=125,u=80,h
 $('#spD').addEventListener('input',e=>{sp=+e.target.value;$('#spDo').textContent=sp+'배';drawSp();});drawSp();
 
 // multiply
-let mv=1,mn=0;function rm(){$('#mulOut').textContent=mn===0?'1배':'약 '+(mv>=10?Math.round(mv):mv.toFixed(1))+'배';const vals=['2.5','6.3','16','40','100'];$('#mulTb').innerHTML=vals.map((v,i)=>`<tr><td>${i+1}</td><td class="${i<mn?'hl':''}">${i<mn?'약 '+v+'배':'?'}</td></tr>`).join('');}
-$('#mulBtn').onclick=()=>{if(mn>=5)return;mn++;mv*=2.512;rm();};$('#mulReset').onclick=()=>{mv=1;mn=0;rm();};rm();
+let mv=1,mn=0;const MROWS=[[1,'약 2.5배'],[2,'약 6.3배'],[3,'약 16배'],[4,'약 40배'],[5,'100배'],[10,'1만 배'],[15,'100만 배'],[20,'1억 배']];
+function rm(){const lab={0:'1배',5:'100배',10:'1만 배 (100×100)',15:'100만 배',20:'1억 배'};$('#mulOut').textContent=lab[mn]||('약 '+(mv>=10?Math.round(mv):mv.toFixed(1))+'배');
+ $('#mulTb').innerHTML=MROWS.map(([d,v])=>`<tr><td>${d}</td><td class="${d<=mn?'hl':''}">${d<=mn?v:'?'}</td></tr>`).join('');$('#mulBig').style.display=mn>=5&&mn<20?'':'none';$('#mulBtn').style.display=mn<5?'':'none';}
+$('#mulBtn').onclick=()=>{if(mn>=5)return;mn++;mv*=2.512;rm();};$('#mulBig').onclick=()=>{if(mn<5||mn>=20)return;mn+=5;mv*=100;rm();};$('#mulReset').onclick=()=>{mv=1;mn=0;rm();};rm();
 
 // compare
 const M2=cv('mag2C');['mA','mB'].forEach((id,i)=>{const s=$('#'+id);for(let m=-1;m<=6;m++){const o=document.createElement('option');o.value=m;o.textContent=m+'등급';s.appendChild(o);}s.value=i?6:1;s.onchange=dm;});
