@@ -47,7 +47,7 @@ canvas{width:100%;height:auto;display:block;background:#050913;border:1px solid 
 .ctrl label{font-weight:700}
 .ctrl output{font-weight:900;color:var(--gold);min-width:90px;text-align:right;font-variant-numeric:tabular-nums;font-size:20px}
 input[type=range]{width:100%;accent-color:var(--gold);height:24px}
-select,input[type=text],input[type=number]{font-family:inherit;font-size:17px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+select,input[type=text],input[type=number],input[type=password]{font-family:inherit;font-size:17px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:17px;margin-top:8px}
 th,td{border:1px solid var(--line);padding:7px 8px;text-align:center}
 th{background:var(--panel2);color:var(--muted);font-weight:500}
@@ -97,6 +97,12 @@ textarea:focus{outline:2px solid var(--cyan);border-color:transparent}
 #login h2{margin:0 0 4px;font-size:26px}
 #login .row{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;margin:10px 0}
 #login .row select,#login .row input{width:100%}
+.ovl2{position:fixed;inset:0;background:#05081499;backdrop-filter:blur(6px);z-index:55;display:none;align-items:center;justify-content:center;padding:16px}
+.ovl2.on{display:flex}.ovl2 .card{background:var(--panel);border:1px solid var(--gold);border-radius:18px;padding:22px;width:min(460px,100%);max-height:90vh;overflow:auto}
+.lvbar{display:inline-block;width:90px;height:8px;background:#2a3666;border-radius:4px;vertical-align:middle;overflow:hidden;margin:0 6px}.lvbar i{display:block;height:100%;background:var(--gold)}
+.tagb{font-size:12px;border-radius:6px;padding:1px 7px;font-weight:700;background:#ffffff14}
+.tag-질문{color:#ff9aa9}.tag-궁금해{color:#8fd6ff}.tag-해보고싶은탐구{color:#7be3a0}.tag-생각한점{color:#ffd166}
+.goodb{font-size:12px;color:#1a1300;background:var(--gold);border-radius:6px;padding:0 6px;font-weight:900}
 /* board */
 .qitem{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
 .qitem .meta{font-size:13px;color:var(--muted);display:flex;gap:10px}
@@ -135,20 +141,38 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
       <a href="#t1" data-m="t1">① 별까지의 거리</a>
       <a href="#t2" data-m="t2">② 별의 등급과 밝기</a>
       <a href="#t3" data-m="t3">③ 별의 표면 온도와 색</a>
-      <a href="#qa" data-m="qa">💬 질문 게시판</a>
+      <a href="#qa" data-m="qa">🔭 호기심 은하</a>
     </nav>
   </div>
 </header>
 
 <div id="login"><div class="card">
   <h2>✦ 별 탐구실</h2>
-  <p class="muted" style="margin:0 0 10px">반·번호·이름을 입력하고 입장</p>
+  <p class="muted" style="margin:0 0 10px" id="lgSub">반·번호·이름·PIN을 입력하고 입장</p>
   <div class="row"><label>반</label><select id="lgCls"><option value="">선택</option><option>2-1</option><option>2-2</option><option>2-3</option><option>2-4</option></select></div>
   <div class="row"><label>번호</label><input type="number" id="lgNum" min="1" max="40" placeholder="예: 15"></div>
   <div class="row"><label>이름</label><input type="text" id="lgName" maxlength="10" placeholder="예: 홍길동"></div>
+  <div class="row"><label>PIN</label><input type="password" id="lgPin" inputmode="numeric" maxlength="4" placeholder="숫자 4자리" autocomplete="off"></div>
+  <div id="lgReg" style="display:none;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px">
+    <p style="margin:0 0 8px;color:var(--gold);font-weight:700">🌟 처음 왔어요! 닉네임 정하기</p>
+    <div class="row"><label>닉네임</label><input type="text" id="lgNick" maxlength="8" placeholder="2~8자, 띄어쓰기 없이"></div>
+    <div class="row"><label>PIN 확인</label><input type="password" id="lgPin2" inputmode="numeric" maxlength="4" placeholder="PIN 한 번 더" autocomplete="off"></div>
+    <p class="small muted" style="margin:4px 0 0">· 닉네임은 <b>한 번 정하면 바꿀 수 없음</b> (실명 금지)<br>· PIN(숫자 4자리)은 다음 로그인 때 필요하니 꼭 기억하기</p>
+  </div>
   <div class="msg" id="lgMsg"></div>
   <div class="btns"><button class="au" id="lgGo" style="width:100%;font-size:18px">입장하기</button></div>
-  <p class="small muted" style="margin:6px 0 0">※ 제출한 탐구 결과는 선생님께 전달됨. 질문 게시판에는 반만 표시됨.</p>
+  <p class="small muted" style="margin:6px 0 0">※ 게시판에는 닉네임만 표시됨. PIN을 잊으면 선생님께 말하기.</p>
+</div></div>
+<div id="lvHelp" class="ovl2"><div class="card">
+  <h2 style="margin:0 0 6px">⭐ 별 등급 안내</h2>
+  <p class="small muted" style="margin:0 0 8px">활동할수록 별의 <b>표면 온도</b>가 올라가요! (3차시 내용 복습)</p>
+  <table><thead><tr><th>등급</th><th>필요 점수</th></tr></thead><tbody id="lvTb"></tbody></table>
+  <table style="margin-top:10px"><thead><tr><th>활동</th><th>점수</th></tr></thead><tbody>
+    <tr><td>차시 탐구 결과 제출</td><td>+5</td></tr><tr><td>형성평가 통과 / 첫 채점 만점</td><td>+5 / +3</td></tr>
+    <tr><td>호기심 은하 글쓰기 (10자 이상)</td><td>+2</td></tr><tr><td>친구 글에 답 달기 (10자 이상)</td><td>+3</td></tr>
+    <tr><td>선생님이 고른 ⭐ 좋은 글</td><td>+5</td></tr></tbody></table>
+  <p class="small muted" style="margin:6px 0 0">※ 게시판 점수는 하루 10점까지 · 숨김 처리된 글은 점수에서 빠짐</p>
+  <div class="btns"><button class="au" id="lvClose" style="width:100%">닫기</button></div>
 </div></div>
 
 <main>
@@ -525,13 +549,18 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
 <!-- ======================= 질문 게시판 ======================= -->
 <section class="module" id="m-qa">
-  <div class="mhead"><div class="tag">💬 함께 묻고 답하기</div><h1>질문 게시판</h1><span class="goal">2-1~2-4반 모든 질문을 함께 보고, 어느 반 질문이든 답을 달 수 있음</span></div>
+  <div class="mhead"><div class="tag">🔭 함께 묻고, 상상하고, 탐구하기</div><h1>호기심 은하</h1><span class="goal">질문 · 궁금한 점 · 해 보고 싶은 탐구 · 생각한 점을 자유롭게! 친구 글에 답도 달아 보기</span></div>
   <div class="step">
     <div class="lchips" id="qaL"><button data-l="all" class="on">전체 차시</button><button data-l="1">1차시 별까지의 거리</button><button data-l="2">2차시 등급과 밝기</button><button data-l="3">3차시 표면 온도와 색</button></div>
-    <div class="q c" style="margin-top:16px">새 질문 쓰기 <span class="small muted" id="qaMine"></span></div>
-    <div class="btns" style="margin:0 0 8px"><select id="qaLsel"><option value="1">1차시 질문</option><option value="2">2차시 질문</option><option value="3">3차시 질문</option></select></div>
-    <textarea id="qaNew" maxlength="500" placeholder="예: 연주 시차가 너무 작은 별은 거리를 어떻게 재나요?"></textarea>
-    <div class="btns"><button class="au" id="qaPost">질문 올리기</button><button id="qaRef">🔄 새로고침</button><span class="lockhint">게시판에는 '2-3반 학생'처럼 반만 표시됨 · 30초마다 자동 새로고침</span></div>
+    <div class="lchips" id="qaT" style="margin-top:8px"><button data-t="all" class="on">모든 글</button><button data-t="질문">❓ 질문</button><button data-t="궁금해">💭 궁금해</button><button data-t="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</button><button data-t="생각한 점">✨ 생각한 점</button></div>
+    <div class="q c" style="margin-top:16px">새 글 쓰기 <span class="small muted" id="qaMine"></span></div>
+    <div class="btns" style="margin:0 0 8px;align-items:center">
+      <select id="qaTag"><option value="질문">❓ 질문</option><option value="궁금해">💭 궁금해</option><option value="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</option><option value="생각한 점">✨ 생각한 점</option></select>
+      <select id="qaLsel"><option value="1">1차시</option><option value="2">2차시</option><option value="3">3차시</option></select>
+      <label class="small" id="qaAnonL" style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qaAnon"> 익명으로 올리기 (질문만)</label>
+    </div>
+    <textarea id="qaNew" maxlength="500" placeholder="예: 연주 시차가 너무 작은 별은 거리를 어떻게 재나요? / 휴대폰으로 별의 밝기를 직접 재 보고 싶어요"></textarea>
+    <div class="btns"><button class="au" id="qaPost">올리기</button><button id="qaRef">🔄 새로고침</button><span class="lockhint">닉네임으로 표시됨 · 10자 이상 쓰면 별 점수 +2 · 30초마다 자동 새로고침</span></div>
     <div class="msg" id="qaMsg"></div>
   </div>
   <div class="qacols" id="qaList"></div>
@@ -555,16 +584,38 @@ function tcol(c){const st=[[2500,[255,110,60]],[3500,[255,140,80]],[4500,[255,18
 function cname(c){return c<3500?'적색':c<5000?'주황색':c<6500?'황색':c<8500?'황백색':c<12000?'백색':c<30000?'청백색':'청색';}
 function bgStars(x,w,h,n,seed,a){const r=rng(seed);for(let i=0;i<n;i++){x.fillStyle=`rgba(220,228,255,${(r()*.6+.2)*(a||1)})`;const s=r()*1.5+.4;x.beginPath();x.arc(r()*w,r()*h,s,0,7);x.fill();}}
 
-/* ---------- user ---------- */
+/* ---------- user (반·번호·이름 + PIN, 닉네임 고정) ---------- */
 let user=null;try{user=JSON.parse(localStorage.getItem('starlab_user')||'null');}catch(e){}
 const PREVIEW=new URLSearchParams(location.search).has('preview');
 if(PREVIEW){user={cls:'교사',num:0,name:'미리보기'};document.documentElement.classList.add('preview');}
-function showWho(){if(PREVIEW){$('#who').innerHTML='<b>👩‍🏫 교사 미리보기</b> <span class="small">(제출·게시 안 됨, 게시판 읽기만)</span>';return;}$('#who').innerHTML=user?`<b>${user.cls}반 ${user.num}번 ${esc(user.name)}</b><button id="chg">변경</button>`:'';const c=$('#chg');if(c)c.onclick=()=>{$('#login').classList.add('on');};}
+const LV=[[0,'성운','☁️'],[5,'적색 별','🔴'],[15,'주황색 별','🟠'],[30,'황색 별','🟡'],[50,'백색 별','⚪'],[75,'청백색 별','🔷'],[100,'청색 별','💙'],[140,'초신성','💥']];
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-if(PREVIEW){}else if(user){$('#lgCls').value=user.cls;$('#lgNum').value=user.num;$('#lgName').value=user.name;}else $('#login').classList.add('on');
-$('#lgGo').onclick=()=>{const cls=$('#lgCls').value,num=parseInt($('#lgNum').value,10),name=$('#lgName').value.trim();
- if(!cls||!num||num<1||num>40||!name){$('#lgMsg').textContent='반·번호·이름을 모두 정확히 입력하기';return;}
- user={cls,num,name};try{localStorage.setItem('starlab_user',JSON.stringify(user));}catch(e){}$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();};
+function saveUser(){try{localStorage.setItem('starlab_user',JSON.stringify(user));}catch(e){}}
+function setPoints(j){if(!user||j==null||j.points==null)return;user.points=j.points;user.level=j.level;saveUser();showWho();}
+function showWho(){if(PREVIEW){$('#who').innerHTML='<b>👩‍🏫 교사 미리보기</b> <span class="small">(제출·게시 안 됨, 게시판 읽기만)</span>';return;}
+ if(!user||!user.nick){$('#who').innerHTML='';return;}
+ const lv=user.level||{icon:'☁️',name:'성운',next:5,nextName:'적색 별'},p=user.points||0,cur=LV.find(x=>x[1]===lv.name)||LV[0];
+ const pr=lv.next?Math.round((p-cur[0])/(lv.next-cur[0])*100):100;
+ $('#who').innerHTML=`<span title="${user.cls}반 ${user.num}번">${lv.icon} <b>${esc(user.nick)}</b> · ${lv.name} ${p}점<span class="lvbar"><i style="width:${pr}%"></i></span>${lv.next?`<span class="small">${lv.nextName}까지 ${lv.next-p}점</span>`:'<span class="small">최고 등급!</span>'}</span><button id="lvBtn">등급 안내</button><button id="chg">로그아웃</button>`;
+ $('#chg').onclick=()=>{const u=user;user=null;try{localStorage.removeItem('starlab_user');}catch(e){}showWho();user=u?{cls:u.cls,num:u.num,name:u.name}:null;openLogin();user=null;};$('#lvBtn').onclick=()=>$('#lvHelp').classList.add('on');}
+$('#lvTb').innerHTML=LV.map(x=>`<tr><td>${x[2]} ${x[1]}</td><td>${x[0]}점</td></tr>`).join('');$('#lvClose').onclick=()=>$('#lvHelp').classList.remove('on');
+function openLogin(){$('#lgReg').style.display='none';$('#lgMsg').textContent='';if(user){$('#lgCls').value=user.cls||'';$('#lgNum').value=user.num||'';$('#lgName').value=user.name||'';}$('#lgPin').value='';$('#login').classList.add('on');}
+let lgBusy=false;
+$('#lgGo').onclick=async()=>{if(lgBusy)return;const cls=$('#lgCls').value,num=parseInt($('#lgNum').value,10),name=$('#lgName').value.trim(),pin=$('#lgPin').value.trim();const m=$('#lgMsg');
+ if(!cls||!num||num<1||num>40||!name){m.textContent='반·번호·이름을 모두 정확히 입력하기';return;}
+ if(!/^\d{4}$/.test(pin)){m.textContent='PIN은 숫자 4자리';return;}
+ const reg=$('#lgReg').style.display!=='none';const body={action:'login',cls,num,name,pin};
+ if(reg){const nick=$('#lgNick').value.trim();if(nick.length<2){m.textContent='닉네임은 2~8자';return;}if($('#lgPin2').value!==pin){m.textContent='PIN 확인이 다름';return;}body.nick=nick;}
+ if(!API_URL){user={cls,num,name,pin,nick:name};saveUser();$('#login').classList.remove('on');showWho();restore();drawGraphs&&drawGraphs();return;}
+ lgBusy=true;m.style.color='#9ba6d4';m.textContent='확인 중…';
+ try{const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(body)});const j=await r.json();m.style.color='';
+  if(j.need==='register'){$('#lgReg').style.display='block';m.textContent=j.error||'처음 왔어요! 닉네임과 PIN 확인을 입력하고 다시 [입장하기]';$('#lgNick').focus();}
+  else if(!j.ok){m.textContent=j.error||'로그인 실패';}
+  else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();if($('#m-qa').classList.contains('on'))loadQA();}
+ }catch(e){m.style.color='';m.textContent='인터넷 연결 확인 후 다시 시도하기';}
+ lgBusy=false;};
+['lgPin','lgPin2','lgNick'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lgGo').click();}));
+if(!PREVIEW&&(!user||!user.pin||!user.nick))openLogin();
 showWho();
 
 /* ---------- routing ---------- */
@@ -687,7 +738,7 @@ function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]
   it.o.forEach((t,j)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{if(QZ[lesson][i]===null)QZ[lesson][i]=j===it.a;o.querySelectorAll('button').forEach(x=>x.classList.remove('ok','no'));b.classList.add(j===it.a?'ok':'no');fb.innerHTML=j===it.a?'⭕ 정답! '+it.e:'❌ 다시 생각해 보기';fb.classList.add('show');};o.appendChild(b);});root.appendChild(d);});}
 
 /* ---------- API ---------- */
-async function api(payload){if(!API_URL)throw new Error('NOAPI');const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok)throw new Error(j.error||'오류');return j;}
+async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin)openLogin();throw new Error(j.error||'오류');}setPoints(j);return j;}
 async function apiGet(params){if(!API_URL)throw new Error('NOAPI');const r=await fetch(API_URL+'?'+new URLSearchParams(params));return r.json();}
 
 /* ---------- submit ---------- */
@@ -696,7 +747,7 @@ function collect(sec){const out=[];$$('[data-f]',sec).forEach(el=>{let v='';
  else if(el.tagName==='TEXTAREA')v=el.value.trim();
  else if(el.tagName==='TBODY')v=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('calc')).map(td=>{const i=td.querySelector('input,select');return i?i.value.trim():td.textContent;}).join(' / ')).filter(s=>!s.includes('아직')&&s.replace(/[\s\/]/g,'').length>1).join('\n');
  else v=el.textContent.trim();out.push([el.dataset.f,v]);});return out;}
-$$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
+$$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.lesson).textContent='미리보기 모드: 학생 화면에서는 여기서 선생님께 제출됨';return;}if(!user||!user.pin){openLogin();return;}if(!user){$('#login').classList.add('on');return;}const L=b.dataset.lesson,sec=$('#m-t'+L),st=$('#st'+L);
  const fields=collect(sec).concat(L==='2'?[['실험2 예상(거리 2배→지름·넓이)',($('#spPred')||{}).value||'']]:[]).concat(faFields(L));
  const empty=fields.filter(f=>!f[1]).length;
  if(empty&&!b.dataset.confirm){b.dataset.confirm='1';st.style.color='#ff7a90';st.textContent=`빈칸 ${empty}개가 있음. 그래도 제출하려면 한 번 더 누르기`;return;}
@@ -705,40 +756,41 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  catch(e){st.style.color='#ff7a90';st.textContent=e.message==='NOAPI'?'아직 제출 기능이 설정되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':'제출 실패: 인터넷 연결 확인 후 다시 시도하기';}
  b.disabled=false;});
 
-/* ---------- Q&A (4개 반 열) ---------- */
-const CLS=['2-1','2-2','2-3','2-4'];
-let qaL='all',qaTimer;
+/* ---------- 호기심 은하 (반별 4열 · 말머리 · 닉네임) ---------- */
+const CLS=['2-1','2-2','2-3','2-4'],TICON={'질문':'❓','궁금해':'💭','해 보고 싶은 탐구':'🔬','생각한 점':'✨'};
+let qaL='all',qaT='all',qaTimer,qaData=[];
 $$('#qaL button').forEach(b=>b.onclick=()=>{qaL=b.dataset.l;$$('#qaL button').forEach(x=>x.classList.toggle('on',x===b));if(qaL!=='all')$('#qaLsel').value=qaL;$('#qaList').innerHTML='';loadQA();});
+$$('#qaT button').forEach(b=>b.onclick=()=>{qaT=b.dataset.t;$$('#qaT button').forEach(x=>x.classList.toggle('on',x===b));if(qaT!=='all'){$('#qaTag').value=qaT;anonSync();}renderQA();});
+function anonSync(){const q=$('#qaTag').value==='질문';$('#qaAnon').disabled=!q;if(!q)$('#qaAnon').checked=false;$('#qaAnonL').style.opacity=q?1:.4;}
+$('#qaTag').onchange=anonSync;anonSync();
 function fmtT(t){try{const d=new Date(t);return d.toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'})+' '+d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}catch(e){return'';}}
 function myCls(){return user&&CLS.includes(user.cls)?user.cls:null;}
 async function loadQA(){clearTimeout(qaTimer);const list=$('#qaList');
- $('#qaMine').textContent=myCls()?'(내 질문은 '+myCls()+'반 열에 올라감)':'';
+ $('#qaMine').textContent=myCls()?'(내 글은 '+myCls()+'반 열에 닉네임으로 올라감)':'';
  if(!API_URL){list.innerHTML='<div class="notice">아직 게시판이 설정되지 않음 (선생님께 알리기)</div>';return;}
  if(!list.innerHTML)list.innerHTML='<p class="muted">불러오는 중…</p>';
  const typing=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#qaList');
- if(typing){qaTimer=setTimeout(loadQA,15000);return;} // 답을 쓰는 중이면 새로고침 미룸
- try{const Ls=qaL==='all'?['1','2','3']:[qaL];
-  const res=await Promise.all(Ls.map(l=>apiGet({action:'list',lesson:l}).then(j=>(j.questions||[]).map(q=>Object.assign(q,{lesson:l})))));
-  const qs=[].concat(...res).sort((x,y)=>x.time<y.time?1:-1);
-  list.innerHTML='';
-  CLS.forEach(c=>{const mine=c===myCls();const col=document.createElement('div');col.className='qacol'+(mine?' mine':'');
-   const items=qs.filter(q=>q.who===c+'반 학생');
-   col.innerHTML=`<h3>${c}반 ${mine?'<span class="ltag" style="background:#ffd16633;color:#ffd166">우리 반</span>':''}<span class="cnt">질문 ${items.length}</span></h3>`+(items.length?'':'<p class="muted small" style="padding:4px 6px">아직 질문 없음</p>');
-   items.forEach(q=>{const d=document.createElement('div');d.className='qitem';
-    d.innerHTML=`<div class="meta"><span class="ltag">${q.lesson}차시</span><span>${fmtT(q.time)}</span><span>💬 ${q.answers.length}</span></div><div class="qt">${esc(q.text)}</div>`+
-     q.answers.map(x=>`<div class="ans${x.who==='선생님'?' teacher':''}"><div class="meta"><span>${x.who==='선생님'?'👩‍🏫':'💬'} ${esc(x.who)}</span><span>${fmtT(x.time)}</span></div>${esc(x.text)}</div>`).join('')+
-     `<div class="aform"><textarea maxlength="500" placeholder="답 달기 (어느 반이든 가능)"></textarea><button class="pri">답 등록</button></div>`;
-    const ta=d.querySelector('.aform textarea'),bt=d.querySelector('.aform button');
-    bt.onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=ta.value.trim();if(!t)return;if(!user){$('#login').classList.add('on');return;}bt.disabled=true;
-     try{await api({action:'answer',qid:q.id,cls:user.cls,num:user.num,name:user.name,text:t});ta.value='';ta.blur();loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: 다시 시도하기');}};
-    col.appendChild(d);});
-   list.appendChild(col);});
- }catch(e){list.innerHTML='<div class="notice">게시판을 불러오지 못함. 🔄 새로고침 누르기</div>';}
+ if(typing){qaTimer=setTimeout(loadQA,15000);return;}
+ try{const j=await apiGet({action:'list',lesson:qaL});qaData=j.questions||[];renderQA();}
+ catch(e){list.innerHTML='<div class="notice">게시판을 불러오지 못함. 🔄 새로고침 누르기</div>';}
  if($('#m-qa').classList.contains('on'))qaTimer=setTimeout(loadQA,30000);}
+function renderQA(){const list=$('#qaList');list.innerHTML='';const qs=qaData.filter(q=>qaT==='all'||q.tag===qaT);
+ CLS.forEach(c=>{const mine=c===myCls();const col=document.createElement('div');col.className='qacol'+(mine?' mine':'');const items=qs.filter(q=>q.cls===c);
+  col.innerHTML=`<h3>${c}반 ${mine?'<span class="ltag" style="background:#ffd16633;color:#ffd166">우리 반</span>':''}<span class="cnt">글 ${items.length}</span></h3>`+(items.length?'':'<p class="muted small" style="padding:4px 6px">아직 글 없음</p>');
+  items.forEach(q=>{const d=document.createElement('div');d.className='qitem';
+   d.innerHTML=`<div class="meta" style="flex-wrap:wrap"><span class="tagb tag-${q.tag.replace(/\s/g,'')}">${TICON[q.tag]||''} ${q.tag}</span><span class="ltag">${q.lesson}차시</span>${q.good?'<span class="goodb">⭐ 좋은 글</span>':''}</div>
+   <div class="meta" style="margin-top:4px"><span>${q.icon} <b style="color:#e9edff">${esc(q.who)}</b></span><span>${fmtT(q.time)}</span><span>💬 ${q.answers.length}</span></div><div class="qt">${esc(q.text)}</div>`+
+    q.answers.map(x=>`<div class="ans${x.who==='선생님'?' teacher':''}"><div class="meta"><span>${x.icon} ${esc(x.who)}</span><span>${fmtT(x.time)}</span>${x.good?'<span class="goodb">⭐</span>':''}</div>${esc(x.text)}</div>`).join('')+
+    `<div class="aform"><textarea maxlength="500" placeholder="답·의견 달기 (어느 반이든 가능)"></textarea><button class="pri">등록</button></div>`;
+   const ta=d.querySelector('.aform textarea'),bt=d.querySelector('.aform button');
+   bt.onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=ta.value.trim();if(!t)return;if(!user||!user.pin){openLogin();return;}bt.disabled=true;
+    try{await api({action:'answer',qid:q.id,text:t});ta.value='';ta.blur();loadQA();}catch(e){bt.disabled=false;alertMsg('등록 실패: '+e.message);}};
+   col.appendChild(d);});
+  list.appendChild(col);});}
 function alertMsg(t){$('#qaMsg').textContent=t;setTimeout(()=>$('#qaMsg').textContent='',4000);}
 $('#qaRef').onclick=()=>{if(document.activeElement)document.activeElement.blur();loadQA();};
-$('#qaPost').onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=$('#qaNew').value.trim();if(!t){alertMsg('질문을 먼저 쓰기');return;}if(!user){$('#login').classList.add('on');return;}
- const b=$('#qaPost');b.disabled=true;try{await api({action:'question',lesson:$('#qaLsel').value,cls:user.cls,num:user.num,name:user.name,text:t});$('#qaNew').value='';alertMsg('');loadQA();}catch(e){alertMsg(e.message==='NOAPI'?'게시판이 아직 설정되지 않음':'등록 실패: 다시 시도하기');}b.disabled=false;};
+$('#qaPost').onclick=async()=>{if(PREVIEW){alertMsg('미리보기 모드에서는 글을 올릴 수 없음');return;}const t=$('#qaNew').value.trim();if(!t){alertMsg('내용을 먼저 쓰기');return;}if(!user||!user.pin){openLogin();return;}
+ const b=$('#qaPost');b.disabled=true;try{await api({action:'question',lesson:$('#qaLsel').value,tag:$('#qaTag').value,anon:$('#qaAnon').checked,text:t});$('#qaNew').value='';$('#qaAnon').checked=false;alertMsg('');loadQA();}catch(e){alertMsg(e.message==='NOAPI'?'게시판이 아직 설정되지 않음':'등록 실패: '+e.message);}b.disabled=false;};
 
 /* ================== 1차시 ================== */
 // Parallax sim (별 S·T 두 개 비교)
