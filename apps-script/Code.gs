@@ -20,7 +20,7 @@
  *       · 부적절한 글 → '숨김' 체크 (게시판에서 사라지고 점수도 빠짐)
  *       · 좋은 글 → '좋은 글' 체크 (+5점)
  *       · 선생님 답변 → '답변' 시트 새 줄에 질문 ID 복사, 반 칸에 "교사", 답변 칸에 내용
- *   - 시트 메뉴 [⭐ 별 탐구실] → 반·번호 순 정렬 / 학생 점수 새로 계산
+ *   - 시트 메뉴 [⭐ 별 탐구실] → 반·번호 순 정렬 / 학생 점수 새로 계산 / 교사용 그래프 보기 비밀번호 설정
  */
 
 const CLASSES = ['2-1', '2-2', '2-3', '2-4'];
@@ -36,6 +36,7 @@ const PTS = { submit: 5, pass: 5, perfect: 3, post: 2, answer: 3, good: 5, daily
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'list') return json_(listQuestions_(String(p.lesson || 'all')));
+  if (p.action === 'graphs') return json_(teacherGraphs_(String(p.key || '')));
   return json_({ ok: true, msg: '별 탐구실 API 작동 중' });
 }
 
@@ -67,6 +68,7 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('⭐ 별 탐구실')
     .addItem('탐구 결과 반·번호 순으로 정렬', 'sortAllSheets')
     .addItem('학생 명부 점수·등급 새로 계산', 'refreshRoster')
+    .addItem('교사용 그래프 보기 비밀번호 설정', 'setTeacherKey')
     .addToUi();
 }
 function sortAllSheets() {
@@ -84,6 +86,35 @@ function refreshRoster() {
   const rows = s.getRange(2, 1, last - 1, 2).getValues();
   const out = rows.map(function (r) { const p = all[key_(r[0], r[1])] || 0; const lv = level_(p); return [p, lv.icon + ' ' + lv.name]; });
   s.getRange(2, 8, out.length, 2).setValues(out);
+}
+
+function setTeacherKey() {
+  const ui = SpreadsheetApp.getUi();
+  const r = ui.prompt('교사용 그래프 보기 비밀번호', '교사 화면의 [📊 학생 그래프]에서 입력할 비밀번호 (4자 이상)', ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return;
+  const v = r.getResponseText().trim();
+  if (v.length < 4) { ui.alert('4자 이상으로 정하기'); return; }
+  PropertiesService.getScriptProperties().setProperty('TEACHER_KEY', v);
+  ui.alert('설정 완료! 교사 화면에서 이 비밀번호로 학생 그래프를 볼 수 있음');
+}
+
+/* ---------------- 교사용: 학생 실험 데이터 ---------------- */
+function teacherGraphs_(key) {
+  const real = PropertiesService.getScriptProperties().getProperty('TEACHER_KEY');
+  if (!real) return { ok: false, error: '시트 메뉴 [⭐ 별 탐구실] → [교사용 그래프 보기 비밀번호 설정]을 먼저 하기' };
+  if (key !== real) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('2차시 탐구');
+  if (!s || s.getLastRow() < 2) return { ok: true, students: [] };
+  const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
+  const h = v[0].map(String);
+  const find = function (pre) { for (let i = h.length - 1; i >= 0; i--) if (h[i].indexOf(pre) === 0) return i; return -1; };
+  const i1 = find('실험1'), i2 = find('실험2'), nicks = nickMap_();
+  const out = [];
+  for (let r = 1; r < v.length; r++) {
+    out.push({ cls: String(v[r][1]), num: Number(v[r][2]), name: String(v[r][3]), nick: nicks[key_(v[r][1], v[r][2])] || '', time: iso_(v[r][0]),
+      lux: i1 >= 0 ? String(v[r][i1]) : '', sp: i2 >= 0 ? String(v[r][i2]) : '' });
+  }
+  return { ok: true, students: out };
 }
 
 /* ---------------- 로그인 / 학생 명부 ---------------- */

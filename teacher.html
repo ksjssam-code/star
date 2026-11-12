@@ -931,6 +931,33 @@ const TEACHER_HASH='1fa58357';
  </div>
  <iframe id="stuFrame" title="학생 탐구" style="flex:1;border:0;width:100%;background:#0a0f1f"></iframe>
 </div>
+<div id="grOv" style="position:fixed;inset:0 0 52px 0;z-index:27;background:#0a0f1f;display:none;flex-direction:column;font-family:'Noto Sans KR',sans-serif">
+ <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid #2a3666;background:#0c1328;flex-wrap:wrap">
+  <b style="color:#ffd166;font-size:17px">📊 반별 학생 실험 그래프</b>
+  <button class="grTab on" data-e="1">실험 ① 거리–빛의 세기</button><button class="grTab" data-e="2">실험 ② 빛이 퍼지는 넓이</button>
+  <button id="grLoad">🔄 불러오기</button><span id="grMsg" style="color:#9ba6d4;font-size:14px"></span>
+  <span id="grKeyBox" style="display:none;align-items:center;gap:6px"><input id="grKey" type="password" placeholder="그래프 비밀번호" style="font-size:14px;padding:5px 8px;border-radius:8px;border:1px solid #2a3666;background:#18224a;color:#eef1ff;width:150px"><button id="grKeyGo">확인</button></span>
+  <button id="grClose" style="margin-left:auto;background:#ffd166;color:#1a1300;border-color:#ffd166;font-weight:700">✕ 수업 화면으로</button>
+ </div>
+ <div id="grBody" style="flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start"></div>
+</div>
+<div id="grBig" style="position:fixed;inset:0;z-index:60;background:#03060fee;display:none;align-items:center;justify-content:center;padding:20px;font-family:'Noto Sans KR',sans-serif">
+ <div style="background:#111934;border:1px solid #ffd166;border-radius:16px;padding:16px 18px;width:min(1200px,96vw);max-height:94vh;overflow:auto">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><b id="grBigT" style="font-size:22px;color:#ffd166"></b><button id="grBigX" style="margin-left:auto;font-size:15px;padding:6px 12px">✕ 닫기</button></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" id="grBigG"></div>
+  <div id="grBigTb" style="margin-top:10px"></div>
+ </div>
+</div>
+<style>
+#grOv button,#grBig button{font-size:14px;padding:6px 11px}
+.grTab.on{background:#ffd166!important;color:#1a1300!important;border-color:#ffd166!important;font-weight:700}
+.grCol{background:#111934;border:1px solid #2a3666;border-radius:12px;padding:8px}
+.grCol h3{margin:2px 4px 8px;font-size:18px;color:#eef1ff}.grCol h3 small{color:#9ba6d4;font-weight:500;font-size:13px}
+.grCard{background:#050913;border:1px solid #2a3666;border-radius:10px;padding:6px;margin-bottom:8px;cursor:pointer}
+.grCard:hover{border-color:#ffd166}.grCard .nm{font-size:13px;color:#eef1ff;margin:0 2px 4px;display:flex;gap:6px}.grCard .nm span{color:#9ba6d4}
+.grCard canvas{width:100%;height:auto;display:block;border:0;border-radius:6px;background:#050913}
+#grBig table{border-collapse:collapse;width:100%;font-size:16px;color:#eef1ff}#grBig th,#grBig td{border:1px solid #2a3666;padding:5px 8px;text-align:center}#grBig th{color:#9ba6d4;background:#18224a;font-size:15px!important;font-weight:700}
+</style>
 <div id="prog"></div>
 <aside id="notes"></aside>
 <div id="menu"></div>
@@ -955,6 +982,7 @@ const TEACHER_HASH='1fa58357';
   <button id="bNotes">📝 노트</button>
   <button id="bFull">⛶ 전체 화면</button>
   <button id="bStu" style="color:#6ad1ff">🧑‍🎓 학생 탐구</button>
+  <button id="bGraph" style="color:#63e6a3">📊 학생 그래프</button>
   <button id="bHelp">?</button>
 </div>
 
@@ -1017,7 +1045,7 @@ tb.addEventListener('pointerup',()=>{if(tPress){clearTimeout(tPress);tToggle();}
 $('#bNext').onclick=next;$('#bPrev').onclick=prev;$('#bNotes').onclick=toggleNotes;$('#bMenu').onclick=toggleMenu;$('#bFull').onclick=full;
 $('#bHelp').onclick=()=>$('#help').classList.toggle('on');$('#helpClose').onclick=()=>$('#help').classList.remove('on');
 $$('#bar .les button').forEach(b=>b.onclick=()=>show(b.dataset.l,0,'fwd'));
-document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;const so=document.getElementById('stuOv');if(so&&so.style.display==='flex')return;
+document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;const so=document.getElementById('stuOv');if(so&&so.style.display==='flex')return;const go=document.getElementById('grOv');if(go&&go.style.display==='flex')return;
  if(['ArrowRight','PageDown','Enter'].includes(e.key)||(e.key===' '&&t!=='BUTTON')){e.preventDefault();next();}
  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
  else if(e.key==='n'||e.key==='N'||e.key==='ㅜ')toggleNotes();
@@ -1324,6 +1352,58 @@ let __b=false;function __go(){if(__b)return;__b=true;__boot();}
  document.getElementById('bStu').onclick=()=>{const L=(document.querySelector('.lesson.on')||{}).id||'L1';const h='#t'+L.slice(1);
   if(!fr.src)fr.src='./?preview=1'+h;else{try{fr.contentWindow.location.hash=h;}catch(e){}}ov.style.display='flex';};
  document.getElementById('stuClose').onclick=()=>{ov.style.display='none';};})();
+</script>
+<script>
+(function(){
+const API_URL='https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';const CLS=['2-1','2-2','2-3','2-4'];const COLS=['#ffd166','#6ad1ff','#63e6a3','#ff7a90','#b49cff','#ff9a5a','#7be3e0','#f5e663','#c4f06a','#ff8fd8'];
+let data=[],exp='1';const $=s=>document.querySelector(s);
+const ov=$('#grOv'),body=$('#grBody'),msg=$('#grMsg');
+function nv(v){v=String(v||'').trim();if(!v)return NaN;if(v.includes('/')){const[a,b]=v.split('/').map(Number);return b?a/b:NaN;}return parseFloat(v.replace(/,/g,''));}
+function parse(str){return String(str||'').split('\n').map(l=>l.split(' / ').map(x=>x.trim())).filter(r=>r.length>=2);}
+function series(st){if(exp==='1'){const rows=parse(st.lux).map(r=>[nv(r[0]),nv(r[1])]).filter(p=>isFinite(p[0])&&isFinite(p[1]));return{a:rows,b:rows.map(p=>[p[0],p[1]*Math.pow(p[0]/100,2)])};}
+ const rows=parse(st.sp).map(r=>[nv(r[0]),nv(r[1])]).filter(p=>isFinite(p[0])&&isFinite(p[1])&&p[1]>0);const b0=rows.length?rows[0][1]:NaN;return{a:rows,b:rows.map(p=>[p[0],Math.pow(p[1]/b0,2)])};}
+const LBL={'1':[['거리에 따른 빛의 세기','거리 (cm)','빛의 세기 (lx)'],['빛의 세기 × 거리²','거리 (cm)','세기×거리²']],'2':[['거리에 따른 원의 지름','거리 (cm)','지름 (cm)'],['거리에 따른 넓이 비','거리 (cm)','넓이 몇 배?']]};
+function canvas(w,h){const c=document.createElement('canvas'),d=Math.max(2,window.devicePixelRatio||1);c.width=w*d;c.height=h*d;const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{c,x,w,h};}
+function plot(C,sets,lb,big){const{x,w:W,h:H}=C;x.fillStyle='#050913';x.fillRect(0,0,W,H);const fs=big?14:10,L=big?66:40,R=12,T=big?30:20,B=big?44:28,pw=W-L-R,ph=H-T-B;
+ x.font=`900 ${fs+1}px "Noto Sans KR",sans-serif`;x.fillStyle='#e9edff';x.textBaseline='middle';x.textAlign='left';x.fillText(lb[0],L,T/2+1);
+ const all=[].concat(...sets.map(s=>s.pts));const nice=v=>{const e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;return(f<=1?1:f<=2?2:f<=5?5:10)*e;};
+ const xmax=Math.max(10,...all.map(p=>p[0]))*1.08;let ymax=all.length?Math.max(1e-9,...all.map(p=>p[1]))*1.15:10;const ys=nice(ymax/4),xs=nice(xmax/5);ymax=Math.ceil(ymax/ys)*ys;
+ const X=v=>L+v/xmax*pw,Y=v=>T+ph-v/ymax*ph;x.font=`500 ${fs-1}px "Noto Sans KR",sans-serif`;x.fillStyle='#9ba6d4';
+ x.strokeStyle='#1c2650';for(let v=0;v<=ymax+1e-9;v+=ys){x.beginPath();x.moveTo(L,Y(v));x.lineTo(L+pw,Y(v));x.stroke();x.textAlign='right';x.fillText(+v.toPrecision(4)+'',L-4,Y(v));}
+ x.textAlign='center';for(let v=0;v<=xmax+1e-9;v+=xs)x.fillText(v+'',X(v),T+ph+fs-2);
+ if(big){x.fillText(lb[1],L+pw/2,H-10);x.save();x.translate(14,T+ph/2);x.rotate(-Math.PI/2);x.fillText(lb[2],0,0);x.restore();}
+ x.strokeStyle='#4a5a99';x.beginPath();x.moveTo(L,T);x.lineTo(L,T+ph);x.lineTo(L+pw,T+ph);x.stroke();
+ if(!all.length){x.fillStyle='#6a78b5';x.fillText('데이터 없음',L+pw/2,T+ph/2);return;}
+ sets.forEach(s=>{const p=s.pts.slice().sort((a,b)=>a[0]-b[0]);if(!p.length)return;x.strokeStyle=s.col;x.lineWidth=big?3:2;x.globalAlpha=s.alpha||1;x.beginPath();p.forEach((q,i)=>i?x.lineTo(X(q[0]),Y(q[1])):x.moveTo(X(q[0]),Y(q[1])));x.stroke();
+  p.forEach(q=>{x.fillStyle=s.col;x.beginPath();x.arc(X(q[0]),Y(q[1]),big?5:3,0,7);x.fill();if(big&&sets.length===1){x.fillStyle='#e9edff';x.font=`700 ${fs-2}px "Noto Sans KR",sans-serif`;x.fillText(+q[1].toPrecision(3)+'',X(q[0]),Y(q[1])-12);}});x.globalAlpha=1;x.lineWidth=1;});}
+function render(){body.innerHTML='';const lb=LBL[exp];
+ CLS.forEach(c=>{const st=data.filter(d=>d.cls===c).sort((a,b)=>a.num-b.num).filter(d=>series(d).a.length);const col=document.createElement('div');col.className='grCol';
+  col.innerHTML=`<h3>${c}반 <small>제출 ${st.length}명</small></h3>`;
+  if(st.length){const card=document.createElement('div');card.className='grCard';card.innerHTML=`<div class="nm"><b>👥 ${c}반 전체 겹쳐 보기</b></div>`;const C=canvas(300,170);plot(C,st.map((d,i)=>({pts:series(d).b,col:COLS[i%COLS.length],alpha:.8})),lb[1],false);card.appendChild(C.c);card.onclick=()=>big(`${c}반 전체 (${st.length}명)`,st);col.appendChild(card);}
+  st.forEach((d,i)=>{const card=document.createElement('div');card.className='grCard';card.innerHTML=`<div class="nm"><b>${d.num}번 ${esc(d.name)}</b><span>${esc(d.nick||'')}</span></div>`;const C=canvas(300,150);plot(C,[{pts:series(d).a,col:COLS[i%COLS.length]}],lb[0],false);card.appendChild(C.c);card.onclick=()=>big(`${c}반 ${d.num}번 ${d.name}${d.nick?' ('+d.nick+')':''}`,[d]);col.appendChild(card);});
+  if(!st.length)col.innerHTML+='<p style="color:#6a78b5;font-size:14px;margin:6px">아직 제출 없음</p>';
+  body.appendChild(col);});}
+function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function big(title,list){$('#grBigT').textContent=title;const g=$('#grBigG');g.innerHTML='';const lb=LBL[exp];
+ [0,1].forEach(k=>{const C=canvas(560,330);plot(C,list.map((d,i)=>({pts:k?series(d).b:series(d).a,col:COLS[i%COLS.length],alpha:list.length>1?.85:1})),lb[k],true);C.c.style.cssText='width:100%;height:auto;border:1px solid #2a3666;border-radius:10px';g.appendChild(C.c);});
+ const tb=$('#grBigTb');
+ if(list.length===1){const rows=parse(exp==='1'?list[0].lux:list[0].sp);const hd=exp==='1'?['거리(cm)','빛의 세기(lx)','거리²(m²)','세기×거리²','세기의 비']:['거리(cm)','지름(cm)','지름 몇 배','넓이 몇 배','한 곳의 빛'];
+  tb.innerHTML=`<p style="color:#9ba6d4;font-size:13px;margin:4px 0">학생이 직접 쓴 값</p><table><tr>${hd.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${hd.map((_,i)=>`<td>${esc(r[i]||'')}</td>`).join('')}</tr>`).join('')}</table>`;}
+ else tb.innerHTML=`<p style="color:#9ba6d4;font-size:14px">${list.map((d,i)=>`<span style="color:${COLS[i%COLS.length]}">●</span> ${d.num}번 ${esc(d.name)}`).join(' &nbsp; ')}</p>`;
+ $('#grBig').style.display='flex';}
+$('#grBigX').onclick=()=>$('#grBig').style.display='none';$('#grBig').onclick=e=>{if(e.target.id==='grBig')$('#grBig').style.display='none';};
+async function load(){let key='';try{key=localStorage.getItem('starlab_tkey')||'';}catch(e){}
+ if(!key){$('#grKeyBox').style.display='inline-flex';msg.textContent='그래프 비밀번호를 입력하기';return;}
+ msg.textContent='불러오는 중…';try{const r=await fetch(API_URL+'?action=graphs&key='+encodeURIComponent(key));const j=await r.json();
+  if(!j.ok){msg.textContent=j.error||'불러오기 실패';if(j.badKey){try{localStorage.removeItem('starlab_tkey');}catch(e){}$('#grKeyBox').style.display='inline-flex';}return;}
+  data=j.students||[];$('#grKeyBox').style.display='none';msg.textContent=`2차시 제출 ${data.length}명 · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})} 기준`;render();}
+ catch(e){msg.textContent='불러오기 실패: 새 Apps Script가 배포되었는지 확인';}}
+$('#grKeyGo').onclick=()=>{const v=$('#grKey').value.trim();if(!v)return;try{localStorage.setItem('starlab_tkey',v);}catch(e){}load();};
+$('#grKey').addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();$('#grKeyGo').click();}});
+document.querySelectorAll('.grTab').forEach(b=>b.onclick=()=>{exp=b.dataset.e;document.querySelectorAll('.grTab').forEach(x=>x.classList.toggle('on',x===b));render();});
+$('#grLoad').onclick=load;$('#grClose').onclick=()=>{ov.style.display='none';};
+document.getElementById('bGraph').onclick=()=>{ov.style.display='flex';if(!data.length)load();else render();};
+})();
 </script>
 </body>
 </html>
