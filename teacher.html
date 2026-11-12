@@ -91,6 +91,9 @@ td.hl{color:var(--gold);font-weight:900}
 .ovl{position:relative}
 .ovl .lab{position:absolute;font-size:23px;font-weight:700;color:var(--gold);transform:translate(-50%,-160%);white-space:nowrap;text-shadow:0 0 6px #000}
 .ovl .nmk{position:absolute;font-size:19px;color:#c9d1f5;transform:translate(-50%,22%);text-shadow:0 0 6px #000;white-space:nowrap}
+.ttab{font-size:21px}.ttab th{font-size:17px;padding:3px 5px;line-height:1.15}.ttab td{padding:2px 4px;line-height:1.1}
+.tin{width:100%;font-family:inherit;font-size:21px;font-weight:700;text-align:center;background:#0b1229;color:var(--gold);border:1px solid var(--line);border-radius:6px;padding:2px 4px}
+.ttab td.auto{color:var(--cyan);font-weight:700;font-size:22px}.ttab.hideauto td.auto{color:transparent}
 /* bottom bar */
 #bar{position:fixed;left:0;right:0;bottom:0;height:52px;background:#0a0f20;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;z-index:20}
 #bar button{font-size:15px;padding:7px 12px}
@@ -534,41 +537,45 @@ const TEACHER_HASH='1fa58357';
   </aside>
 </section>
 
-<section class="slide" data-title="탐구 A · 가상 조도계">
-  <div class="sh"><span class="ph p2">탐구</span><h2>거리에 따른 빛의 세기 측정</h2><span class="pg">284~285쪽</span></div>
-  <div class="sb">
-    <canvas id="luxC" data-w="1168" data-h="230" style="width:1176px"></canvas>
-    <div class="row" style="gap:24px;align-items:flex-start;margin-top:4px">
-      <div style="width:470px">
-        <div class="ctrl"><label>거리</label><input type="range" id="luxD" min="0.5" max="2" step="0.1" value="0.5"><output id="luxDo">0.5 m</output></div>
-        <div class="btns"><button class="au" id="luxRec">✍ 기록</button><button id="luxClr">표 지우기</button></div>
-      </div>
-      <div class="col"><table class="tsm"><thead><tr><th>거리(m)</th><th>세기(lx)</th><th>거리²</th><th>세기×거리²</th></tr></thead><tbody id="luxTb"></tbody></table></div>
+<section class="slide" data-title="실험 ① 결과 · 거리에 따른 빛의 세기">
+  <div class="sh"><span class="ph p2">실험</span><h2>거리에 따른 빛의 세기 — 우리 반 결과</h2><span class="pg">272~273쪽</span></div>
+  <div class="sb row" style="gap:18px;align-items:flex-start">
+    <div style="width:470px">
+      <table class="ttab hideauto"><thead><tr><th>거리<br>(cm)</th><th>빛의 세기<br>(lx)</th><th>거리²<br>(m²)</th><th>세기×거리²</th></tr></thead><tbody id="tLuxIn"><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="20"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="30"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="40"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="50"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="60"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="70"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="80"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="90"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr></tbody></table>
+      <div class="btns" style="margin-top:8px"><button id="tLuxEx" style="font-size:20px;padding:6px 12px">예시 값</button><button id="tLuxClr" style="font-size:20px;padding:6px 12px">지우기</button><button id="tLuxAuto" style="font-size:20px;padding:6px 12px">계산 칸 보이기</button></div>
+      <div class="ans frag" style="font-size:26px;margin-top:10px">거리 2배 → 빛의 세기 약 <b>¼</b> (응원봉 예측 정답)<br>세기 × 거리² 거의 <b>일정</b></div>
+    </div>
+    <div class="col">
+      <canvas id="tgLux" data-w="560" data-h="250" style="width:640px"></canvas>
+      <canvas id="tgLux2" data-w="560" data-h="250" style="width:640px;margin-top:8px"></canvas>
     </div>
   </div>
+  <div hidden><canvas id="luxC" data-w="1168" data-h="230"></canvas><input type="range" id="luxD" min="0.5" max="2" step="0.1" value="0.5"><output id="luxDo"></output><button id="luxRec"></button><button id="luxClr"></button><table><tbody id="luxTb"></tbody></table></div>
   <aside class="notes" data-time="6분">
-    <h4>진행</h4><ol style="padding-left:18px;margin:0"><li>0.5 m에서 측정·기록 (약 421 lx)</li><li class="say" style="list-style:none;margin-left:-18px">“1.0 m로 옮기면 몇 lx가 나올까요? ½이면 210, ¼이면 105!”</li><li>1.0, 1.5, 2.0 m 측정·기록</li></ol>
-    <h4>참고</h4><ul><li>교과서 탐구 결과(421, 105, 47, 26 lx)와 비슷한 값이 나오도록 만들었고, 측정할 때마다 ±1% 오차가 있어요.</li><li>실제 실험을 했다면 학생 데이터와 비교해 보세요.</li></ul>
+    <h4>진행</h4><ol style="padding-left:18px;margin:0"><li>모둠 대표 1~2명의 측정값(빛의 세기)을 왼쪽 표에 입력 → 그래프 2개가 바로 그려짐</li><li>위 그래프: 거리가 멀어질수록 빛의 세기가 <b>급격히</b> 줄어드는 곡선</li><li>아래 그래프: ‘빛의 세기 × 거리²’이 거의 <b>수평선</b> → 일정함</li><li>[계산 칸 보이기]: 학생들이 계산한 거리², 세기×거리²와 비교할 때 누르기</li><li><kbd>→</kbd> 정리 공개 (도입 응원봉 예측의 정답 ¼배 포함)</li></ol>
+    <h4>발문</h4><p class="say">“거리가 20 cm → 40 cm(2배)일 때 빛의 세기는 몇 분의 1이 되었나요?” “아래 그래프가 수평선에 가깝다는 건 무슨 뜻일까요?”</p>
+    <h4>참고</h4><ul><li>[예시 값]은 수업 전 시연용(20 cm 1120 lx 기준)</li><li>값이 크게 튀는 모둠이 있으면 오차 원인(센서 방향, 주변 빛, 거리 재는 기준)을 함께 이야기</li><li>휴대폰 손전등은 20 cm보다 가까우면 점광원으로 보기 어려워 관계가 잘 안 맞음</li></ul>
   </aside>
 </section>
 
-<section class="slide" data-title="탐구 A 결과 · 왜 제곱일까">
-  <div class="sh"><span class="ph p3">발견</span><h2>빛의 세기와 거리의 관계는?</h2></div>
-  <div class="sb">
-    <div class="vote" id="v21b" data-ans="1" style="margin-bottom:12px"><button class="vo">½배</button><button class="vo">¼배</button><button class="vo">그대로</button></div>
-    <div class="ans frag" data-show="v21b">‘세기 × 거리²’ 일정 → 빛의 세기는 <b>거리의 제곱에 반비례</b></div>
-    <div class="row frag" style="align-items:center">
-      <canvas id="spreadC" data-w="760" data-h="250" style="width:720px"></canvas>
-      <div class="col">
-        <div class="ctrl" style="margin:0"><label>거리</label><input type="range" id="spD" min="1" max="3" step="1" value="1"><output id="spDo" style="min-width:70px">1배</output></div>
-        <p style="margin-top:14px;font-size:30px">2배 거리 → <b class="gold">4칸</b>에 퍼짐<br>3배 거리 → <b class="gold">9칸</b>에 퍼짐</p>
-      </div>
+<section class="slide" data-title="실험 ② 결과 · 왜 제곱일까">
+  <div class="sh"><span class="ph p3">발견</span><h2>왜 '제곱'일까? — 빛이 퍼지는 넓이</h2></div>
+  <div class="sb row" style="gap:18px;align-items:flex-start">
+    <div style="width:470px">
+      <table class="ttab hideauto"><thead><tr><th>거리<br>(cm)</th><th>원의 지름<br>(cm)</th><th>지름<br>몇 배?</th><th>넓이<br>몇 배?</th></tr></thead><tbody id="tSpIn"><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="10"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="20"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="30"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr><tr><td><input class="tin" inputmode="decimal" maxlength="5" value="40"></td><td><input class="tin" inputmode="decimal" maxlength="7"></td><td class="auto"></td><td class="auto"></td></tr></tbody></table>
+      <div class="btns" style="margin-top:8px"><button id="tSpEx" style="font-size:20px;padding:6px 12px">예시 값</button><button id="tSpClr" style="font-size:20px;padding:6px 12px">지우기</button><button id="tSpAuto" style="font-size:20px;padding:6px 12px">계산 칸 보이기</button></div>
+      <div class="ans frag" style="font-size:27px;margin-top:10px">거리 2배 → 지름 <b>2배</b> → 넓이 <b>4배</b><br>→ 한 곳이 받는 빛 <b>1/4</b></div>
+      <div class="concept frag" style="font-size:27px">빛의 세기는 거리의 <b>제곱</b>에 반비례</div>
+    </div>
+    <div class="col">
+      <canvas id="tgSp" data-w="560" data-h="250" style="width:640px"></canvas>
+      <canvas id="tgSp2" data-w="560" data-h="250" style="width:640px;margin-top:8px"></canvas>
     </div>
   </div>
-  <aside class="notes" data-time="4분">
-    <h4>진행</h4><p>도입의 예측 결과를 다시 말해 주거나, 여기서 다시 손을 들게 한 뒤 <kbd>→</kbd>로 정답을 공개하세요.</p>
-    <h4>발문</h4><p class="say">“왜 ½이 아니라 ¼일까요? 빛이 어떻게 퍼져 나가는지 생각해 보세요.”</p>
-    <p>두 번째 <kbd>→</kbd>로 그림이 나오면 슬라이더로 거리를 1→2→3으로 바꾸며 칸 수가 1→4→9로 늘어나는 것을 보여 주세요. (모눈종이·종이컵 실험과 같은 원리)</p>
+  <div hidden><canvas id="spreadC" data-w="760" data-h="250"></canvas><input type="range" id="spD" min="1" max="3" step="1" value="1"><output id="spDo"></output><div class="vote" id="v21b" data-ans="1"><button class="vo">½</button></div></div>
+  <aside class="notes" data-time="5분">
+    <h4>진행</h4><ol style="padding-left:18px;margin:0"><li>모둠 측정값(원의 지름)을 입력 → 위: 거리–지름(직선), 아래: 거리–넓이 비(위로 휘는 곡선)</li><li class="say" style="list-style:none;margin-left:-18px">“지름 그래프와 넓이 그래프의 모양은 어떻게 다른가요? 지름이 2배면 넓이는?”</li><li><kbd>→</kbd> 정리 공개: 지름 2배 → 넓이 4배 → 한 곳이 받는 빛 1/4</li><li><kbd>→</kbd> 개념: 빛의 세기는 거리의 제곱에 반비례</li></ol>
+    <h4>참고</h4><ul><li>넓이 비는 지름 비의 제곱으로 자동 계산 (첫 줄 = 1)</li><li>구멍 크기 때문에 지름이 정확히 비례하지 않을 수 있음 → 대략 1, 4, 9, 16에 가까운지 보기</li></ul>
   </aside>
 </section>
 
@@ -1213,6 +1220,41 @@ function rdc(){const dc=$('#distCards');dc.innerHTML='';['rigel','altair','arct'
 $('#distChk').onclick=()=>{const ok=dpick.join()==='altair,arct,rigel',m=$('#distMsg');m.innerHTML=dpick.length<3?'세 별을 모두 눌러 주세요.':ok?'⭕ 정답! 알타이르(약 5 pc) &lt; 아르크투루스(약 11 pc) &lt; 리겔(약 240 pc)':'❌ (겉보기 − 절대) 값이 작을수록 가까워요.';m.style.color=ok?'#63e6a3':'#ff7a90';};
 $('#distReset').onclick=()=>{dpick=[];rdc();$('#distMsg').textContent='';};rdc();
 })();
+
+// 실험 결과 입력 · 그래프 (교사용)
+(function(){if(!document.getElementById('tgLux'))return;
+function numv(v){v=String(v||'').replace(/,/g,'').trim();if(!v)return NaN;if(v.includes('/')){const[a,b]=v.split('/').map(Number);return b?a/b:NaN;}return parseFloat(v);}
+function rows(id){return [...document.querySelectorAll('#'+id+' tr')].map(tr=>[...tr.querySelectorAll('input')].map(e=>numv(e.value)));}
+function plot(id,pts,o){const C=cv(id),x=C.x,W=C.w,H=C.h;x.fillStyle='#050913';x.fillRect(0,0,W,H);
+ const L=62,R=16,T=30,B=42,pw=W-L-R,ph=H-T-B;txt(x,o.title,L,13,'#e9edff',10,'left',900);
+ pts=pts.filter(p=>isFinite(p[0])&&isFinite(p[1])).sort((a,b)=>a[0]-b[0]);
+ const xmax=Math.max(10,...pts.map(p=>p[0]),o.xmin||0)*1.08;let ymax=pts.length?Math.max(1e-9,...pts.map(p=>p[1]))*1.18:(o.ydef||100);
+ const nice=v=>{const e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e;};const ys=nice(ymax/4),xs=nice(xmax/5);ymax=Math.ceil(ymax/ys)*ys;
+ const X=v=>L+v/xmax*pw,Y=v=>T+ph-v/ymax*ph;
+ x.strokeStyle='#1c2650';for(let v=0;v<=ymax+1e-9;v+=ys){x.beginPath();x.moveTo(L,Y(v));x.lineTo(L+pw,Y(v));x.stroke();txt(x,+v.toPrecision(4)+'',L-6,Y(v),'#9ba6d4',8,'right');}
+ for(let v=0;v<=xmax+1e-9;v+=xs){txt(x,v+'',X(v),T+ph+11,'#9ba6d4',8,'center');}
+ x.strokeStyle='#4a5a99';x.beginPath();x.moveTo(L,T);x.lineTo(L,T+ph);x.lineTo(L+pw,T+ph);x.stroke();
+ txt(x,o.xl,L+pw/2,H-10,'#9ba6d4',9,'center',700);x.save();x.translate(12,T+ph/2);x.rotate(-Math.PI/2);txt(x,o.yl,0,0,'#9ba6d4',8,'center',700);x.restore();
+ if(!pts.length){txt(x,'표에 측정값을 입력하면 그래프가 그려짐',L+pw/2,T+ph/2,'#6a78b5',10,'center',700);return;}
+ x.strokeStyle=o.col;x.lineWidth=3;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(X(p[0]),Y(p[1])):x.moveTo(X(p[0]),Y(p[1])));x.stroke();x.lineWidth=1;
+ pts.forEach(p=>{x.fillStyle=o.col;x.beginPath();x.arc(X(p[0]),Y(p[1]),5,0,7);x.fill();txt(x,+p[1].toPrecision(3)+'',X(p[0]),Y(p[1])-12,'#e9edff',8,'center',700);});}
+function fmt(v){return isFinite(v)?(+v.toPrecision(3)).toString():'';}
+function draw(){const lr=rows('tLuxIn');
+ document.querySelectorAll('#tLuxIn tr').forEach((tr,i)=>{const r=lr[i],d=r[0]/100,c=tr.querySelectorAll('td.auto');c[0].textContent=isFinite(d)&&isFinite(r[1])?fmt(d*d):'';c[1].textContent=isFinite(d)&&isFinite(r[1])?fmt(r[1]*d*d):'';});
+ plot('tgLux',lr.map(r=>[r[0],r[1]]),{title:'거리에 따른 빛의 세기',xl:'거리 (cm)',yl:'빛의 세기 (lx)',col:'#ffd166'});
+ plot('tgLux2',lr.map(r=>[r[0],r[1]*Math.pow(r[0]/100,2)]),{title:'빛의 세기 × 거리² (거리는 m)',xl:'거리 (cm)',yl:'세기×거리²',col:'#6ad1ff',ydef:60});
+ const sr=rows('tSpIn'),base=sr.find(r=>isFinite(r[1])&&r[1]>0);
+ document.querySelectorAll('#tSpIn tr').forEach((tr,i)=>{const r=sr[i],c=tr.querySelectorAll('td.auto');const k=base&&isFinite(r[1])?r[1]/base[1]:NaN;c[0].textContent=fmt(k);c[1].textContent=fmt(k*k);});
+ plot('tgSp',sr.map(r=>[r[0],r[1]]),{title:'거리에 따른 빛이 비친 원의 지름',xl:'거리 (cm)',yl:'지름 (cm)',col:'#63e6a3',ydef:10});
+ plot('tgSp2',base?sr.map(r=>[r[0],Math.pow(r[1]/base[1],2)]):[],{title:'거리에 따른 넓이 비 (첫 줄 = 1)',xl:'거리 (cm)',yl:'넓이 몇 배?',col:'#b49cff',ydef:20});}
+function fill(id,vals){document.querySelectorAll('#'+id+' tr').forEach((tr,i)=>{const e=tr.querySelectorAll('input')[1];if(e)e.value=vals[i]!=null?vals[i]:'';});draw();}
+document.getElementById('tLuxEx').onclick=()=>fill('tLuxIn',[1120,500,290,180,131,92,72,56]);
+document.getElementById('tLuxClr').onclick=()=>fill('tLuxIn',[]);
+document.getElementById('tSpEx').onclick=()=>fill('tSpIn',[2.1,4.0,6.2,8.1]);
+document.getElementById('tSpClr').onclick=()=>fill('tSpIn',[]);
+[['tLuxAuto','tLuxIn'],['tSpAuto','tSpIn']].forEach(([b,t])=>{document.getElementById(b).onclick=e=>{const tb=document.getElementById(t).closest('table');tb.classList.toggle('hideauto');e.target.textContent=tb.classList.contains('hideauto')?'계산 칸 보이기':'계산 칸 숨기기';};});
+document.addEventListener('input',e=>{if(e.target.closest&&(e.target.closest('#tLuxIn')||e.target.closest('#tSpIn')))draw();});
+draw();})();
 
 /* ================== 3차시 ================== */
 (function(){
