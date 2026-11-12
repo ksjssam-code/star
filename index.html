@@ -101,7 +101,7 @@ textarea:focus{outline:2px solid var(--cyan);border-color:transparent}
 .ovl2.on{display:flex}.ovl2 .card{background:var(--panel);border:1px solid var(--gold);border-radius:18px;padding:22px;width:min(460px,100%);max-height:90vh;overflow:auto}
 .lvbar{display:inline-block;width:90px;height:8px;background:#2a3666;border-radius:4px;vertical-align:middle;overflow:hidden;margin:0 6px}.lvbar i{display:block;height:100%;background:var(--gold)}
 .tagb{font-size:12px;border-radius:6px;padding:1px 7px;font-weight:700;background:#ffffff14}
-.tag-궁금해요{color:#8fd6ff}.tag-해보고싶은탐구{color:#7be3a0}.tag-새로알게된점{color:#ffd166}
+.tag-궁금해요{color:#8fd6ff}.tag-해보고싶은탐구{color:#7be3a0}.tag-오늘의발견{color:#ffd166}
 .goodb{font-size:12px;color:#1a1300;background:var(--gold);border-radius:6px;padding:0 6px;font-weight:900}
 /* board */
 .qitem{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
@@ -549,13 +549,13 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
 <!-- ======================= 질문 게시판 ======================= -->
 <section class="module" id="m-qa">
-  <div class="mhead"><div class="tag">🔭 함께 묻고, 상상하고, 탐구하기</div><h1>호기심 은하</h1><span class="goal">궁금한 점 · 해 보고 싶은 탐구 · 새로 알게 된 점을 자유롭게! 친구 글에 답도 달아 보기</span></div>
+  <div class="mhead"><div class="tag">🔭 함께 묻고, 상상하고, 탐구하기</div><h1>호기심 은하</h1><span class="goal">궁금한 점 · 해 보고 싶은 탐구 · 오늘의 발견을 자유롭게! 친구 글에 답도 달아 보기</span></div>
   <div class="step">
     <div class="lchips" id="qaL"><button data-l="all" class="on">전체 차시</button><button data-l="1">1차시 별까지의 거리</button><button data-l="2">2차시 등급과 밝기</button><button data-l="3">3차시 표면 온도와 색</button></div>
-    <div class="lchips" id="qaT" style="margin-top:8px"><button data-t="all" class="on">모든 글</button><button data-t="궁금해요">❓ 궁금해요</button><button data-t="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</button><button data-t="새로 알게 된 점">💡 새로 알게 된 점</button></div>
+    <div class="lchips" id="qaT" style="margin-top:8px"><button data-t="all" class="on">모든 글</button><button data-t="궁금해요">❓ 궁금해요</button><button data-t="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</button><button data-t="오늘의 발견">💡 오늘의 발견</button></div>
     <div class="q c" style="margin-top:16px">새 글 쓰기 <span class="small muted" id="qaMine"></span></div>
     <div class="btns" style="margin:0 0 8px;align-items:center">
-      <select id="qaTag"><option value="궁금해요">❓ 궁금해요</option><option value="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</option><option value="새로 알게 된 점">💡 새로 알게 된 점</option></select>
+      <select id="qaTag"><option value="궁금해요">❓ 궁금해요</option><option value="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</option><option value="오늘의 발견">💡 오늘의 발견</option></select>
       <select id="qaLsel"><option value="1">1차시</option><option value="2">2차시</option><option value="3">3차시</option></select>
       <label class="small" id="qaAnonL" style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qaAnon"> 익명으로 올리기 (질문만)</label>
     </div>
@@ -758,7 +758,7 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  b.disabled=false;});
 
 /* ---------- 호기심 은하 (반별 4열 · 말머리 · 닉네임) ---------- */
-const CLS=['2-1','2-2','2-3','2-4'],TICON={'궁금해요':'❓','해 보고 싶은 탐구':'🔬','새로 알게 된 점':'💡'},TAG_OLD={'질문':'궁금해요','궁금해':'궁금해요','생각한 점':'새로 알게 된 점'};
+const CLS=['2-1','2-2','2-3','2-4'],TICON={'궁금해요':'❓','해 보고 싶은 탐구':'🔬','오늘의 발견':'💡'},TAG_OLD={'질문':'궁금해요','궁금해':'궁금해요','생각한 점':'오늘의 발견','새로 알게 된 점':'오늘의 발견'};
 let qaL='all',qaT='all',qaTimer,qaData=[];
 $$('#qaL button').forEach(b=>b.onclick=()=>{qaL=b.dataset.l;$$('#qaL button').forEach(x=>x.classList.toggle('on',x===b));if(qaL!=='all')$('#qaLsel').value=qaL;$('#qaList').innerHTML='';loadQA();});
 $$('#qaT button').forEach(b=>b.onclick=()=>{qaT=b.dataset.t;$$('#qaT button').forEach(x=>x.classList.toggle('on',x===b));if(qaT!=='all'){$('#qaTag').value=qaT;anonSync();}renderQA();});
