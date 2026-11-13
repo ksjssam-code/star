@@ -650,12 +650,18 @@ const TEACHER_HASH='1fa58357';
 <section class="slide" data-title="발문 · 시리우스 vs 베텔게우스">
   <div class="sh"><span class="ph p1">탐구</span><h2>밝게 보이는 별 = 정말 밝은 별?</h2></div>
   <div class="sb">
+    <div class="row" style="gap:16px;align-items:center;margin-bottom:6px">
+      <canvas id="winterC" data-w="560" data-h="230" style="width:470px;border-radius:12px"></canvas>
+      <div class="box" style="flex:1;font-size:25px;margin:0;line-height:1.45">🌌 겨울철 남쪽 하늘<br>
+        <b style="color:#cfe0ff">시리우스</b> — <b class="gold">큰개자리</b>의 별 · 밤하늘에서 가장 밝은 별<br>
+        <b style="color:#ff9a6a">베텔게우스</b> — <b class="gold">오리온자리</b> 왼쪽 어깨의 붉은 별</div>
+    </div>
     <div class="box">밤하늘: <b>시리우스</b>(−1.5등급)가 <b>베텔게우스</b>(0.6등급)보다 밝게 보임</div>
     <div class="q">시리우스가 <span class="gold">실제로</span> 빛을 더 많이 낼까?</div>
     <div class="vote" id="v23" data-ans="2"><button class="vo">그렇다</button><button class="vo">아니다</button><button class="vo">알 수 없다</button></div>
     <div class="ans frag" data-show="v23">겉보기 밝기는 <b>거리</b>의 영향을 받음<br>→ <b>같은 거리(10 pc)</b>에 놓고 비교 = <b>절대 등급</b></div>
   </div>
-  <aside class="notes" data-time="2분"><p class="say">“달리기 기록을 비교할 때 한 명은 50 m, 한 명은 100 m를 뛰면 공정할까요?” → 같은 조건(같은 거리)에서 비교해야 해요.</p></aside>
+  <aside class="notes" data-time="2분"><p>두 별 모두 겨울철 저녁 남쪽 하늘에서 맨눈으로 찾을 수 있음. 오리온자리 허리띠(세 별)를 왼쪽 아래로 이으면 시리우스. 베텔게우스·시리우스·프로키온(작은개자리)을 이으면 <b>겨울철 대삼각형</b>. “이번 주 저녁 8시쯤 남동쪽 하늘에서 찾아보세요!”</p><p class="say">“달리기 기록을 비교할 때 한 명은 50 m, 한 명은 100 m를 뛰면 공정할까요?” → 같은 조건(같은 거리)에서 비교해야 해요.</p></aside>
 </section>
 
 <section class="slide" data-title="개념 · 겉보기 등급과 절대 등급">
@@ -1303,6 +1309,18 @@ measureSp();drawSp();
 [['tLuxAuto','tLuxIn'],['tSpAuto','tSpIn']].forEach(([b,t])=>{document.getElementById(b).onclick=e=>{const tb=document.getElementById(t).closest('table');tb.classList.toggle('hideauto');e.target.textContent=tb.classList.contains('hideauto')?'계산 칸 보이기':'계산 칸 숨기기';};});
 document.addEventListener('input',e=>{if(e.target.closest&&(e.target.closest('#tLuxIn')||e.target.closest('#tSpIn')))draw();});
 draw();})();
+
+// 겨울철 남쪽 하늘 (시리우스·베텔게우스)
+(function(){const W=cv('winterC');if(!W)return;const x=W.x;x.fillStyle='#050913';x.fillRect(0,0,W.w,W.h);bgStars(x,W.w,W.h,70,57,.5);
+ const S={bet:[360,62],bel:[452,72],mei:[405,34],a1:[392,128],a2:[409,122],a3:[426,116],sai:[378,190],rig:[468,184],sir:[250,166],mir:[292,154],wez:[226,194],adh:[240,212],ald:[210,206],pro:[140,80],gom:[168,66]};
+ const L=[['bet','mei'],['bel','mei'],['bet','a1'],['bel','a3'],['a1','a2'],['a2','a3'],['a1','sai'],['a3','rig'],['sir','mir'],['sir','wez'],['wez','adh'],['wez','ald'],['pro','gom']];
+ x.strokeStyle='rgba(140,160,230,.45)';x.lineWidth=1.5;L.forEach(([a,b])=>{x.beginPath();x.moveTo(...S[a]);x.lineTo(...S[b]);x.stroke();});
+ x.setLineDash([5,6]);x.strokeStyle='rgba(255,209,102,.35)';x.beginPath();x.moveTo(...S.bet);x.lineTo(...S.sir);x.lineTo(...S.pro);x.closePath();x.stroke();x.setLineDash([]);x.lineWidth=1;
+ Object.entries(S).forEach(([k,[X,Y]])=>{if(k==='sir'||k==='bet'||k==='pro'||k==='rig')return;glow(x,X,Y,2.4,'230,235,255',.9);});
+ glow(x,...S.rig,3.6,'190,210,255');glow(x,...S.pro,3.4,'255,248,225');glow(x,...S.bet,5,'255,140,90');glow(x,...S.sir,6.5,'210,228,255');
+ txt(x,'베텔게우스',S.bet[0]-10,S.bet[1]-16,'#ff9a6a',10,'right',900);txt(x,'시리우스',S.sir[0]-12,S.sir[1]-14,'#cfe0ff',10,'right',900);txt(x,'프로키온',S.pro[0],S.pro[1]+18,'#ffe9b0',8,'center',700);
+ txt(x,'오리온자리',500,140,'#9ba6d4',9,'center',700);txt(x,'큰개자리',300,206,'#9ba6d4',9,'center',700);txt(x,'작은개자리',140,40,'#9ba6d4',8,'center',700);
+ txt(x,'겨울철 대삼각형',225,118,'#ffd16699',7,'center',700);txt(x,'동',14,W.h-10,'#6a78b5',8,'left',700);txt(x,'서',W.w-14,W.h-10,'#6a78b5',8,'right',700);})();
 
 /* ================== 3차시 ================== */
 (function(){
