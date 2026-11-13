@@ -144,7 +144,7 @@ kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padd
 const TEACHER_HASH='1fa58357';
 (function(){function h(s){let x=0x811c9dc5;for(const b of new TextEncoder().encode(s)){x^=b;x=Math.imul(x,0x01000193)>>>0;}return x.toString(16).padStart(8,'0');}
  const g=document.getElementById('gate');let ok=false;try{ok=sessionStorage.getItem('starlab_t')===TEACHER_HASH;}catch(e){}
- if(ok)g.remove();else document.getElementById('gateF').onsubmit=e=>{e.preventDefault();const p=document.getElementById('gateP').value;if(h(p)===TEACHER_HASH){try{sessionStorage.setItem('starlab_t',TEACHER_HASH);}catch(e){}g.remove();}else document.getElementById('gateM').textContent='비밀번호가 다름';};})();
+ if(ok)g.remove();else document.getElementById('gateF').onsubmit=e=>{e.preventDefault();const p=document.getElementById('gateP').value;if(h(p)===TEACHER_HASH){try{sessionStorage.setItem('starlab_t',TEACHER_HASH);localStorage.setItem('starlab_tkey',p);}catch(e){}g.remove();}else document.getElementById('gateM').textContent='비밀번호가 다름';};})();
 </script>
 <div id="viewport"><div id="stage">
 
@@ -944,7 +944,7 @@ const TEACHER_HASH='1fa58357';
   <b style="color:#ffd166;font-size:17px">📊 반별 학생 실험 그래프</b>
   <button class="grTab on" data-e="1">실험 ① 거리–빛의 세기</button><button class="grTab" data-e="2">실험 ② 빛이 퍼지는 넓이</button>
   <button id="grLoad">🔄 불러오기</button><span id="grMsg" style="color:#9ba6d4;font-size:14px"></span>
-  <span id="grKeyBox" style="display:none;align-items:center;gap:6px"><input id="grKey" type="password" placeholder="그래프 비밀번호" style="font-size:14px;padding:5px 8px;border-radius:8px;border:1px solid #2a3666;background:#18224a;color:#eef1ff;width:150px"><button id="grKeyGo">확인</button></span>
+  <span id="grKeyBox" style="display:none;align-items:center;gap:6px"><input id="grKey" type="password" placeholder="교사용 페이지 비밀번호" style="font-size:14px;padding:5px 8px;border-radius:8px;border:1px solid #2a3666;background:#18224a;color:#eef1ff;width:150px"><button id="grKeyGo">확인</button></span>
   <button id="grClose" style="margin-left:auto;background:#ffd166;color:#1a1300;border-color:#ffd166;font-weight:700">✕ 수업 화면으로</button>
  </div>
  <div id="grBody" style="flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start"></div>
@@ -1436,7 +1436,7 @@ function big(title,list){$('#grBigT').textContent=title;const g=$('#grBigG');g.i
  $('#grBig').style.display='flex';}
 $('#grBigX').onclick=()=>$('#grBig').style.display='none';$('#grBig').onclick=e=>{if(e.target.id==='grBig')$('#grBig').style.display='none';};
 async function load(){let key='';try{key=localStorage.getItem('starlab_tkey')||'';}catch(e){}
- if(!key){$('#grKeyBox').style.display='inline-flex';msg.textContent='그래프 비밀번호를 입력하기';return;}
+ if(!key){$('#grKeyBox').style.display='inline-flex';msg.textContent='교사용 페이지 비밀번호를 한 번 더 입력하기';return;}
  msg.textContent='불러오는 중…';try{const r=await fetch(API_URL+'?action=graphs&key='+encodeURIComponent(key));const j=await r.json();
   if(!j.ok){msg.textContent=j.error||'불러오기 실패';if(j.badKey){try{localStorage.removeItem('starlab_tkey');}catch(e){}$('#grKeyBox').style.display='inline-flex';}return;}
   data=j.students||[];$('#grKeyBox').style.display='none';msg.textContent=`2차시 제출 ${data.length}명 · ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})} 기준`;render();}

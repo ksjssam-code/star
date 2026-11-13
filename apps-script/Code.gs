@@ -33,6 +33,7 @@ const TAGS = ['궁금해요', '해 보고 싶은 탐구', '오늘의 발견'];
 const TAG_OLD = { '질문': '궁금해요', '궁금해': '궁금해요', '생각한 점': '오늘의 발견', '새로 알게 된 점': '오늘의 발견' };
 function tagOf_(t) { t = String(t || ''); t = TAG_OLD[t] || t; return TAGS.indexOf(t) >= 0 ? t : '궁금해요'; }
 const LEVELS = [[0, '성운', '☁️'], [5, '적색 별', '🔴'], [12, '주황색 별', '🟠'], [22, '황색 별', '🟡'], [35, '백색 별', '⚪'], [50, '청백색 별', '🔷'], [70, '청색 별', '💙'], [100, '초신성', '💥']];
+const TEACHER_PAGE_HASH = 'f5fc84951e21513f2385c806857b4194ef4c526ceb8ec77430a2185b760f8cd3';
 const PTS = { post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
 
 function doGet(e) {
@@ -102,9 +103,11 @@ function setTeacherKey() {
 
 /* ---------------- 교사용: 학생 실험 데이터 ---------------- */
 function teacherGraphs_(key) {
+  // 교사용 페이지 비밀번호로 열림 (시트 메뉴에서 따로 비밀번호를 정했다면 그것도 가능)
   const real = PropertiesService.getScriptProperties().getProperty('TEACHER_KEY');
-  if (!real) return { ok: false, error: '시트 메뉴 [⭐ 별 탐구실] → [교사용 그래프 보기 비밀번호 설정]을 먼저 하기' };
-  if (key !== real) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  const dg = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, 'starlab-teacher|' + key, Utilities.Charset.UTF_8)
+    .map(function (x) { return ('0' + (x & 255).toString(16)).slice(-2); }).join('');
+  if (!key || (key !== real && dg !== TEACHER_PAGE_HASH)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
   const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('2차시 탐구');
   if (!s || s.getLastRow() < 2) return { ok: true, students: [] };
   const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
