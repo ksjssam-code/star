@@ -611,11 +611,12 @@ $('#lgGo').onclick=async()=>{if(lgBusy)return;const cls=$('#lgCls').value,num=pa
   if(!j.ok&&j.error==='알 수 없는 요청'){user={cls,num,name,pin,nick:name,legacy:true};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();lgBusy=false;return;}
   if(j.need==='register'){$('#lgReg').style.display='block';m.textContent=j.error||'처음 왔어요! 닉네임과 PIN 확인을 입력하고 다시 [입장하기]';$('#lgNick').focus();}
   else if(!j.ok){m.textContent=j.error||'로그인 실패';}
-  else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();if($('#m-qa').classList.contains('on'))loadQA();}
+  else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();pullServer();if($('#m-qa').classList.contains('on'))loadQA();}
  }catch(e){m.style.color='';m.textContent='인터넷 연결 확인 후 다시 시도하기';}
  lgBusy=false;};
 ['lgPin','lgPin2','lgNick'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lgGo').click();}));
 if(!PREVIEW&&(!user||!user.pin||!user.nick))openLogin();
+else if(!PREVIEW&&user&&user.pin)setTimeout(pullServer,800);
 showWho();
 
 /* ---------- routing ---------- */
@@ -755,6 +756,29 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  try{await api({action:'submit',lesson:L,cls:user.cls,num:user.num,name:user.name,fields});st.style.color='#63e6a3';st.textContent='✔ 제출 완료 ('+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+')';}
  catch(e){st.style.color='#ff7a90';st.textContent=e.message==='NOAPI'?'아직 제출 기능이 설정되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':'제출 실패: 인터넷 연결 확인 후 다시 시도하기';}
  b.disabled=false;});
+
+/* ---------- 다른 기기에서 로그인해도 제출한 결과 불러오기 (빈 칸만 채움) ---------- */
+async function pullServer(){if(PREVIEW||!API_URL||!user||!user.pin||user.legacy)return;let j;try{j=await api({action:'mine'});}catch(e){return;}
+ const D=(j&&j.data)||{};let n=0;
+ ['1','2','3'].forEach(L=>{const o=D[L];const sec=$('#m-t'+L);if(!o||!sec)return;
+  $$('[data-f]',sec).forEach(el=>{const v=o[el.dataset.f];if(!v)return;
+   if(el.classList.contains('predict')){if(el.querySelector('button.sel'))return;const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){b.classList.add('sel');n++;}}
+   else if(el.tagName==='TEXTAREA'){if(el.value.trim())return;el.value=v;n++;}
+   else if(el.tagName==='TBODY'){
+    const filled=[...el.querySelectorAll('input')].some(i=>i.value.trim()&&!i.defaultValue)||(el.id!=='pxIn'&&[...el.querySelectorAll('select')].some(s=>s.value));
+    if(filled)return;const lines=v.split('\n').map(l=>l.split(' / ').map(x=>x.trim()));
+    if(el.id==='pxIn'){el.innerHTML='';lines.forEach(p=>addRow(p));n++;return;}
+    const used=new Set();
+    lines.forEach(p=>{const trs=[...el.querySelectorAll('tr')];
+     const cells=tr=>[...tr.children].filter(td=>!td.classList.contains('calc'));
+     const first=tr=>{const c=cells(tr)[0];if(!c)return '';const i=c.querySelector('input,select');return (i?i.value:c.textContent).trim();};
+     let tr=trs.find(t=>!used.has(t)&&first(t)===p[0])||trs.find(t=>!used.has(t)&&![...t.querySelectorAll('input')].some(i=>i.value.trim()));
+     if(!tr&&el.id==='luxIn'&&typeof luxAddRow==='function'){luxAddRow();tr=el.lastElementChild;}
+     if(!tr)return;used.add(tr);cells(tr).forEach((td,k)=>{const i=td.querySelector('input,select');if(i&&p[k]!=null&&p[k]!=='')i.value=p[k];});});
+    el.querySelectorAll('input').forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true})));n++;}
+  });
+  if(L==='2'&&$('#spPred')&&!$('#spPred').value&&o['실험2 예상(거리 2배→지름·넓이)'])$('#spPred').value=o['실험2 예상(거리 2배→지름·넓이)'];});
+ if(n){save();lockRv();if(typeof drawGraphs==='function')drawGraphs();const t=document.createElement('div');t.textContent='☁️ 선생님께 제출했던 탐구 결과를 불러왔어요';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1b2a5c;color:#eef1ff;border:1px solid #6ad1ff;padding:10px 18px;border-radius:12px;z-index:9999;font-size:15px';document.body.appendChild(t);setTimeout(()=>t.remove(),4000);}}
 
 /* ---------- 호기심 은하 (반별 4열 · 말머리 · 닉네임) ---------- */
 const CLS=['2-1','2-2','2-3','2-4'],TICON={'궁금해요':'❓','해 보고 싶은 탐구':'🔬','오늘의 발견':'💡'},TAG_OLD={'질문':'궁금해요','궁금해':'궁금해요','생각한 점':'오늘의 발견','새로 알게 된 점':'오늘의 발견'};

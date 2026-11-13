@@ -58,6 +58,7 @@ function doPost(e) {
     else if (d.action === 'question') res = addQuestion_(d, me);
     else if (d.action === 'answer') res = addAnswer_(d);
     else if (d.action === 'me') res = { ok: true };
+    else if (d.action === 'mine') res = mine_(d);
     else return json_({ ok: false, error: '알 수 없는 요청' });
     if (res.ok) { const p = pointsOf_(d.cls, d.num); res.points = p; res.level = level_(p); }
     return json_(res);
@@ -221,6 +222,32 @@ function allPoints_() {
 }
 
 /* ---------------- 탐구 결과 제출 ---------------- */
+/* 학생 본인의 제출 결과 (다른 기기에서 로그인해도 불러오기) */
+function mine_(d) {
+  const out = {};
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ['1', '2', '3'].forEach(function (L) {
+    const s = ss.getSheetByName(L + '차시 탐구');
+    if (!s || s.getLastRow() < 2) return;
+    const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
+    const h = v[0].map(String);
+    for (let i = 1; i < v.length; i++) {
+      if (String(v[i][1]).replace(/^'/, '') === d.cls && Number(v[i][2]) === Number(d.num)) {
+        const o = {};
+        for (let j = 5; j < h.length; j++) {
+          let x = v[i][j];
+          if (x === '' || x === null) continue;
+          x = String(x).replace(/^'/, '');
+          if (x) o[h[j]] = x;
+        }
+        out[L] = o;
+        break;
+      }
+    }
+  });
+  return { ok: true, data: out };
+}
+
 function submit_(d) {
   const L = String(d.lesson);
   if (['1', '2', '3'].indexOf(L) < 0) return { ok: false, error: '차시 오류' };
