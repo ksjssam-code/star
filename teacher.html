@@ -1298,7 +1298,7 @@ function drawSp(){const x=Pc.x,W=Pc.w,H=Pc.h;x.clearRect(0,0,W,H);const sx=70,sy
  x.fillStyle='#0b1229';x.strokeStyle='#2a3666';x.beginPath();x.roundRect(W-230,46,214,90,14);x.fill();x.stroke();
  txt(x,'📏 빛 원의 지름',W-216,66,'#9ba6d4',11);txt(x,dia.toFixed(1)+' cm',W-30,110,'#63e6a3',30,'right',900);}
 document.getElementById('spD').addEventListener('input',e=>{sd=+e.target.value;document.getElementById('spDo').textContent=sd+' cm';measureSp();drawSp();});
-document.getElementById('spRec').onclick=()=>rec('tSpIn',sd,dia);
+document.getElementById('spRec').onclick=()=>{rec('tSpIn',sd,dia);document.getElementById('tSpIn').closest('table').classList.remove('hideauto');document.getElementById('tSpAuto').textContent='계산 칸 숨기기';};
 measureSp();drawSp();
 [['tLuxAuto','tLuxIn'],['tSpAuto','tSpIn']].forEach(([b,t])=>{document.getElementById(b).onclick=e=>{const tb=document.getElementById(t).closest('table');tb.classList.toggle('hideauto');e.target.textContent=tb.classList.contains('hideauto')?'계산 칸 보이기':'계산 칸 숨기기';};});
 document.addEventListener('input',e=>{if(e.target.closest&&(e.target.closest('#tLuxIn')||e.target.closest('#tSpIn')))draw();});
