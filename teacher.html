@@ -1279,7 +1279,7 @@ function drawLux(){const x=Lc.x,W=Lc.w,H=Lc.h;x.clearRect(0,0,W,H);const bx=90,b
 document.getElementById('luxD').addEventListener('input',e=>{ld=+e.target.value;document.getElementById('luxDo').textContent=ld+' cm';measure();drawLux();});
 function rec(id,d,v){const trs=[...document.querySelectorAll('#'+id+' tr')];let tr=trs.find(t=>numv(t.querySelector('input').value)===d)||trs.find(t=>!t.querySelectorAll('input')[1].value);
  if(!tr)return;const ins=tr.querySelectorAll('input');ins[0].value=d;ins[1].value=v;tr.classList.remove('flash');void tr.offsetWidth;tr.classList.add('flash');draw();}
-document.getElementById('luxRec').onclick=()=>rec('tLuxIn',ld,lux);
+document.getElementById('luxRec').onclick=()=>{rec('tLuxIn',ld,lux);const tb=document.getElementById('tLuxIn').closest('table');tb.classList.remove('hideauto');document.getElementById('tLuxAuto').textContent='계산 칸 숨기기';};
 measure();drawLux();
 // 가상 실험 ②: 구멍 뚫린 종이 + 스크린의 빛 원
 const Pc=cv('spreadC');let sd=10,dia=0;
