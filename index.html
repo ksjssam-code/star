@@ -453,8 +453,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
     <canvas id="magC" data-w="1168" data-h="280"></canvas>
     <div class="ctrl"><label>별까지 거리</label><input type="range" id="dist" min="-5.7" max="3" step="0.01" value="1"><output id="disto">10 pc</output></div>
     <div class="chips"><div class="chip">겉보기 <b id="mApp">-</b></div><div class="chip">절대 <b id="mAbs">-</b></div><div class="chip" hidden>겉보기−절대 <b id="mDm">-</b></div></div>
-    <p class="small muted" style="margin:4px 0 0">별을 <b>실제 거리로</b> 옮긴 뒤 등급을 읽어 표에 쓰고, 겉보기 − 절대를 직접 계산하기</p>
-    <table class="intab"><thead><tr><th>별</th><th>겉보기 등급<br><span class="small">(실제 거리)</span></th><th>절대 등급</th><th>겉보기 − 절대</th><th>10 pc보다</th></tr></thead><tbody id="mcIn" data-f="겉보기·절대 등급표(겉보기/절대/차/거리)"><tr><td><b>시리우스</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr><tr><td><b>베텔게우스</b></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr></tbody></table>
+    <p class="small muted" style="margin:4px 0 0">별을 <b>실제 거리로</b> 옮긴 뒤 등급을 읽어 표에 쓰고, 겉보기 − 절대를 직접 계산하기 · 음수는 <b>-</b>(빼기)를 붙여 쓰기 (예: -1.5)</p>
+    <table class="intab"><thead><tr><th>별</th><th>겉보기 등급<br><span class="small">(실제 거리)</span></th><th>절대 등급</th><th>겉보기 − 절대</th><th>10 pc보다</th></tr></thead><tbody id="mcIn" data-f="겉보기·절대 등급표(겉보기/절대/차/거리)"><tr><td><b>시리우스</b></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr><tr><td><b>베텔게우스</b></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><input inputmode="text" autocomplete="off" maxlength="10"></td><td><select><option value="">선택</option><option>가까움</option><option>10 pc</option><option>멂</option></select></td></tr></tbody></table>
     <div class="q g">① 10 pc에서 겉보기·절대 등급의 관계 ② 10 pc보다 가까우면/멀면? ③ 실제로 더 밝은 별은?</div>
     <textarea data-f="발견-겉보기·절대 등급" placeholder="①, ②, ③" style="min-height:100px"></textarea>
     <div class="btns"><button class="rv" data-t="r23">정리 확인</button></div>
@@ -464,7 +464,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   <div class="step">
     <h2><span class="badge b3">해 보기</span> 등급으로 별의 거리 비교 (287쪽)</h2>
     <table><thead><tr><th>별</th><th>알타이르</th><th>아르크투루스</th><th>리겔</th></tr></thead><tbody><tr><td>겉보기 등급</td><td>0.77</td><td>−0.04</td><td>0.12</td></tr><tr><td>절대 등급</td><td>2.2</td><td>−0.3</td><td>−6.8</td></tr></tbody>
-    <tbody id="hbIn" class="intab" data-f="해보기-겉보기−절대(알타이르/아르크투루스/리겔)"><tr><td><b>겉보기 − 절대</b> <span class="small muted calc">(직접 계산)</span></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td></tr></tbody></table>
+    <tbody id="hbIn" class="intab" data-f="해보기-겉보기−절대(알타이르/아르크투루스/리겔)"><tr><td><b>겉보기 − 절대</b> <span class="small muted calc">(직접 계산)</span></td><td><input inputmode="text" autocomplete="off" placeholder="예: -1.5" maxlength="10"></td><td><input inputmode="text" autocomplete="off" placeholder="예: -1.5" maxlength="10"></td><td><input inputmode="text" autocomplete="off" placeholder="예: -1.5" maxlength="10"></td></tr></tbody></table>
     <div class="q c">가장 밝게 보이는 별과 실제로 가장 밝은 별은?</div>
     <textarea data-f="해보기-밝게 보이는 별/실제 밝은 별" placeholder="내 답"></textarea>
     <div class="q c">계산한 값을 보고 가까운 별부터 순서대로 누르기 — 어떤 값을 보고 판단했는지도 생각해 보기</div>
@@ -568,6 +568,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 <footer>✦ 별 탐구실 · 중학교 과학 2 Ⅷ. 별과 우주 · 시뮬레이션의 거리·크기는 이해를 돕기 위해 과장됨</footer>
 
 <script>
+document.addEventListener('input',e=>{const t=e.target;if(t.matches&&t.matches('#mcIn input,#hbIn input')&&/[−–—ㅡ－]/.test(t.value))t.value=t.value.replace(/[−–—ㅡ－]/g,'-');});
 /* ===== 선생님 설정: 구글 Apps Script 웹 앱 주소를 따옴표 안에 붙여 넣기 ===== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';
 /* ============================================================================ */
@@ -707,7 +708,7 @@ function luxRowHTML(){return `<td><input inputmode="decimal" maxlength="5"></td>
 function luxAddRow(){const tr=document.createElement('tr');tr.innerHTML=luxRowHTML();$('#luxIn').appendChild(tr);}
 $('#luxAdd').onclick=()=>{luxAddRow();save();};
 
-function numv(v){v=String(v||'').replace(/,/g,'').trim();if(!v)return NaN;if(v.includes('/')){const[a,b]=v.split('/').map(Number);return b?a/b:NaN;}return parseFloat(v);}
+function numv(v){v=String(v||'').replace(/,/g,'').replace(/[−–—ㅡ－]/g,'-').trim();if(!v)return NaN;if(v.includes('/')){const[a,b]=v.split('/').map(Number);return b?a/b:NaN;}return parseFloat(v);}
 function rows(tb){return [...$('#'+tb).querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('input')].map(e=>numv(e.value)));}
 function plot(id,pts,o){const el=document.getElementById(id);if(!el)return;const C=cv(id),x=C.x,W=C.w,H=C.h;x.fillStyle='#050913';x.fillRect(0,0,W,H);
  const L=70,R=20,T=34,B=56,pw=W-L-R,ph=H-T-B;txt(x,o.title,L,16,'#e9edff',13,'left',900);
