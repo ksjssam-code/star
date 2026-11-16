@@ -128,6 +128,7 @@ body.notes-on #notes{transform:none}
 #help.on{display:block}
 #help h3{margin:0 0 8px;color:var(--gold)}
 kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-family:inherit;font-size:14px}
+.startab{width:100%;border-collapse:collapse}.startab th,.startab td{padding:7px 12px;text-align:center;border-bottom:1px solid var(--line)}.startab th{color:var(--muted);font-size:.85em}.sd{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:-3px;margin-right:6px;box-shadow:0 0 12px currentColor}
 </style>
 </head>
 <body>
@@ -916,6 +917,84 @@ const TEACHER_HASH='1fa58357';
   <aside class="notes" data-time="2분"></aside>
 </section>
 
+<section class="slide" data-title="[심화·선택] 별은 어떻게 태어날까?">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별은 어떻게 태어날까?</h2><span class="pg">필요할 때만</span></div>
+  <div class="sb">
+    <div class="q">밤하늘의 별은 <span class="gold">처음부터</span> 빛나고 있었을까?</div>
+    <canvas id="birthC" data-w="1168" data-h="270" style="width:1176px;border-radius:12px;cursor:pointer" title="클릭: 다음 단계"></canvas>
+    <div class="row" style="gap:12px;margin-top:10px">
+      <div class="box frag" style="flex:1;font-size:24px;margin:0">☁️ <b>성운</b>: 수소 가스와 먼지 구름</div>
+      <div class="box frag" style="flex:1;font-size:24px;margin:0">🌀 <b>중력</b>으로 뭉치며 수축 → 중심 온도 ↑</div>
+      <div class="box frag" style="flex:1;font-size:24px;margin:0">✨ 중심 약 <b class="gold">1000만 ℃</b> → 수소 <b>핵융합</b> → 별 탄생</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="(선택) 3분">
+    <h4>언제 쓰나</h4><p>교과서 범위를 넘는 심화(고등 지구과학 내용). “별마다 왜 온도가 달라요?” 질문이 나오거나 시간이 남을 때 사용. 필요 없으면 넘기기.</p>
+    <h4>진행</h4><ol style="padding-left:18px;margin:0"><li>발문 후 <b>그림을 클릭</b>할 때마다 한 단계씩: 성운 → 뭉침 → 원시별 → 별 탄생</li><li><kbd>→</kbd>로 아래 설명 상자 3개를 하나씩 공개</li></ol>
+    <p class="say">“구름이 어떻게 스스로 빛나는 별이 될까요? 무엇이 구름을 뭉치게 할까요?”</p>
+    <p>원시별은 수축하며 뜨거워져 빛을 내지만 아직 핵융합 전. 중심이 약 1000만 ℃를 넘으면 수소 원자핵이 합쳐져 헬륨이 되며(핵융합) 막대한 에너지를 내어 ‘별’이 됨. 호기심 은하 첫 등급 ☁️ 성운과 연결해 주면 좋아요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 별마다 온도가 다른 까닭">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>같은 성운에서 태어나도 색이 다른 까닭은?</h2></div>
+  <div class="sb">
+    <div class="q">별의 표면 온도(색)를 결정하는 가장 큰 요인은?</div>
+    <div class="vote" id="v34" data-ans="1"><button class="vo">태어난 장소</button><button class="vo">질량 (무게)</button><button class="vo">지구와의 거리</button></div>
+    <div class="frag" data-show="v34">
+    <div class="ans" style="font-size:25px;margin-bottom:8px">질량이 클수록 → 중력이 강해 중심이 더 뜨거움 → 표면도 뜨거운 <b style="color:#9fc0ff">청색</b> 별</div>
+    <table class="startab" style="font-size:25px"><thead><tr><th>질량 (태양 = 1)</th><th>색</th><th>표면 온도</th></tr></thead><tbody>
+      <tr><td>0.5</td><td><i class="sd" style="background:#ff8c5a"></i> 적색</td><td>약 3500 ℃</td></tr>
+      <tr><td>1 (태양)</td><td><i class="sd" style="background:#ffe17a"></i> 황색</td><td>약 6000 ℃</td></tr>
+      <tr><td>3</td><td><i class="sd" style="background:#f4f6ff"></i> 백색</td><td>약 10000 ℃</td></tr>
+      <tr><td>15</td><td><i class="sd" style="background:#9fb8ff"></i> 청색</td><td>약 30000 ℃</td></tr></tbody></table>
+    </div>
+  </div>
+  <aside class="notes" data-time="(선택) 3분">
+    <p class="say">“같은 구름에서 태어난 별들인데 왜 어떤 별은 파랗고 어떤 별은 붉을까요?”</p>
+    <p>정답은 <b>질량</b>. 무거운 별일수록 자기 무게(중력)에 눌려 중심의 압력과 온도가 높아지고, 핵융합이 활발해 표면도 뜨거워짐. 표의 온도는 교과서 핵심 정리(청색 약 30000 ℃ 이상, 백색 약 10000 ℃, 적색 약 3500 ℃ 이하, 태양 약 6000 ℃)와 맞춤. 거리는 밝기(등급)에는 영향을 주지만 색에는 영향 없음 → 2차시와 구분.</p>
+    <p>※ 같은 별도 나이가 들면 온도가 변함(다음 슬라이드들).</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 무거운 별은 오래 살까?">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>연료가 많은 무거운 별은 더 오래 살까?</h2></div>
+  <div class="sb">
+    <div class="q">질량이 큰 별은 연료(수소)도 많음. 그렇다면 수명은?</div>
+    <div class="vote" id="v35" data-ans="1"><button class="vo">더 길다</button><button class="vo">더 짧다</button><button class="vo">똑같다</button></div>
+    <div class="frag" data-show="v35">
+    <table class="startab" style="font-size:25px"><thead><tr><th>질량 (태양 = 1)</th><th>색</th><th>수명 (약)</th></tr></thead><tbody>
+      <tr><td>0.5</td><td><i class="sd" style="background:#ff8c5a"></i> 적색</td><td>수백억 년</td></tr>
+      <tr><td>1 (태양)</td><td><i class="sd" style="background:#ffe17a"></i> 황색</td><td><b class="gold">100억 년</b> (지금 약 46억 살)</td></tr>
+      <tr><td>3</td><td><i class="sd" style="background:#f4f6ff"></i> 백색</td><td>수억 년</td></tr>
+      <tr><td>15</td><td><i class="sd" style="background:#9fb8ff"></i> 청색</td><td>약 1000만 년</td></tr></tbody></table>
+    </div>
+    <div class="box frag" style="font-size:25px;margin-top:10px">🚛 대형 트럭은 연료통이 크지만 연료를 훨씬 빨리 씀 → 무거운 별은 중심이 매우 뜨거워 연료를 <b class="gold">엄청 빨리</b> 태움</div>
+  </div>
+  <aside class="notes" data-time="(선택) 3분">
+    <p class="say">“연료가 많으면 오래 갈 것 같죠? 정말 그럴까요?”</p>
+    <p>무거운 별은 연료가 많지만 훨씬 빠르게 태워서 수명이 짧음(질량 15배 별 ≈ 1000만 년, 태양 ≈ 100억 년). 청색 별은 ‘짧고 화려하게’, 적색 왜성은 ‘가늘고 길게’. 수치는 대략적인 값.</p>
+    <p>발문 확장: “밤하늘에 보이는 청색 별은 나이가 많을까, 적을까?” → 수명이 짧으므로 대부분 젊은 별.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 별의 일생과 색의 변화">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별도 나이가 들면 색이 변한다</h2></div>
+  <div class="sb">
+    <canvas id="lifeC" data-w="1168" data-h="380" style="width:1176px;border-radius:12px"></canvas>
+    <div class="row" style="gap:12px;margin-top:10px">
+      <div class="box frag" style="flex:1;font-size:23px;margin:0">☀️ 태양: 50억 년 뒤 <b style="color:#ff8c5a">적색 거성</b><br>→ 표면 온도 ↓ → <b>적색</b> (사고력 문제!)</div>
+      <div class="box frag" style="flex:1;font-size:23px;margin:0">🔴 베텔게우스: 늙은 <b style="color:#ff8c5a">적색 초거성</b><br>→ 언젠가 <b class="gold">초신성</b> 폭발 예정</div>
+      <div class="box frag" style="flex:1;font-size:23px;margin:0">💥 초신성이 흩뿌린 원소(철·칼슘 등)<br>→ 새 별과 행성, <b>우리 몸</b>의 재료</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="(선택) 4분">
+    <h4>그림 읽기</h4><ul><li>위: <b>태양 정도 질량</b> — 성운 → 주계열성(황색, 지금 태양) → 적색 거성 → 행성상 성운 + 백색 왜성</li><li>아래: <b>무거운 별</b> — 성운 → 주계열성(청색) → 적색 초거성 → 초신성 → 중성자별·블랙홀</li></ul>
+    <p class="say">“사고력 문제에서 태양이 적색으로 변한다고 했죠? 왜 그런지 이제 설명할 수 있나요?”</p>
+    <p>베텔게우스(적색 초거성, 늙은 별)와 리겔(청색 초거성, 젊은 별)이 같은 오리온자리에 있음 → 3차시 도입 발문과 연결. 호기심 은하 등급(☁️ 성운 → … → 💥 초신성)도 이 일생을 본떠 이름 붙였다고 소개해 보세요. 우리 몸의 칼슘·철도 오래전 별 속에서 만들어짐 → “우리는 별의 부스러기”.</p>
+  </aside>
+</section>
+
 <section class="slide cover" data-title="중단원 마무리">
   <div class="num" style="font-size:99px">1. 별</div>
   <h1>중단원 마무리</h1>
@@ -1326,6 +1405,37 @@ draw();})();
   txt(x,['클릭 ▶ 별 이름','클릭 ▶ 겉보기 등급','클릭 ▶ 처음으로'][st],W.w-16,W.h-14,'#6a78b5',10,'right',700);
   txt(x,'동',16,W.h-14,'#6a78b5',10,'left',700);txt(x,'서',W.w-16,26,'#6a78b5',10,'right',700);}
  W.c?W.c.addEventListener('click',()=>{st=(st+1)%3;draw();}):document.getElementById('winterC').addEventListener('click',()=>{st=(st+1)%3;draw();});draw();})();
+
+// [심화] 별의 탄생 (클릭으로 단계)
+(function(){const B=cv('birthC');if(!B)return;const x=B.x;let st=0;
+ const X=[150,440,730,1010],Y=132,lab=['성운','중력으로 뭉침','원시별','별 탄생!'],sub=['가스·먼지 구름','수축 · 회전','뜨거워짐 (아직 핵융합 전)','수소 핵융합 시작'];
+ function cloud(cx,cy,R,a,seed){const r=rng(seed);for(let i=0;i<70;i++){const t=r()*7,d=Math.sqrt(r())*R;x.fillStyle=`rgba(${150+r()*60},${120+r()*60},${200+r()*40},${a*(0.25+r()*0.3)})`;x.beginPath();x.arc(cx+Math.cos(t)*d,cy+Math.sin(t)*d*0.7,6+r()*14,0,7);x.fill();}}
+ function draw(){x.fillStyle='#050913';x.fillRect(0,0,B.w,B.h);bgStars(x,B.w,B.h,90,77,.4);
+  for(let i=0;i<=st;i++){const cx=X[i];
+   if(i===0)cloud(cx,Y,95,1,3);
+   if(i===1){cloud(cx,Y,55,1,5);x.strokeStyle='rgba(255,209,102,.6)';x.lineWidth=2;for(let k=0;k<6;k++){const t=k*Math.PI/3;x.beginPath();x.moveTo(cx+Math.cos(t)*85,Y+Math.sin(t)*62);x.lineTo(cx+Math.cos(t)*62,Y+Math.sin(t)*45);x.stroke();}x.lineWidth=1;glow(x,cx,Y,4,'255,160,110',.7);}
+   if(i===2){cloud(cx,Y,40,.6,8);glow(x,cx,Y,13,'255,120,70');}
+   if(i===3){glow(x,cx,Y,20,'255,235,170');x.strokeStyle='rgba(255,240,190,.5)';for(let k=0;k<12;k++){const t=k*Math.PI/6;x.beginPath();x.moveTo(cx+Math.cos(t)*48,Y+Math.sin(t)*48);x.lineTo(cx+Math.cos(t)*80,Y+Math.sin(t)*80);x.stroke();}}
+   txt(x,lab[i],cx,B.h-46,i===3?'#ffd166':'#e9edff',15,'center',900);txt(x,sub[i],cx,B.h-20,'#9ba6d4',10,'center',700);
+   if(i>0){x.fillStyle='#6a78b5';const ax=(X[i-1]+cx)/2;x.beginPath();x.moveTo(ax-14,Y-10);x.lineTo(ax+10,Y);x.lineTo(ax-14,Y+10);x.fill();}}
+  if(st===2)txt(x,'중심 온도 ↑↑',X[2],34,'#ff9a6a',11,'center',900);if(st===3)txt(x,'중심 약 1000만 ℃',X[3],30,'#ffd166',11,'center',900);
+  txt(x,st<3?'클릭 ▶ 다음 단계':'클릭 ▶ 처음으로',14,22,'#6a78b5',9,'left',700);}
+ (B.c||document.getElementById('birthC')).addEventListener('click',()=>{st=(st+1)%4;draw();});draw();})();
+// [심화] 별의 일생
+(function(){const C=cv('lifeC');if(!C)return;const x=C.x;x.fillStyle='#050913';x.fillRect(0,0,C.w,C.h);bgStars(x,C.w,C.h,110,91,.4);
+ const rows=[{y:98,t:'태양 정도의 별',c:'#ffe17a',s:[['성운','',0],['주계열성','황색 (지금 태양)',1],['적색 거성','적색 · 크게 부풂',2],['행성상 성운','바깥층이 퍼짐',3],['백색 왜성','작고 흰 별',4]]},
+  {y:278,t:'무거운 별',c:'#9fb8ff',s:[['성운','',0],['주계열성','청색',5],['적색 초거성','예: 베텔게우스',6],['초신성','대폭발 💥',7],['중성자별·블랙홀','',8]]}];
+ const xs=[90,320,560,800,1040];
+ rows.forEach(r=>{txt(x,r.t,16,r.y-68,r.c,12,'left',900);
+  r.s.forEach(([n,sub,k],i)=>{const X=xs[i],Y=r.y;
+   if(i>0){x.fillStyle='#4b5893';const ax=X-120;x.beginPath();x.moveTo(ax-10,Y-8);x.lineTo(ax+8,Y);x.lineTo(ax-10,Y+8);x.fill();}
+   if(k===0){const g=rng(i+r.y);for(let j=0;j<40;j++){const t=g()*7,d=Math.sqrt(g())*42;x.fillStyle=`rgba(170,140,220,${.15+g()*.2})`;x.beginPath();x.arc(X+Math.cos(t)*d,Y+Math.sin(t)*d*.7,5+g()*9,0,7);x.fill();}}
+   if(k===1)glow(x,X,Y,10,'255,230,140');if(k===2)glow(x,X,Y,22,'255,130,80');
+   if(k===3){x.strokeStyle='rgba(120,220,255,.6)';x.lineWidth=5;x.beginPath();x.arc(X,Y,30,0,7);x.stroke();x.lineWidth=1;glow(x,X,Y,3,'240,245,255');}
+   if(k===4)glow(x,X,Y,5,'235,240,255');if(k===5)glow(x,X,Y,13,'160,190,255');if(k===6)glow(x,X,Y,28,'255,120,70');
+   if(k===7){glow(x,X,Y,24,'255,240,200');x.strokeStyle='rgba(255,209,102,.6)';for(let j=0;j<16;j++){const t=j*Math.PI/8;x.beginPath();x.moveTo(X+Math.cos(t)*40,Y+Math.sin(t)*40);x.lineTo(X+Math.cos(t)*58,Y+Math.sin(t)*58);x.stroke();}}
+   if(k===8){glow(x,X-26,Y,4,'200,220,255');x.fillStyle='#000';x.strokeStyle='#ffb36b';x.lineWidth=3;x.beginPath();x.arc(X+26,Y,14,0,7);x.fill();x.stroke();x.lineWidth=1;}
+   txt(x,n,X,Y+52,'#e9edff',12,'center',900);if(sub)txt(x,sub,X,Y+72,'#9ba6d4',9,'center',700);});});})();
 
 /* ================== 3차시 ================== */
 (function(){
