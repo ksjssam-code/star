@@ -129,6 +129,20 @@ body.notes-on #notes{transform:none}
 #help h3{margin:0 0 8px;color:var(--gold)}
 kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-family:inherit;font-size:14px}
 .startab{width:100%;border-collapse:collapse}.startab th,.startab td{padding:7px 12px;text-align:center;border-bottom:1px solid var(--line)}.startab th{color:var(--muted);font-size:.85em}.sd{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:-3px;margin-right:6px;box-shadow:0 0 12px currentColor}
+.tgal{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.tgal .gc{background:#040812;border:2px solid var(--line);border-radius:12px;padding:6px}
+.tgal canvas{width:100%;border:0}
+.tgal .nm{font-size:20px;font-weight:700;margin:4px 2px 0;line-height:1.2}
+.tgal .ty{font-size:21px;font-weight:900;color:var(--gold);visibility:hidden;margin:0 2px}
+.tgal.rev .ty{visibility:visible}
+.ttech{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.ttech .tc{background:#040812;border:2px solid var(--line);border-radius:12px;padding:8px;text-align:center;cursor:pointer;min-height:236px}
+.ttech .em{font-size:50px}.ttech .nm{font-size:21px;font-weight:700;line-height:1.2}.ttech .ex{font-size:16px;color:var(--muted);visibility:hidden;margin-top:6px;line-height:1.35}
+.ttech .tc.on .ex{visibility:visible}.ttech .tc.on.y{border-color:var(--green);background:#63e6a314}.ttech .tc.on.n{border-color:var(--pink);background:#ff7a9014}
+.ttl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.ttl button{font-size:18px;padding:5px 9px;line-height:1.2}.ttl button b{color:var(--gold);display:block}.ttl button.on{border-color:var(--gold);background:#ffd16618}
+.krtl{display:flex;gap:14px;align-items:stretch}.krtl>div{flex:1;background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--cyan);border-radius:12px;padding:12px;font-size:28px;font-weight:700;text-align:center}.krtl b{display:block;color:var(--gold);font-size:34px}.krtl small{display:block;font-size:21px;color:var(--muted);font-weight:500;margin-top:4px}
+.tdest{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}.tdest button{font-size:24px;padding:8px 14px}.tdest button.on{border-color:var(--gold);background:#ffd16618}
+.dt td,.dt th{font-size:24px}
 </style>
 </head>
 <body>
@@ -1007,6 +1021,653 @@ const TEACHER_HASH='1fa58357';
 </section>
 </div>
 
+<!-- ======================================================= 4차시 (Ⅷ-2 우주 01 우리은하) ======================================================= -->
+<div class="lesson" id="L4" data-name="4차시 · 우리은하 (Ⅷ-2 우주 01)">
+
+<section class="slide cover" data-title="표지 · 학습 목표">
+  <div class="num">2-01</div>
+  <h1>우리은하</h1>
+  <div class="goal"><div>🎯 우리은하의 구조와 크기를 설명할 수 있다.</div><div>🎯 우리은하를 구성하는 성단과 성운의 특징을 비교할 수 있다.</div></div>
+  <p class="muted" style="margin-top:26px;font-size:26px">중학교 과학 2 · Ⅷ. 별과 우주 · 2. 우주 · 교과서 294~297쪽</p>
+  <aside class="notes" data-time="1분">
+    <h4>45분 수업 흐름</h4>
+    <ul><li>도입 (8분): 은하수의 정체 → 여름·겨울 은하수 비교 → ‘왜 띠 모양일까?’ 가설</li><li>탐구 ① (10분): 우리은하 안에서 하늘 바라보기 시뮬레이션 → 띠 모양·여름철이 두꺼운 까닭 발견</li><li>개념 (5분): 우리은하의 모양과 크기</li><li>탐구 ② (12분): 성단·성운 무리 짓기 → 종류와 특징 정리</li><li>사고력·정리 (10분): 성단·성운의 분포, 스스로 확인하기, 핵심 정리</li></ul>
+    <p>학생 화면: 하단 <b>🧑‍🎓 학생 탐구</b> → ④ 우리은하. 학생들은 스마트 기기로 같은 시뮬레이션을 직접 조작해요.</p>
+    <p>단원 시작 차시라면 292~293쪽(궁금해, 이전에 배웠어요)을 먼저 짚어 주세요. 6차시 도입 화면에 같은 질문이 있어요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="도입 · 은하수의 정체는?">
+  <div class="sh"><span class="ph p1">도입</span><h2>밤하늘의 희뿌연 띠, 정체는?</h2><span class="pg">294쪽</span></div>
+  <div class="sb row">
+    <div style="width:600px"><canvas id="t4mw" data-w="600" data-h="420" style="width:600px"></canvas><div class="cap">▲ 은하수 (모형) · 고구려 벽화에도 견우와 직녀 사이에 그려져 있음</div></div>
+    <div class="col">
+      <div class="q" style="font-size:34px">은하수는 무엇일까?</div>
+      <div class="vote" id="v41" data-ans="1" style="flex-direction:column;gap:10px"><button class="vo" style="font-size:32px">빛나는 구름</button><button class="vo" style="font-size:32px">수많은 별의 집단</button><button class="vo" style="font-size:32px">달빛이 반사된 것</button></div>
+      <div class="ans frag" data-show="v41" style="font-size:30px">🔭 <b>갈릴레이</b>: 망원경으로 보니 <b>수많은 별</b>! → 은하수는 <b>우리은하의 일부</b></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분">
+    <h4>진행</h4><p>교과서 294쪽 그림(고구려 벽화의 견우·직녀) 이야기로 시작 → 투표 → <kbd>→</kbd> 정답.</p>
+    <p class="say">“은하수(銀河水)는 ‘은빛 강’이라는 뜻이에요. 영어로는 Milky Way(우유가 흐르는 길)! 옛사람들은 무엇이라고 생각했을까요?”</p>
+    <h4>예상 반응</h4><ul><li>“구름이에요.” — 맨눈에는 희뿌옇게 보여 구름처럼 느껴져요.</li><li>“별이 많이 모인 거요.” — 그렇다면 왜 하늘 전체가 아니라 띠 모양일까? 다음 화면으로.</li></ul>
+    <p>⚠ 도시에서는 빛 공해로 은하수를 거의 볼 수 없다는 점도 짚어 주세요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="해 보기 · 여름철과 겨울철 은하수">
+  <div class="sh"><span class="ph p3">해 보기</span><h2>여름철과 겨울철의 은하수 비교</h2><span class="pg">294쪽</span></div>
+  <div class="sb">
+    <div class="row" style="gap:18px">
+      <div class="col"><canvas id="t4a" data-w="580" data-h="300" style="width:580px"></canvas><div class="cap" style="font-size:24px">(가)</div></div>
+      <div class="col"><canvas id="t4b" data-w="580" data-h="300" style="width:580px"></canvas><div class="cap" style="font-size:24px">(나)</div></div>
+    </div>
+    <div class="q" style="margin-top:8px">어느 쪽이 <b class="gold">여름철</b> 은하수일까? 두 은하수의 차이는?</div>
+    <div class="vote" id="v42" data-ans="0"><button class="vo">(가)</button><button class="vo">(나)</button></div>
+    <div class="ans frag" data-show="v42">(가) <b>여름철</b>: 더 <b>두껍고 밝음</b> · (나) 겨울철: 더 가늘고 흐림</div>
+  </div>
+  <aside class="notes" data-time="3분">
+    <h4>진행</h4><p>교과서 해 보기: 원래는 스마트 기기로 계절별 은하수 사진을 검색해 공유 플랫폼에 올려 비교하는 활동이에요. 시간이 있으면 학생들이 직접 사진을 찾아보게 하세요.</p>
+    <p>(가)는 궁수자리(은하 중심) 쪽, (나)는 마차부·쌍둥이자리(은하 중심 반대쪽) 쪽을 그린 모형이에요.</p>
+    <p class="say">“왜 여름철 은하수가 더 두껍고 밝을까요? 그리고 애초에 왜 띠 모양일까요?” → 다음 화면에서 가설 세우기</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="가설 · 왜 띠 모양일까?">
+  <div class="sh"><span class="ph p1">가설</span><h2>은하수는 왜 띠 모양일까?</h2></div>
+  <div class="sb">
+    <div class="q">별이 하늘 전체에 고르게 있지 않고<br><b class="gold">띠 모양</b>으로 모여 보이는 까닭은?</div>
+    <div class="vote" id="v43" data-ans="1" style="flex-direction:column"><button class="vo">우리은하는 공 모양이고, 우리는 그 중심에 있어서</button><button class="vo">우리은하는 납작한 원반이고, 우리는 그 원반 안에 있어서</button><button class="vo">별들이 하늘에 한 줄로 늘어서 있어서</button></div>
+    <div class="box frag">💡 우리은하 <b class="gold">안</b>에 들어가서 직접 바라보자!</div>
+  </div>
+  <aside class="notes" data-time="2분"><p>정답은 공개하지 않고 손 든 수만 셉니다. 다음 탐구 후 ‘탐구 결과’ 화면에서 이 투표의 정답이 공개돼요.</p><p>학생들은 학생 화면 ① 생각 열기 칸에 가설을 써요.</p></aside>
+</section>
+
+<section class="slide" data-title="탐구 · 우리은하 안에서 바라보기">
+  <div class="sh"><span class="ph p2">탐구</span><h2>우리은하 안에서 하늘 바라보기</h2></div>
+  <div class="sb row" style="gap:16px">
+    <canvas id="t4top" data-w="470" data-h="470" style="width:440px"></canvas>
+    <div class="col">
+      <canvas id="t4sky" data-w="700" data-h="300" style="width:720px"></canvas>
+      <canvas id="t4side" data-w="700" data-h="120" style="width:720px;margin-top:8px"></canvas>
+      <div class="ctrl" style="font-size:24px;margin-top:6px"><label>시선</label><input type="range" id="t4dir" min="-180" max="180" step="5" value="0"><output id="t4dirO" style="font-size:24px;min-width:200px">은하 중심 쪽</output></div>
+      <div class="ctrl" style="font-size:24px;margin-top:2px"><label>위로</label><input type="range" id="t4up" min="0" max="90" step="5" value="0"><output id="t4upO" style="font-size:24px;min-width:200px">0°</output></div>
+      <div class="btns" style="margin-top:6px"><button class="t4p" data-d="0" data-u="0" style="font-size:22px">A 은하 중심</button><button class="t4p" data-d="180" data-u="0" style="font-size:22px">B 반대쪽</button><button class="t4p" data-d="90" data-u="0" style="font-size:22px">옆쪽</button><button class="t4p" data-d="0" data-u="90" style="font-size:22px">원반 위쪽</button></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="7분">
+    <h4>발문 (버튼을 차례로 누르며)</h4>
+    <ol style="padding-left:18px;margin:0"><li class="say">“A(은하 중심 쪽)를 보면 하늘이 어떻게 보이나요?”</li><li class="say">“B(반대쪽)는 A와 무엇이 다른가요?”</li><li class="say">“원반 위쪽(수직)을 보면? 왜 띠가 사라졌을까요?”</li><li class="say">“시선 슬라이더를 한 바퀴 돌려 보세요. 띠는 어디까지 이어지나요?” → 하늘을 한 바퀴 두르는 띠</li></ol>
+    <h4>지도 포인트</h4><ul><li>왼쪽 위에서 본 모습의 노란 부채꼴 = 지금 바라보는 방향</li><li>옆에서 본 모습은 두께를 2.5배 과장했어요. 실제 원반은 지름에 비해 매우 얇아요(약 1000 pc 이하).</li><li>여름철 밤에는 지구가 공전하여 밤하늘이 은하 중심(궁수자리) 쪽을 향함 → A 방향</li></ul>
+  </aside>
+</section>
+
+<section class="slide" data-title="탐구 결과 · 은하수의 비밀">
+  <div class="sh"><span class="ph p3">발견</span><h2>무엇을 발견했나?</h2></div>
+  <div class="sb">
+    <div class="q g">① 원반 면 방향 vs 원반 위쪽, 별의 양은?</div>
+    <div class="ans frag">원반 면 방향: 별이 <b>겹겹이 많음</b> · 위쪽: 별이 <b>적음</b></div>
+    <div class="q g frag">② 은하수가 띠 모양인 까닭은?</div>
+    <div class="ans frag" data-show="v43">별들이 대부분 <b>납작한 원반 면</b>에 모여 있고<br>태양계도 그 <b>원반 면 안</b>에 있기 때문</div>
+    <div class="q g frag">③ [협력적 소통] 여름철 은하수는 A, B 중 어느 방향?</div>
+    <div class="ans frag"><b>A(은하 중심) 방향</b> — 별이 많은 중심부 쪽이라 더 두껍고 밝음</div>
+  </div>
+  <aside class="notes" data-time="3분"><p>②를 공개할 때 앞의 가설 투표 정답이 함께 표시돼요(목록 <kbd>M</kbd>으로 돌아가 확인 가능).</p><p>③은 교과서 해 보기 정리 2번(협력적 소통) — 모둠원에게 설명하게 한 뒤 공개하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="사고 실험 · 태양계가 은하 중심에 있다면?">
+  <div class="sh"><span class="ph p5">사고 실험</span><h2>태양계가 은하 중심에 있다면?</h2><span class="pg">교과서 밖</span></div>
+  <div class="sb row" style="gap:16px">
+    <canvas id="t4top2" data-w="420" data-h="420" style="width:400px"></canvas>
+    <div class="col">
+      <div class="row" style="gap:10px"><div class="col"><canvas id="t4c1" data-w="380" data-h="210" style="width:100%"></canvas><div class="cap">왼쪽 방향</div></div><div class="col"><canvas id="t4c2" data-w="380" data-h="210" style="width:100%"></canvas><div class="cap">오른쪽 방향</div></div></div>
+      <div class="btns"><button class="t4s" data-r="8500" style="font-size:22px">실제 (8500 pc)</button><button class="t4s" data-r="0" style="font-size:22px">은하 중심</button><button class="t4s" data-r="14000" style="font-size:22px">가장자리</button></div>
+      <div class="q" style="font-size:30px;margin-top:8px">은하 중심에서 본 은하수는?</div>
+      <div class="vote" id="v44" data-ans="0" style="margin-bottom:4px"><button class="vo" style="font-size:26px">모든 방향 두께 같음</button><button class="vo" style="font-size:26px">안 보임</button></div>
+      <div class="ans frag" data-show="v44" style="font-size:28px">어느 방향이든 <b>똑같이 두꺼운 띠</b> → 실제로는 방향마다 달라서 태양계가 <b>중심에서 떨어져</b> 있음을 알 수 있음</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>선택 활동이에요. 예측 투표 후 [은하 중심] 버튼으로 확인합니다. 두 하늘 그림은 시선을 반대 방향(은하 중심 쪽 ↔ 반대쪽, 중심에 있을 땐 임의의 두 방향)으로 놓은 모습이에요.</p><p>역사: 허셜은 별의 수를 세어 태양계가 은하 중심에 있다고 생각했지만, 이후 섀플리가 구상 성단의 분포를 이용해 태양계가 중심에서 멀리 떨어져 있음을 알아냈어요.</p><p>계산에 1~2초 걸릴 수 있어요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 우리은하의 모양과 크기">
+  <div class="sh"><span class="ph p4">개념</span><h2>우리은하의 모양과 크기</h2><span class="pg">295쪽</span></div>
+  <div class="sb row" style="gap:18px">
+    <canvas id="t4c3" data-w="460" data-h="460" style="width:440px"></canvas>
+    <div class="col">
+      <canvas id="t4c4" data-w="700" data-h="190" style="width:720px"></canvas>
+      <div class="concept" style="margin-top:10px;font-size:30px"><ul>
+        <li class="frag"><b>은하</b>: 수천억 개의 별·성단·성운 등의 천체 집단 · <b>우리은하</b>: 태양계가 속한 은하</li>
+        <li class="frag">위: 중심부 <b>막대 구조</b> + 소용돌이 <b>나선팔</b> · 옆: 중심부가 <b>볼록한 원반</b></li>
+        <li class="frag">지름 약 <b>30000 pc</b> · 태양계: 중심에서 약 <b>8500 pc</b>, 나선팔의 원반 면</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>학생 화면 ‘4 탐구하기’에서 눈금(1칸 = 5000 pc)으로 지름과 태양계까지의 거리를 직접 재 보게 하세요.</p><p class="say">“30000 pc를 광년으로 바꾸면? (1 pc ≈ 3.26 광년) → 약 10만 광년. 빛의 속도로 10만 년!”</p><p>1차시의 pc 단위와 연결해 주세요.</p></aside>
+</section>
+
+<section class="slide" data-title="발문 · 우리은하에는 무엇이 있을까?">
+  <div class="sh"><span class="ph p1">발문</span><h2>우리은하는 어떤 천체로 이루어져 있을까?</h2><span class="pg">296쪽</span></div>
+  <div class="sb">
+    <div class="q">은하수를 망원경으로 자세히 보면<br>별 말고 또 무엇이 보일까?</div>
+    <div class="concept frag"><b>성간 물질</b>: 별과 별 사이 공간에 희박하게 퍼져 있는 <b>기체와 먼지</b></div>
+    <div class="row frag" style="gap:18px">
+      <div class="col box">⭐ 많은 별이 좁은 공간에 모여 집단을 이룬 천체 → <b class="gold">성단</b></div>
+      <div class="col box">☁️ 성간 물질이 모여 구름처럼 보이는 천체 → <b class="gold">성운</b></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="2분"><p>정의는 짧게 소개하고, 다음 탐구에서 학생들이 직접 천체를 무리 지으며 종류를 찾게 합니다.</p></aside>
+</section>
+
+<section class="slide" data-title="탐구 · 우리은하를 구성하는 천체 관측하기">
+  <div class="sh"><span class="ph p2">탐구</span><h2>비슷한 천체끼리 무리 짓기</h2><span class="pg">296쪽</span></div>
+  <div class="sb">
+    <div class="tgal" id="t4gal"></div>
+    <div class="btns" style="margin-top:8px"><button class="pri" id="t4galK">종류 공개</button><span class="sm muted" style="align-self:center">학생: 학생 화면 ‘5 탐구하기’에서 ㄱ~ㅁ 5무리로 나누고 기준·이름 쓰기</span></div>
+  </div>
+  <aside class="notes" data-time="8분">
+    <h4>진행</h4><ol style="padding-left:18px;margin:0"><li>모둠별로 10개 천체를 5무리로 나누고, 나눈 기준과 무리 이름을 정하게 해요(교과서에 없는 문항: ‘각 부류에 어울리는 이름 붙이기’).</li><li>모둠 발표 → [종류 공개]로 확인.</li></ol>
+    <h4>실제 관측</h4><p>교과서는 천체 관측 프로그램에서 「설정 → 가로 방향」을 해제해 지평선을 없앤 뒤 천체 이름(NGC, C 번호)을 검색해 관측해요. 웹에서는 <b>스텔라리움 웹(stellarium-web.org)</b>에서도 검색할 수 있어요.</p>
+    <p>그림은 사진이 아닌 모형이에요. 실제 사진은 교과서 297쪽 그림 11이나 관측 프로그램으로 확인하세요.</p>
+    <h4>정답</h4><ul><li>산개 성단: 벌집 성단, 보석 상자</li><li>구상 성단: 큰부리새자리 47, 센타우루스자리 오메가 성단</li><li>방출 성운: 초승달 성운, 달리는 닭 성운</li><li>반사 성운: 아이리스 성운, 런닝맨 성운</li><li>암흑 성운: 석탄 포대 성운, 말머리성운</li></ul>
+  </aside>
+</section>
+
+<section class="slide" data-title="탐구 결과 · 관측 기록표">
+  <div class="sh"><span class="ph p3">발견</span><h2>천체의 특징과 종류</h2><span class="pg">296쪽</span></div>
+  <div class="sb">
+    <table class="tsm"><tr><th>천체</th><th>천체 이름</th><th>관측된 천체의 공통된 특징</th><th>천체의 종류</th></tr>
+      <tr><td rowspan="2">성단</td><td>벌집 성단, 보석 상자</td><td class="frag">주로 파란색 별 · 일정한 모양 없음</td><td class="frag hl">산개 성단</td></tr>
+      <tr><td>큰부리새자리 47, 오메가 성단</td><td class="frag">주로 붉은색 별 · 공 모양</td><td class="frag hl">구상 성단</td></tr>
+      <tr><td rowspan="3">성운</td><td>초승달, 달리는 닭</td><td class="frag">붉은색 빛을 냄</td><td class="frag hl">방출 성운</td></tr>
+      <tr><td>아이리스, 런닝맨</td><td class="frag">파란색 빛을 냄</td><td class="frag hl">반사 성운</td></tr>
+      <tr><td>석탄 포대, 말머리</td><td class="frag">검게 보임</td><td class="frag hl">암흑 성운</td></tr></table>
+  </div>
+  <aside class="notes" data-time="2분"><p>학생 화면의 관측 기록표와 같은 구조예요. 학생들이 쓴 무리 이름(예: ‘반짝이 모임’, ‘공 모양 별 뭉치’)을 먼저 듣고 과학 용어를 붙여 주세요.</p></aside>
+</section>
+
+<section class="slide" data-title="정리 · 성단과 성운 비교">
+  <div class="sh"><span class="ph p3">정리</span><h2>성단과 성운, 두 성단의 차이</h2><span class="pg">296쪽</span></div>
+  <div class="sb">
+    <div class="q g">① 성단과 성운의 차이점은?</div>
+    <div class="ans frag"><b>성단</b>: 많은 별이 좁은 공간에 모인 집단 · <b>성운</b>: 성간 물질이 모여 구름처럼 보이는 천체</div>
+    <div class="q g frag">② 두 종류의 성단은 각각 어떤 특징이 있을까?</div>
+    <div class="ans frag"><b>산개 성단</b>: 일정한 형태 없음, 주로 <b>푸른색</b> 별<br><b>구상 성단</b>: <b>공 모양</b>, 주로 <b>붉은색</b> 별</div>
+  </div>
+  <aside class="notes" data-time="2분"><p>교과서 탐구 정리 1, 2번이에요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 성단">
+  <div class="sh"><span class="ph p4">개념</span><h2>성단의 종류와 특징</h2><span class="pg">297쪽</span></div>
+  <div class="sb">
+    <table class="tsm"><tr><th style="width:190px">종류</th><th>산개 성단</th><th>구상 성단</th></tr>
+      <tr><th>모습</th><td><canvas id="t4o1" data-w="300" data-h="150" style="width:300px;margin:auto"></canvas></td><td><canvas id="t4o2" data-w="300" data-h="150" style="width:300px;margin:auto"></canvas></td></tr>
+      <tr><th>별의 수·모양</th><td class="frag">수십~수만 개, <b class="gold">일정한 모양 없이</b></td><td class="frag">수만~수십만 개, <b class="gold">공 모양</b>으로 빽빽</td></tr>
+      <tr><th>별의 색</th><td class="frag"><b class="cyan">파란색</b> 젊은 별</td><td class="frag"><b class="pink">붉은색</b> 늙은 별</td></tr>
+      <tr><th>분포</th><td class="frag">대부분 <b>나선팔</b></td><td class="frag"><b>중심부</b>와 원반을 둘러싼 <b>구형 공간</b></td></tr></table>
+  </div>
+  <aside class="notes" data-time="2분"><p>교과서 사진 예: 산개 성단 = 좀생이성단(플레이아데스), 구상 성단 = NGC 6093.</p><p>‘젊은 별·늙은 별’은 3차시 [심화] 별의 일생과 연결할 수 있어요(무거운 파란 별은 수명이 짧아 젊은 성단에만 남아 있음).</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 성운">
+  <div class="sh"><span class="ph p4">개념</span><h2>성운의 종류와 특징</h2><span class="pg">297쪽</span></div>
+  <div class="sb">
+    <div class="row" style="gap:16px">
+      <div class="col"><canvas id="t4o3" data-w="370" data-h="220" style="width:100%"></canvas><div class="box frag" style="margin-top:8px;font-size:28px"><b class="pink">방출 성운</b><br>고온의 별에게서 에너지를 받아 <b>붉은빛</b>을 냄</div></div>
+      <div class="col"><canvas id="t4o4" data-w="370" data-h="220" style="width:100%"></canvas><div class="box frag" style="margin-top:8px;font-size:28px"><b class="cyan">반사 성운</b><br>주변의 별빛을 반사하여 <b>파란빛</b>을 냄</div></div>
+      <div class="col"><canvas id="t4o5" data-w="370" data-h="220" style="width:100%"></canvas><div class="box frag" style="margin-top:8px;font-size:28px"><b>암흑 성운</b><br>뒤에서 오는 별빛을 가려 <b>검게</b> 보임</div></div>
+    </div>
+    <p class="frag" style="margin-top:12px">성운은 주로 우리은하의 <b class="gold">나선팔</b>에 분포</p>
+  </div>
+  <aside class="notes" data-time="2분"><p>교과서 사진 예: 방출 = 장미성운, 반사 = 마귀할멈성운, 암흑 = 말머리성운.</p><p class="say">“말머리성운은 왜 말 모양의 ‘그림자’처럼 보일까요?” → 뒤의 붉은 방출 성운 빛을 가리기 때문</p><p>반사 성운이 파랗게 보이는 까닭은 하늘이 파란 까닭과 비슷해요(파란빛이 더 잘 산란). 질문이 나올 때만 설명하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="사고력 · 성단과 성운의 분포">
+  <div class="sh"><span class="ph p4">사고력</span><h2>왜 구상 성단 곁에는 반사 성운이 없을까?</h2><span class="pg">297쪽</span></div>
+  <div class="sb row" style="gap:16px">
+    <div style="width:460px"><canvas id="t4m1" data-w="460" data-h="360" style="width:460px"></canvas></div>
+    <div class="col">
+      <canvas id="t4m2" data-w="700" data-h="230" style="width:720px"></canvas>
+      <div class="btns"><button class="t4m" data-k="oc" style="font-size:22px;color:#6ad1ff">● 산개 성단</button><button class="t4m" data-k="gc" style="font-size:22px;color:#ffd166">○ 구상 성단</button><button class="t4m" data-k="neb" style="font-size:22px;color:#ff5a8c">● 성운</button></div>
+      <div class="ans frag" style="font-size:28px;margin-top:10px">산개 성단·성운 → <b>나선팔(원반)</b>에 함께<br>구상 성단 → <b>중심부와 원반을 둘러싼 구형 공간</b></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>스스로 확인하기 3번 [사고력] 문항이에요. 버튼을 하나씩 켜며 “어디에 모여 있나요?” 묻고, 옆모습에서 구상 성단이 원반 밖까지 공 모양으로 퍼져 있음을 확인시키세요.</p></aside>
+</section>
+
+<section class="slide" data-title="스스로 확인하기">
+  <div class="sh"><span class="ph p4">확인</span><h2>스스로 확인하기</h2><span class="pg">297쪽</span></div>
+  <div class="sb">
+    <div class="q">① 우리은하를 옆에서 보면 중심부가 ( ) 원반 모양</div>
+    <div class="vote" id="v45" data-ans="0"><button class="vo">볼록한</button><button class="vo">납작한</button></div>
+    <div class="ans frag" data-show="v45"><b>볼록한</b> 원반 모양</div>
+    <div class="q frag">② 수만~수십만 개의 별이 공 모양으로 빽빽 → <span class="blank frag">구상</span> 성단</div>
+    <div class="q frag">③ 막대 끝 소용돌이 모양 → ㄴ ㅅ ㅍ <span class="blank frag">나선팔</span></div>
+  </div>
+  <aside class="notes" data-time="2분"><p>학생 화면에는 형성평가 5문항이 있어요. 수업 끝 5분 전에 풀게 하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="핵심 정리">
+  <div class="sh"><span class="ph p4">정리</span><h2>이것만은 꼭! 핵심 정리</h2></div>
+  <div class="sb" style="font-size:33px;line-height:1.85">
+    <p>우리은하: <span class="blank frag">태양계</span>를 포함하는 은하, 태양계는 <span class="blank frag">나선팔</span>에 위치</p>
+    <p>은하수: 별들이 <span class="blank frag">원반</span> 면에 모여 있어 <span class="blank frag">띠</span> 모양으로 보임</p>
+    <p>성단: 일정한 형태가 없는 <span class="blank frag">산개</span> 성단, 공 모양의 <span class="blank frag">구상</span> 성단</p>
+    <p>성운: 붉은빛 <span class="blank frag">방출</span> · 파란빛 <span class="blank frag">반사</span> · 검게 <span class="blank frag">암흑</span> 성운</p>
+  </div>
+  <aside class="notes" data-time="2분"><p>교과서 핵심 정리의 ‘발광 성운’은 본문 용어인 ‘방출 성운’과 같은 뜻이에요.</p></aside>
+</section>
+
+<section class="slide cover" data-title="다음 시간에는">
+  <div class="num" style="font-size:90px">NEXT</div>
+  <h1>팽창하는 우주</h1>
+  <div class="goal"><div>🎈 은하들은 왜 서로 멀어지고 있을까?</div><div>교과서 298쪽 개념 영상을 미리 확인해 보세요.</div></div>
+  <aside class="notes" data-time="1분"><p>다음 시간 준비물(실제 풍선 활동 시): 둥근 풍선, 줄자, 펜, 붙임딱지(부록 336쪽)</p></aside>
+</section>
+</div>
+
+<!-- ======================================================= 5차시 (Ⅷ-2 우주 02 팽창하는 우주) ======================================================= -->
+<div class="lesson" id="L5" data-name="5차시 · 팽창하는 우주 (Ⅷ-2 우주 02)">
+
+<section class="slide cover" data-title="표지 · 학습 목표">
+  <div class="num">2-02</div>
+  <h1>팽창하는 우주</h1>
+  <div class="goal"><div>🎯 모형을 이용하여 우주가 팽창하고 있음을<br>설명할 수 있다.</div></div>
+  <p class="muted" style="margin-top:26px;font-size:26px">교과서 298~299쪽</p>
+  <aside class="notes" data-time="1분">
+    <h4>45분 수업 흐름</h4>
+    <ul><li>도입 (6분): 은하 A·B의 대화 → 팽창의 중심 예측</li><li>해 보기 (12분): 풍선 모형 (실제 풍선 + 시뮬레이션)</li><li>탐구 확장 (10분): 우주 팽창 모형 — 먼 은하일수록 빨리, 중심 없음</li><li>개념 (7분): 외부 은하, 우주 팽창, 138억 년</li><li>정리 (10분): 건포도빵 비유, 스스로 확인하기</li></ul>
+    <p>준비물(실제 활동): 둥근 풍선, 줄자, 펜, 붙임딱지(부록 336쪽). 줄자 대신 실을 붙임딱지 사이에 대고 자로 재도 돼요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="도입 · 은하들의 대화">
+  <div class="sh"><span class="ph p1">도입</span><h2>은하들이 멀어지고 있다?</h2><span class="pg">298쪽</span></div>
+  <div class="sb row" style="gap:24px">
+    <div class="col">
+      <div class="box" style="font-size:30px">🌀 <b class="gold">은하 A</b><br>“나도 은하 B가 지난번보다 멀어졌어. 그런데 왜 너와의 거리도 점점 멀어지는 것 같지?”</div>
+      <div class="box" style="font-size:30px;margin-left:60px">🌀 <b class="cyan">은하 B</b><br>“이상하다. 은하 A에 벌써 도착할 시간인데 지난번보다 더 멀어졌네!”</div>
+    </div>
+    <div style="width:470px">
+      <div class="q">은하들은 왜<br>서로 멀어질까?</div>
+      <div class="ans frag" style="font-size:28px">🔭 <b>허블</b>(1889~1953): 우리은하 밖의 <b>외부 은하</b>를 관측 → 은하들 사이의 거리가 <b>점점 멀어짐</b></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>교과서 298쪽 만화. 학생 가설을 자유롭게 받으세요: “은하가 서로 밀어내서”, “폭발해서”, “우주가 커져서” 등.</p><p>‘은하가 스스로 날아가는 것’과 ‘공간이 늘어나는 것’의 차이를 오늘 모형으로 구분하는 것이 핵심이에요.</p></aside>
+</section>
+
+<section class="slide" data-title="예측 · 팽창의 중심은?">
+  <div class="sh"><span class="ph p1">예측</span><h2>모두가 멀어진다면, 중심은 어디?</h2></div>
+  <div class="sb">
+    <div class="q">우리에게서 은하들이 모두 멀어지고 있다면<br>우주 팽창의 <b class="gold">중심</b>은 어디일까?</div>
+    <div class="vote" id="v51" data-ans="2"><button class="vo">우리은하</button><button class="vo">우주 어딘가의 한가운데</button><button class="vo">중심이 없다</button></div>
+    <p class="muted frag" style="font-size:28px">→ 풍선과 우주 모형으로 확인해 보자!</p>
+  </div>
+  <aside class="notes" data-time="2분"><p>정답은 ‘발견’ 화면에서 공개돼요. 대부분 ‘우리은하’나 ‘한가운데’를 고릅니다. 학생 화면 ① 생각 열기에 예측을 남기게 하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="해 보기 · 풍선 모형">
+  <div class="sh"><span class="ph p3">해 보기</span><h2>풍선 모형으로 우주 팽창 알아보기</h2><span class="pg">298쪽</span></div>
+  <div class="sb row" style="gap:16px">
+    <canvas id="t5bl" data-w="560" data-h="410" style="width:560px"></canvas>
+    <div class="col">
+      <div class="ctrl" style="font-size:26px"><label>풍선</label><input type="range" id="t5blR" min="8" max="16" step="0.5" value="8"><output id="t5blRo" style="font-size:26px">처음</output></div>
+      <div class="btns"><button class="pri t5bm" data-p="12" style="font-size:24px">📏 1~2</button><button class="pri t5bm" data-p="13" style="font-size:24px">📏 1~3</button><button id="t5bS" style="font-size:24px">작게</button><button id="t5bB" style="font-size:24px">크게(2배)</button><button id="t5bC" style="font-size:24px">✕</button></div>
+      <table class="tsm" style="margin-top:12px"><tr><th>구분</th><th>1~2 거리 (cm)</th><th>1~3 거리 (cm)</th></tr>
+        <tr><td>작게</td><td><input class="tin" style="font-size:28px;padding:6px"></td><td><input class="tin" style="font-size:28px;padding:6px"></td></tr>
+        <tr><td>크게</td><td><input class="tin" style="font-size:28px;padding:6px"></td><td><input class="tin" style="font-size:28px;padding:6px"></td></tr>
+        <tr><td>늘어난 거리</td><td><input class="tin" style="font-size:28px;padding:6px"></td><td><input class="tin" style="font-size:28px;padding:6px"></td></tr></table>
+      <p class="sm muted" style="margin-top:6px">과정: ① 풍선을 작게 불어 붙임딱지를 고루 붙이고 3개에 1, 2, 3 쓰기 → ② 1~2, 1~3 거리 재기 → ③ 더 크게 불어 다시 재기</p>
+    </div>
+  </div>
+  <aside class="notes" data-time="10분">
+    <h4>진행</h4><p>모둠별 실제 풍선 활동을 하고, 대표 모둠의 측정값을 표에 입력해 공유하세요. 시뮬레이션은 실험이 어려울 때 또는 결과 확인용이에요.</p>
+    <p>시뮬레이션 값: 작게 1~2 = 2.5 cm, 1~3 = 5.0 cm → 2배로 불면 5.0 cm, 10.0 cm (늘어난 거리 2.5 cm, 5.0 cm).</p>
+    <h4>주의</h4><ul><li>풍선을 너무 크게 불면 터져요. 공기 펌프가 있으면 편리해요.</li><li>붙임딱지 사이 거리는 풍선 <b>표면을 따라</b> 재야 해요(곧은 자 X).</li><li>붙임딱지 자체의 크기는 변하지 않음 → 은하 자체는 커지지 않음과 연결</li></ul>
+  </aside>
+</section>
+
+<section class="slide" data-title="해 보기 결과 · 거리 변화">
+  <div class="sh"><span class="ph p3">발견</span><h2>풍선을 불면 무엇이 달라졌나?</h2></div>
+  <div class="sb">
+    <div class="q g">① 1~2, 1~3 사이 거리는 어떻게 변했나?</div>
+    <div class="ans frag">둘 다 <b>멀어짐</b> · 처음에 <b>멀었던 1~3</b>이 더 많이 늘어남</div>
+    <div class="q g frag">② [토의] 풍선 표면 = 우주 공간, 붙임딱지 = 은하라면?</div>
+    <div class="ans frag">우주 공간이 팽창 → 은하 사이 거리가 <b>멀어짐</b></div>
+    <div class="concept frag">은하가 스스로 달려가는 것이 아니라 <b>공간이 늘어나서</b> 멀어짐</div>
+  </div>
+  <aside class="notes" data-time="3분"><p>교과서 해 보기 정리 1, 2번이에요. ‘거리가 먼 쌍이 더 많이 늘어난다’를 학생이 데이터로 말하게 하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="탐구 · 우주 팽창 모형">
+  <div class="sh"><span class="ph p2">탐구</span><h2>어느 은하에서 보아도?</h2></div>
+  <div class="sb row" style="gap:16px">
+    <canvas id="t5ex" data-w="620" data-h="460" style="width:600px"></canvas>
+    <div class="col">
+      <div class="ctrl" style="font-size:26px"><label>시간</label><input type="range" id="t5exT" min="0.05" max="2" step="0.05" value="1"><output id="t5exTo" style="font-size:26px">1</output></div>
+      <div class="btns"><button id="t5e1" style="font-size:22px">시간 1</button><button class="pri" id="t5e2" style="font-size:22px">시간 1.5</button><button id="t5eG" style="font-size:22px">이동 화살표</button></div>
+      <div class="btns" id="t5refs"><span class="sm muted" style="align-self:center">기준(나):</span></div>
+      <table class="tsm" style="margin-top:10px"><tr><th>은하</th><th>시간 1</th><th>지금</th><th>늘어난 거리</th></tr><tbody id="t5exTb"></tbody></table>
+      <p class="sm muted" style="margin-top:6px">격자(자)는 그대로, 공간만 늘어남 · 은하를 클릭하면 기준이 바뀜</p>
+    </div>
+  </div>
+  <aside class="notes" data-time="8분">
+    <h4>발문</h4><ol style="padding-left:18px;margin:0"><li class="say">“시간을 1에서 1.5로 흘려 보내면 A, B, C 중 누가 가장 많이 멀어지나요?”</li><li class="say">“기준을 A로 바꿔 볼까요? A에서 봐도 다른 은하가 모두 멀어지나요?”</li><li class="say">“그럼 팽창의 중심은 어디일까요?”</li></ol>
+    <h4>지도 포인트</h4><ul><li>표는 기준 은하에서 A·B·C까지의 거리(칸)를 자동으로 계산해요. 처음 거리 × 0.5 = 늘어난 거리 → 거리에 비례(허블 법칙의 직관)</li><li>‘허블 법칙’이라는 용어는 교과서 범위 밖이므로 ‘멀리 있는 은하일수록 더 빨리 멀어진다’로만 정리하세요.</li></ul>
+  </aside>
+</section>
+
+<section class="slide" data-title="발견 · 먼 은하일수록, 중심은 없다">
+  <div class="sh"><span class="ph p3">발견</span><h2>무엇을 발견했나?</h2></div>
+  <div class="sb">
+    <div class="q g">① 멀리 있는 은하일수록?</div>
+    <div class="ans frag">같은 시간 동안 <b>더 많이(빨리)</b> 멀어짐</div>
+    <div class="q g frag">② 기준 은하를 바꾸면?</div>
+    <div class="ans frag">어느 은하에서 보아도 다른 은하가 <b>모두 멀어짐</b></div>
+    <div class="ans frag" data-show="v51">⇒ 팽창하는 우주에는 <b>중심이 없음</b> (모든 방향으로 팽창)</div>
+  </div>
+  <aside class="notes" data-time="3분"><p>마지막 단계에서 앞의 예측 투표 정답(중심이 없다)이 함께 공개돼요.</p><p class="say">“풍선 표면 위의 개미에게 ‘풍선 표면의 중심’은 어디일까요?” — 표면에는 중심이 없다는 점을 연결하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 외부 은하와 우주 팽창">
+  <div class="sh"><span class="ph p4">개념</span><h2>팽창하는 우주</h2><span class="pg">298~299쪽</span></div>
+  <div class="sb">
+    <div class="concept"><ul>
+      <li class="frag"><b>외부 은하</b>: 우리은하 밖에 있는 은하</li>
+      <li class="frag">허블: 외부 은하들이 서로 <b>멀어지고</b> 있음을 관측</li>
+      <li class="frag">우주 공간이 <b>팽창</b> → 은하 사이 거리 증가 · 먼 은하일수록 더 빨리 멀어짐</li>
+      <li class="frag">팽창하는 우주에는 <b>중심이 없음</b></li></ul></div>
+    <table class="tsm frag" style="margin-top:6px"><tr><th>풍선 모형</th><th>풍선 표면</th><th>붙임딱지</th><th>풍선 불기</th></tr><tr><th>실제 우주</th><td class="hl">우주 공간</td><td class="hl">은하</td><td class="hl">우주 팽창</td></tr></table>
+  </div>
+  <aside class="notes" data-time="3분"><p>모형의 한계도 짚어 주세요: 풍선은 2차원 표면이지만 실제 우주는 3차원 공간 전체가 팽창해요. 또 풍선에는 ‘안쪽 중심’이 있지만, 우주에서는 표면(공간)만 생각해야 해요.</p></aside>
+</section>
+
+<section class="slide" data-title="시간을 거꾸로 · 138억 년">
+  <div class="sh"><span class="ph p4">개념</span><h2>시간을 거꾸로 돌리면?</h2><span class="pg">299쪽</span></div>
+  <div class="sb row" style="gap:20px">
+    <canvas id="t5rw" data-w="560" data-h="420" style="width:560px"></canvas>
+    <div class="col">
+      <div class="btns"><button class="au" id="t5rwGo" style="font-size:26px">⏪ 시간 되돌리기</button><button id="t5rwBack" style="font-size:26px">⏩ 다시 팽창</button></div>
+      <div class="q" style="margin-top:12px">팽창하는 우주의 시간을 과거로 되돌리면?</div>
+      <div class="ans frag">우주의 크기가 점점 <b>작아짐</b></div>
+      <div class="concept frag">우주는 약 <b>138억 년 전</b>에 탄생하여<br>점점 팽창해 현재의 모습이 됨</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>교과서 그림 12 ‘팽창하는 우주 모형’에 해당해요. ‘빅뱅’ 용어는 교과서에 나오지 않으므로 질문이 나오면 간단히 소개하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="창의력 · 건포도빵">
+  <div class="sh"><span class="ph p4">창의력</span><h2>건포도빵으로 우주 팽창 설명하기</h2><span class="pg">299쪽</span></div>
+  <div class="sb row" style="gap:20px">
+    <div style="width:540px"><canvas id="t5br" data-w="540" data-h="330" style="width:540px"></canvas><div class="btns"><button class="au" id="t5brGo" style="font-size:24px">🍞 오븐에 굽기</button><button id="t5brR" style="font-size:24px">처음으로</button></div></div>
+    <div class="col">
+      <div class="q c">반죽이 부풀어 오르는 것을 우주 팽창에 비유하면?</div>
+      <div class="ans frag">건포도 = <b>은하</b> · 빵 반죽 = <b>우주 공간</b></div>
+      <div class="ans frag">반죽이 부풀면 건포도 사이가 <b>모두 멀어짐</b><br>어느 건포도에서 보아도 같음 → <b>중심 없음</b></div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>이것만은 3번 [창의력] 문항. 학생 화면에 먼저 쓰게 한 뒤 발표, 그다음 공개하세요.</p><p>건포도 자체는 커지지 않는다는 점(은하의 크기는 그대로)도 짚어 주세요.</p></aside>
+</section>
+
+<section class="slide" data-title="스스로 확인하기">
+  <div class="sh"><span class="ph p4">확인</span><h2>스스로 확인하기</h2><span class="pg">299쪽</span></div>
+  <div class="sb">
+    <div class="q">① 우리은하 밖의 은하들 → <span class="blank frag">외부 은하</span></div>
+    <div class="q frag">② 우주가 팽창하면 은하들 사이의 거리는?</div>
+    <div class="vote frag" id="v52" data-ans="1"><button class="vo">가까워진다</button><button class="vo">멀어진다</button></div>
+    <div class="ans frag" data-show="v52"><b>멀어진다</b></div>
+    <div class="q frag">③ 외부 은하들이 서로 멀어짐 → 우주가 ㅍ ㅊ <span class="blank frag">팽창</span></div>
+  </div>
+  <aside class="notes" data-time="2분"></aside>
+</section>
+
+<section class="slide" data-title="핵심 정리">
+  <div class="sh"><span class="ph p4">정리</span><h2>이것만은 꼭! 핵심 정리</h2></div>
+  <div class="sb" style="font-size:33px;line-height:1.85">
+    <p>풍선 표면은 우주 공간, 붙임딱지는 <span class="blank frag">은하</span></p>
+    <p>풍선 표면이 <span class="blank frag">팽창</span>할수록 붙임딱지 사이가 멀어짐</p>
+    <p>멀리 있는 은하일수록 더 <span class="blank frag">빨리</span> 멀어짐</p>
+    <p>팽창하는 우주에는 중심이 <span class="blank frag">없</span>다 · 약 <span class="blank frag">138억</span> 년 전 탄생</p>
+  </div>
+  <aside class="notes" data-time="2분"></aside>
+</section>
+
+<section class="slide cover" data-title="다음 시간에는">
+  <div class="num" style="font-size:90px">NEXT</div>
+  <h1>우주 탐사</h1>
+  <div class="goal"><div>🚀 우주 탐사는 인류에게 어떤 영향을 주었을까?</div><div>교과서 300쪽 개념 영상을 미리 확인해 보세요.</div></div>
+  <aside class="notes" data-time="1분"><p>더 해 보기(과제): 과학자들이 우주가 팽창한다는 것을 알아낸 과정 조사하기 (허블, 출처 기록) → 호기심 은하 ‘오늘의 발견’에 올리기</p></aside>
+</section>
+</div>
+
+<!-- ======================================================= 6차시 (Ⅷ-2 우주 03 우주 탐사) ======================================================= -->
+<div class="lesson" id="L6" data-name="6차시 · 우주 탐사 (Ⅷ-2 우주 03)">
+
+<section class="slide cover" data-title="표지 · 학습 목표">
+  <div class="num">2-03</div>
+  <h1>우주 탐사</h1>
+  <div class="goal"><div>🎯 우주 탐사의 의의와 인류에 미친 영향을 조사하여<br>과학의 유용성을 인식할 수 있다.</div></div>
+  <p class="muted" style="margin-top:26px;font-size:26px">교과서 300~305쪽</p>
+  <aside class="notes" data-time="1분">
+    <h4>수업 흐름 (1~2차시 분량)</h4>
+    <ul><li>도입 (8분): 우주 탐사, 계속해야 할까? → 우리 주변의 우주 기술 찾기</li><li>개념·조사 (17분): 일상 속 우주 기술, 우주 탐사의 성과 연표 → 사례 하나 조사·정리</li><li>토의 (8분): 우주 탐사를 계속하는 까닭, 인류의 삶에 미친 영향 → 의의 정리</li><li>탐구 (이어서 또는 다음 시간): 우주 탐사 계획 세우기 · 발표</li><li>정리: 처음 질문 다시 생각하기, 스스로 확인하기</li></ul>
+    <p>탐구 ‘우주 탐사 계획 세우기’까지 하려면 2차시로 나누는 것을 권장해요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="도입 · 우주 탐사, 계속해야 할까?">
+  <div class="sh"><span class="ph p1">도입</span><h2>우주 탐사, 꼭 해야 할까?</h2><span class="pg">292·300쪽</span></div>
+  <div class="sb">
+    <div class="box">💬 “인류는 우주에 호기심을 가지고 탐구해 왔어. 20세기에 우주 탐사선이 개발되면서 우주에 관심이 더욱 많아졌고, 이 과정에서 개발된 과학 기술이 우리 생활에 이용되기도 한대.”</div>
+    <div class="q">로켓 한 번에 수백억 원! 인류는 우주 탐사를 계속해야 할까?</div>
+    <div class="vote" id="v61" data-ans="-1"><button class="vo">계속해야 한다</button><button class="vo">줄여야 한다</button><button class="vo">잘 모르겠다</button></div>
+  </div>
+  <aside class="notes" data-time="3분"><p>정답이 없는 질문이에요. 손 든 수를 기록해 두고, 수업 끝 ‘다시 생각하기’에서 생각이 바뀌었는지 다시 투표해 보세요.</p><p>학생 화면 ① 생각 열기에 처음 생각과 까닭을 쓰게 합니다.</p></aside>
+</section>
+
+<section class="slide" data-title="활동 · 우리 주변의 우주 기술 찾기">
+  <div class="sh"><span class="ph p3">활동</span><h2>우리 주변의 우주 기술을 찾아라!</h2></div>
+  <div class="sb">
+    <div class="ttech" id="t6tech"></div>
+    <p class="sm muted" style="margin-top:6px">카드를 누르면 우주 탐사와의 관계가 나타나요. 먼저 학생들이 우주 기술이라고 생각하는 것을 손들게 하세요.</p>
+  </div>
+  <aside class="notes" data-time="5분"><p>12개 중 연필·우산·자전거 3개는 우주 탐사와 관계없는 물건이에요.</p><p>⚠ 참고: 전자레인지의 원리는 1940년대(우주 탐사 이전)에 발견되었어요. 교과서는 ‘우주 비행선에서 음식을 조리할 수 있게 개발되어 일상에 널리 쓰이는 예’로 다루므로, 질문이 나오면 ‘우주 탐사를 위해 발전·활용된 기술’ 정도로 설명하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 일상 속 우주 탐사 기술">
+  <div class="sh"><span class="ph p4">개념</span><h2>우주 탐사 기술이 일상에 이용된 예</h2><span class="pg">301쪽</span></div>
+  <div class="sb">
+    <div class="row" style="gap:14px;flex-wrap:wrap">
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">🛰️ <b class="gold">인공위성</b><br>GPS로 실시간 위치 확인, 지구 관측, 통신</div>
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">⛑️ <b class="gold">폴리카보네이트</b><br>열에 강하고 단단 → 안전모 등</div>
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">👕 <b class="gold">기능성 옷감</b><br>우주복용 신소재 → 기능성 옷</div>
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">🍲 <b class="gold">전자레인지</b><br>우주 비행선에서 음식 조리</div>
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">🏥 <b class="gold">자기 공명 영상(MRI)</b><br>우주선 영상 처리 기술에서 착안</div>
+      <div class="box frag" style="flex:1 1 30%;font-size:27px">👓 <b class="gold">형상 기억 합금</b><br>우주선 안테나 → 안경테, 치아 교정 장치</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>교과서 그림 13이에요. 이 밖에 정수기(우주선 물 정화), 태양 전지, 위성 방송·일기 예보 등도 예로 들 수 있어요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 우주 탐사의 성과 연표">
+  <div class="sh"><span class="ph p4">개념</span><h2>우주 탐사의 성과</h2><span class="pg">302~303쪽</span></div>
+  <div class="sb">
+    <div class="ttl" id="t6tl"></div>
+    <div class="box" id="t6tlc" style="min-height:190px;font-size:29px"><span class="muted">연표의 사례를 눌러 보세요.</span></div>
+  </div>
+  <aside class="notes" data-time="5분"><p>학생 화면 ‘2 탐구하기’에도 같은 연표가 있어요(분야별 거르기 가능). 모둠별로 사례를 하나씩 맡겨 조사하게 하세요.</p><p>분야: 탐사선 · 로켓·인공위성 · 우주 망원경·우주 정거장 · 탐사 로봇 · 우리나라 (교과서 302~303쪽 구성)</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 우리나라의 우주 탐사">
+  <div class="sh"><span class="ph p4">개념</span><h2>우리나라의 우주 탐사</h2><span class="pg">303쪽</span></div>
+  <div class="sb">
+    <div class="krtl">
+      <div class="frag"><b>1992</b>우리별 1호<small>최초의 인공위성(과학 위성)</small></div>
+      <div class="frag"><b>2013</b>나로호<small>최초의 우주 발사체</small></div>
+      <div class="frag"><b>2021</b>누리호<small>한국형 우주 발사체</small></div>
+      <div class="frag"><b>2022</b>다누리호<small>달 궤도 진입</small></div>
+      <div class="frag"><b>2032</b>달 착륙선<small>탐사 계획</small></div>
+    </div>
+    <div class="ans frag" style="margin-top:20px">다누리호로 우리나라는 세계 <b>7번째</b> 달 탐사국이 됨</div>
+  </div>
+  <aside class="notes" data-time="2분"><p>누리호는 2021년 1차 발사 때 위성 모사체를 궤도에 올리지 못했고, 2022년 2차 발사에서 성공했어요. 다누리호는 2022년 8월 발사, 12월 달 궤도 진입.</p><p>교과서 부록(대단원 끝) ‘5대 장기 우주 개발 미션’ 읽기 자료와 연결할 수 있어요.</p></aside>
+</section>
+
+<section class="slide" data-title="탐구 · 의의와 인류에게 미친 영향 조사">
+  <div class="sh"><span class="ph p2">탐구</span><h2>우주 탐사의 의의와 인류에게 미친 영향</h2><span class="pg">300쪽</span></div>
+  <div class="sb">
+    <div class="box"><b class="gold">과정</b><br>① 스마트 기기로 인류에게 큰 영향을 미친 우주 탐사 사례 조사<br>② 사례 하나를 골라 <b>의의</b>와 <b>인류에게 미친 영향</b> 정리<br>③ 정보 그림으로 만들어 공유 플랫폼에 올리고 발표</div>
+    <div class="row" style="gap:16px">
+      <div class="col box frag" style="font-size:28px"><b class="cyan">의의</b>: 이 탐사로 무엇을 알게 되었나?</div>
+      <div class="col box frag" style="font-size:28px"><b class="cyan">인류에게 미친 영향</b>: 우리 생활·사회는 어떻게 달라졌나?</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="12분"><p>학생 화면에는 사례 선택 → 의의 분류(지식 확대/기술 활용/지구 환경/국가 간 협력) → 의의·영향 쓰기 칸이 있어요.</p><p>더 해 보기: 조사한 의의가 잘 드러나는 홍보 자료(포스터·표어·정보 그림·만화) 만들기.</p></aside>
+</section>
+
+<section class="slide" data-title="토의 · 우주 탐사를 계속하는 까닭">
+  <div class="sh"><span class="ph p3">토의</span><h2>인류가 우주 탐사를 계속하는 까닭은?</h2><span class="pg">300쪽</span></div>
+  <div class="sb">
+    <div class="row" style="gap:14px;flex-wrap:wrap">
+      <div class="box frag" style="flex:1 1 45%">🌌 우주의 <b class="gold">기원과 구조</b> 이해, 외계 생명체 가능성 탐색</div>
+      <div class="box frag" style="flex:1 1 45%">🌍 <b class="gold">지구 환경</b> 감시: 기후 변화, 소행성 충돌 위험</div>
+      <div class="box frag" style="flex:1 1 45%">💡 GPS·반도체·의료 등 <b class="gold">혁신 기술</b> 탄생</div>
+      <div class="box frag" style="flex:1 1 45%">🏠 우주 <b class="gold">자원</b> 활용, 달·화성 <b class="gold">거주지</b> 탐색</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="4분"><p>교과서 해 보기 정리 1번 [토의]. 모둠 의견을 먼저 듣고 하나씩 공개하세요.</p></aside>
+</section>
+
+<section class="slide" data-title="협력적 소통 · 인류의 삶에 미친 영향">
+  <div class="sh"><span class="ph p3">토의</span><h2>우주 탐사가 인류의 삶에 미친 영향</h2><span class="pg">300쪽</span></div>
+  <div class="sb">
+    <div class="q c">[협력적 소통] 우주 탐사는 우리의 삶을 어떻게 바꾸었을까?</div>
+    <div class="ans frag">첨단 기술이 <b>일상생활·산업</b>에 응용 → 삶의 질 향상</div>
+    <div class="ans frag">지구 환경과 인류 생존에 관한 <b>연구 결과</b> 제공</div>
+    <div class="ans frag">새로운 <b>직업</b>과 <b>국가 간 협력</b> · 인간이 정착할 새로운 거주지 탐색</div>
+  </div>
+  <aside class="notes" data-time="3분"><p>교과서 해 보기 정리 2번. 대체 탐구: 우주 과학과 관련된 직업(우주인, 로켓 제작자, 인공위성 연구원, 위성 통신 공학자, 천문학자, 우주 식품 개발자 등) 조사로 확장할 수 있어요.</p></aside>
+</section>
+
+<section class="slide" data-title="개념 · 우주 탐사의 의의">
+  <div class="sh"><span class="ph p4">개념</span><h2>우주 탐사의 의의</h2><span class="pg">300~303쪽</span></div>
+  <div class="sb">
+    <div class="concept"><ul>
+      <li class="frag"><b>우주 과학의 발달</b>: 우주에 대한 지식과 이해의 폭을 넓힘</li>
+      <li class="frag"><b>탐사 기술의 이용</b>: 혁신 기술을 일상생활과 산업에 활용</li>
+      <li class="frag"><b>지구 환경 연구</b>: 기후·환경 변화, 자원 고갈 등 이해</li>
+      <li class="frag"><b>국가 간 협력</b>: 국제 우주 정거장 등 다국적 프로젝트</li></ul></div>
+    <p class="frag">인류는 로켓, 우주선, 위성, 탐사 로봇 등의 기술을 발전시키며 <b class="gold">활동 영역을 지구 밖으로</b> 넓히고 있음</p>
+  </div>
+  <aside class="notes" data-time="3분"></aside>
+</section>
+
+<section class="slide" data-title="탐구 · 우주 탐사 계획 세우기">
+  <div class="sh"><span class="ph p2">탐구</span><h2>우주 탐사 계획 세우기</h2><span class="pg">304쪽</span></div>
+  <div class="sb">
+    <div class="box" style="font-size:28px">🎯 우주 탐사의 성과를 바탕으로 우주 탐사 계획을 세우고, 다양한 방법으로 발표할 수 있다.</div>
+    <div class="concept" style="font-size:29px"><ul>
+      <li class="frag">① 302~303쪽을 참고하여 모둠별로 우주 탐사의 한 분야를 선택 → 성과 조사</li>
+      <li class="frag">② 앞으로 등장할 <b>우주 탐사 방법</b> 토의</li>
+      <li class="frag">③ 토의 결과로 모둠별 <b>가상의 우주 탐사 계획</b> 세우기</li>
+      <li class="frag">④ 발표 방법 선택 → ⑤ 자료를 만들어 공유 플랫폼에 올리기</li></ul></div>
+  </div>
+  <aside class="notes" data-time="2분"><p>학생 화면 ‘3 탐구하기’에 목적지 환경 카드와 계획서 칸(목적·방법·어려움과 해결·기대 성과·발표 방법)이 있어요.</p></aside>
+</section>
+
+<section class="slide" data-title="자료 · 탐사 목적지의 환경">
+  <div class="sh"><span class="ph p2">자료</span><h2>어디로 갈까? 목적지의 환경</h2></div>
+  <div class="sb">
+    <div class="tdest" id="t6dest"></div>
+    <div class="box" id="t6destI" style="min-height:250px;font-size:27px"><span class="muted">목적지를 눌러 보세요.</span></div>
+  </div>
+  <aside class="notes" data-time="4분"><p class="say">“화성에 있는 로봇에게 ‘멈춰!’라고 명령하면 언제 도착할까요?” → 최대 약 22분. 그래서 먼 행성일수록 로봇이 스스로 판단하는 <b>자율 탐사</b>가 중요해요.</p><p>값은 대략적인 값이에요(거리·통신 지연은 행성 위치에 따라 달라짐).</p></aside>
+</section>
+
+<section class="slide" data-title="토의 예시 · 앞으로의 우주 탐사 방법">
+  <div class="sh"><span class="ph p3">토의</span><h2>앞으로 등장할 우주 탐사 방법</h2><span class="pg">304쪽</span></div>
+  <div class="sb">
+    <div class="row" style="gap:14px;flex-wrap:wrap">
+      <div class="box frag" style="flex:1 1 45%;font-size:28px">🚀 <b class="gold">차세대 추진 시스템</b><br>무거운 화학 로켓 연료의 한계 극복</div>
+      <div class="box frag" style="flex:1 1 45%;font-size:28px">⛏️ <b class="gold">현지 자원 활용</b><br>화성 이산화 탄소 → 산소, 달 얼음 → 물·수소 연료, 달 흙 3D 프린팅 기지</div>
+      <div class="box frag" style="flex:1 1 45%;font-size:28px">🤖 <b class="gold">로봇·AI 자율 탐사</b><br>통신 지연이 큰 먼 행성에서 스스로 판단</div>
+      <div class="box frag" style="flex:1 1 45%;font-size:28px">🏠 <b class="gold">유인 기지·우주 정거장</b><br>방문이 아닌 실제 거주 환경 연구</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="3분"><p>과정 2·3의 예시 토의 내용이에요. 모둠 토의가 막힐 때 하나씩 힌트로 공개하세요.</p><p>더 해 보기: ‘화성 거주 계획서’(에너지, 거주 공간, 물·산소·식량 등 필요한 조건)로 확장 가능.</p></aside>
+</section>
+
+<section class="slide" data-title="발표 방법 · 평가">
+  <div class="sh"><span class="ph p3">발표</span><h2>어떻게 발표할까?</h2><span class="pg">304쪽</span></div>
+  <div class="sb row" style="gap:20px">
+    <div class="col">
+      <div class="box" style="font-size:27px">📺 <b>미래 뉴스 보도</b>: 앵커·현장 기자·과학자 역할극</div>
+      <div class="box" style="font-size:27px">🧩 <b>모형·가상 기지</b>: 재활용품 우주선, 게임 속 기지 설계</div>
+      <div class="box" style="font-size:27px">🗺️ <b>정보 그림 포스터</b>: 탐사 경로·장비·예상 성과</div>
+      <div class="box" style="font-size:27px">💼 <b>우주 기업 투자 설명</b>: 친구들을 투자자로 설득</div>
+    </div>
+    <div style="width:480px">
+      <table class="tsm"><tr><th>평가 항목</th><th>☆ ○ △</th></tr><tr><td style="text-align:left;font-size:25px">우주 탐사 성과를 바탕으로 계획했는가?</td><td></td></tr><tr><td style="text-align:left;font-size:25px">계획을 구체적으로 세웠는가?</td><td></td></tr><tr><td style="text-align:left;font-size:25px">창의성 · 다양성</td><td></td></tr></table>
+    </div>
+  </div>
+  <aside class="notes" data-time="10분+"><p>모둠별 발표 후 ☆(매우 잘함) ○(잘함) △(보통)으로 서로 평가해요(교과서 정리 2번: 창의성, 다양성 등으로 평가).</p><p>더 활동해 보기: 우주 탐사와 관련된 사람들(관제소 요원, 우주 비행사, 거주 예정자 등)을 넣어 연극 시나리오 작성 → 영상으로 촬영해 공유.</p></aside>
+</section>
+
+<section class="slide" data-title="정리 · 계획할 때 고려할 점">
+  <div class="sh"><span class="ph p3">정리</span><h2>우주 탐사 계획, 무엇을 고려해야 할까?</h2><span class="pg">304쪽</span></div>
+  <div class="sb">
+    <div class="q g">우주 탐사 계획을 세울 때 고려해야 할 점은?</div>
+    <div class="ans frag">🎯 탐사 <b>목적과 목표</b>를 명확하게</div>
+    <div class="ans frag">🦺 극한 환경에서 생존할 수 있는 <b>안전</b> 기술과 장비</div>
+    <div class="ans frag">💰 <b>비용과 기술력</b>을 따져 현실적이고 효율적으로</div>
+  </div>
+  <aside class="notes" data-time="2분"></aside>
+</section>
+
+<section class="slide" data-title="창의+융합 · 우주로 보낸 예술 작품">
+  <div class="sh"><span class="ph p5">창의 + 융합</span><h2>우주로 보낸 예술 작품</h2><span class="pg">305쪽</span></div>
+  <div class="sb">
+    <div class="box frag" style="font-size:28px">🌕 <b class="gold">잊힌 우주인</b> (1971, 아폴로 15호): 우주 탐사 중 목숨을 잃은 14명의 우주 비행사를 기리는 작은 알루미늄 조각상과 명패를 달에 설치</div>
+    <div class="box frag" style="font-size:28px">💿 <b class="gold">골든 레코드</b> (1977, 보이저 1·2호): 혹시 있을지 모르는 외계 생명체에게 보내는 인류의 소리와 메시지</div>
+    <div class="box frag" style="font-size:28px">📜 <b class="gold">유로파를 위한 시</b> (2024, 유로파 클리퍼): 우주와 지구가 하나로 이어져 있다는 의미를 담은 시</div>
+    <div class="q c frag" style="font-size:32px">[과학 심미성] 우주로 보내고 싶은 예술 작품을 구상해 보자!</div>
+  </div>
+  <aside class="notes" data-time="3분"><p>선택 활동. 학생들이 구상한 작품을 호기심 은하 ‘해 보고 싶은 탐구’에 올리게 해도 좋아요.</p></aside>
+</section>
+
+<section class="slide" data-title="다시 생각하기 · 스스로 확인하기">
+  <div class="sh"><span class="ph p4">확인</span><h2>스스로 확인하기</h2><span class="pg">304쪽</span></div>
+  <div class="sb">
+    <div class="q">① 우주에 쏘아 올린 ( )으로 길을 찾고 화상 통화를 함 → <span class="blank frag">인공위성</span></div>
+    <div class="q frag">② 우주 비행선 내 조리용으로 개발되어 널리 쓰임 → <span class="blank frag">전자레인지</span></div>
+    <div class="q frag">③ 다시 투표! 인류는 우주 탐사를 계속해야 할까?</div>
+    <div class="vote frag" id="v62" data-ans="-1"><button class="vo">계속해야 한다</button><button class="vo">줄여야 한다</button><button class="vo">잘 모르겠다</button></div>
+  </div>
+  <aside class="notes" data-time="3분"><p>③에서 처음 투표(도입 화면)와 비교해 생각이 바뀐 학생에게 까닭을 물어보세요. 학생 화면 ‘다시 생각하기’에 근거를 들어 쓰게 합니다. ([과학 유용성] 우주 탐사의 의의와 인류에게 미치는 영향 설명하기)</p></aside>
+</section>
+
+<section class="slide" data-title="핵심 정리">
+  <div class="sh"><span class="ph p4">정리</span><h2>이것만은 꼭! 핵심 정리</h2></div>
+  <div class="sb" style="font-size:33px;line-height:1.85">
+    <p>인류는 끊임없이 우주를 <span class="blank frag">탐사</span>하고, 발달한 과학 기술은 삶에 유용하게 쓰임</p>
+    <p>우주 탐사로 우주에 대한 <span class="blank frag">지식</span>과 이해를 넓히고, 첨단 기술을 <span class="blank frag">일상생활</span>에 활용</p>
+    <p>인류는 활동 영역을 <span class="blank frag">지구 밖</span>으로 넓히려 노력 중</p>
+    <p>계획: <span class="blank frag">탐사 목적과 목표</span>를 명확히, 효율적으로</p>
+  </div>
+  <aside class="notes" data-time="2분"></aside>
+</section>
+
+<section class="slide cover" data-title="중단원 마무리 · 2. 우주">
+  <div class="num" style="font-size:99px">2. 우주</div>
+  <h1>중단원 마무리</h1>
+  <div class="goal">
+    <div>🌌 <b class="gold">우리은하</b>: 막대 나선 · 원반 · 지름 약 30000 pc · 성단과 성운</div>
+    <div>🎈 <b class="gold">팽창하는 우주</b>: 은하들이 서로 멀어짐 · 중심 없음 · 약 138억 년</div>
+    <div>🚀 <b class="gold">우주 탐사</b>: 지식 확대 · 기술의 일상 활용 · 국가 간 협력</div>
+  </div>
+  <aside class="notes" data-time="1분"><p>교과서 306~307쪽 ‘도전꿀잼 퀴즈(낱말 퍼즐)’와 ‘콕콕문제로 확인’으로 중단원을 점검하세요.</p></aside>
+</section>
+</div>
+
 </div></div>
 <div hidden><span id="mText"></span><b id="cPeak"></b></div>
 
@@ -1052,14 +1713,14 @@ const TEACHER_HASH='1fa58357';
   <h3>수업 진행 방법</h3>
   <div><kbd>→</kbd> <kbd>PageDown</kbd> <kbd>Enter</kbd> : 다음 (정답·설명이 하나씩 나타난 뒤 다음 화면)</div>
   <div><kbd>←</kbd> <kbd>PageUp</kbd> : 이전</div>
-  <div><kbd>N</kbd> 수업 노트 · <kbd>M</kbd> 화면 목록 · <kbd>F</kbd> 전체 화면 · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 차시 이동 · <kbd>T</kbd> 타이머</div>
+  <div><kbd>N</kbd> 수업 노트 · <kbd>M</kbd> 화면 목록 · <kbd>F</kbd> 전체 화면 · <kbd>1</kbd>~<kbd>6</kbd> 차시 이동 · <kbd>T</kbd> 타이머</div>
   <div>투표 카드: 누를 때마다 +1, 우클릭 −1 (손 든 학생 수 세기)</div>
   <div>무선 프레젠터(리모컨)로도 넘길 수 있어요.</div>
   <div class="btns"><button class="au" id="helpClose">확인</button></div>
 </div>
 
 <div id="bar">
-  <div class="les"><button data-l="L1">1차시 거리</button><button data-l="L2">2차시 등급</button><button data-l="L3">3차시 색</button></div>
+  <div class="les"><button data-l="L1">1 거리</button><button data-l="L2">2 등급</button><button data-l="L3">3 색</button><button data-l="L4">4 은하</button><button data-l="L5">5 팽창</button><button data-l="L6">6 탐사</button></div>
   <button id="bPrev">◀</button>
   <div class="ctr" id="ctr"></div>
   <button id="bNext" class="au">다음 ▶</button>
@@ -1073,6 +1734,7 @@ const TEACHER_HASH='1fa58357';
   <button id="bHelp">?</button>
 </div>
 
+<script src="u2.js"></script>
 <script>
 function __boot(){
 const $=s=>document.querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
@@ -1093,7 +1755,7 @@ $$('.vote').forEach(v=>{const ans=+v.dataset.ans;const bs=$$('.vo',v);bs.forEach
   const r=document.createElement('button');r.className='vreset';r.textContent='↺ 초기화';r.onclick=()=>{bs.forEach(o=>{o.dataset.n=0;o.querySelector('.vc').textContent='';o.querySelector('.vb').style.width='0';});};v.appendChild(r);});
 
 /* ============ slide engine ============ */
-const LESSONS=['L1','L2','L3'];let L='',idx=0;
+const LESSONS=['L1','L2','L3','L4','L5','L6'];let L='',idx=0;
 function slides(){return $$('#'+(L||'L1')+' > .slide');}
 function frags(s){return $$('.frag',s).map((f,i)=>[f,f.dataset.o!=null?+f.dataset.o:i,i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(a=>a[0]);}
 function setFrag(f,on){f.classList.toggle('vis',on);if(f.dataset.show){const v=document.getElementById(f.dataset.show);if(v)v.classList.toggle('reveal',on);}}
@@ -1139,7 +1801,7 @@ document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'|
  else if(e.key==='m'||e.key==='M'||e.key==='ㅡ')toggleMenu();
  else if(e.key==='f'||e.key==='F'||e.key==='ㄹ')full();
  else if(e.key==='t'||e.key==='T'||e.key==='ㅅ')tToggle();
- else if(['1','2','3'].includes(e.key))show('L'+e.key,0,'fwd');
+ else if(['1','2','3','4','5','6'].includes(e.key))show('L'+e.key,0,'fwd');
  else if(e.key==='Escape'){$('#menu').classList.remove('on');$('#help').classList.remove('on');}});
 // keep arrow keys for navigation after using sliders/selects
 document.addEventListener('change',e=>{if(e.target.matches('input[type=range],select'))e.target.blur();});
@@ -1491,10 +2153,71 @@ $('#colChk').onclick=()=>{const ans=[...CS].sort((a,b)=>b.t-a.t).map(s=>s.n),m=$
 $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';};rc();
 })();
 
+/* ================== Ⅷ-2 우주 (4~6차시) ================== */
+(function(){const U=window.U2;if(!U)return;const FS=1.45,C={};const cvs=id=>C[id]||(C[id]=U.setup(id));
+ /* ----- 4차시 ----- */
+ let G=null,i4=false;const st={dir:0,up:0,map:{}};
+ const dn=d=>{d=((d%360)+540)%360-180;return Math.abs(d)<=15?'은하 중심 쪽':Math.abs(d)>=165?'중심 반대쪽':(d>0?'오른쪽 ':'왼쪽 ')+Math.abs(d)+'°';};
+ let raf=0;function v4(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{G.drawTop(cvs('t4top'),{dir:st.dir,fov:90,fs:FS,center:true});
+  G.drawSky(cvs('t4sky'),st.dir,st.up,90,{fs:FS,title:'태양계에서 본 하늘 · '+dn(st.dir)+(st.up?' · 위로 '+st.up+'°':'')});G.drawSide(cvs('t4side'),{zs:2.5,dir:st.dir,up:st.up,fs:FS});
+  $('#t4dirO').textContent=dn(st.dir);$('#t4upO').textContent=st.up+'°';});}
+ function sunTry(r){$$('.t4s').forEach(b=>b.classList.toggle('au',+b.dataset.r===r));G.setSun(r);
+  G.drawTop(cvs('t4top2'),{fs:FS,center:r!==0});const a=r===0?[90,-90]:[0,180];G.drawSky(cvs('t4c1'),a[0],4,100,{fs:FS,mark:false});G.drawSky(cvs('t4c2'),a[1],4,100,{fs:FS,mark:false});G.setSun(8500);}
+ function maps(){G.drawTop(cvs('t4m1'),{show:st.map,fs:FS,title:'위에서 본 모습'});G.drawSide(cvs('t4m2'),{zs:2.5,show:st.map,fs:FS,title:'옆에서 본 모습'});}
+ const OB=[['벌집 성단','open',11],['초승달 성운','emis',15,{shape:'ring'}],['석탄 포대 성운','dark',19],['큰부리새자리 47','glob',13],['아이리스 성운','refl',17],
+  ['보석 상자','open',12],['달리는 닭 성운','emis',16],['말머리성운','dark',20,{shape:'horse'}],['오메가 성단','glob',14],['런닝맨 성운','refl',18]];
+ const KN={open:'산개 성단',glob:'구상 성단',emis:'방출 성운',refl:'반사 성운',dark:'암흑 성운'};
+ function init4(){if(i4)return;i4=true;G=U.Galaxy(7);
+  G.drawSky(cvs('t4mw'),25,4,110,{fs:FS,mark:false});G.drawSky(cvs('t4a'),0,6,110,{fs:FS,mark:false});G.drawSky(cvs('t4b'),180,6,110,{fs:FS,mark:false});
+  v4();G.drawTop(cvs('t4c3'),{labels:true,fs:FS});G.drawSide(cvs('t4c4'),{zs:2.5,labels:true,fs:FS});maps();
+  const gal=$('#t4gal');OB.forEach(o=>{const d=document.createElement('div');d.className='gc';d.innerHTML=`<canvas data-w="220" data-h="185"></canvas><div class="nm">${o[0]}</div><div class="ty">${KN[o[1]]}</div>`;gal.appendChild(d);U.drawObject(U.setup(d.querySelector('canvas')),o[1],o[2],o[3]);});
+  [['t4o1','open',21],['t4o2','glob',22],['t4o3','emis',23],['t4o4','refl',24],['t4o5','dark',20,{shape:'horse'}]].forEach(a=>U.drawObject(cvs(a[0]),a[1],a[2],a[3]));
+  setTimeout(()=>sunTry(8500),50);}
+ $('#t4dir').oninput=e=>{st.dir=+e.target.value;v4();};$('#t4up').oninput=e=>{st.up=+e.target.value;v4();};
+ $$('.t4p').forEach(b=>b.onclick=()=>{st.dir=+b.dataset.d;st.up=+b.dataset.u;$('#t4dir').value=st.dir;$('#t4up').value=st.up;v4();});
+ $$('.t4s').forEach(b=>b.onclick=()=>{b.textContent.length;const r=+b.dataset.r;$('#t4c1').style.opacity=.4;setTimeout(()=>{sunTry(r);$('#t4c1').style.opacity=1;},30);});
+ $$('.t4m').forEach(b=>b.onclick=()=>{const k=b.dataset.k;st.map[k]=!st.map[k];b.classList.toggle('au',st.map[k]);maps();});
+ $('#t4galK').onclick=()=>{$('#t4gal').classList.toggle('rev');};
+ /* ----- 5차시 ----- */
+ let i5=false,B,E,RW;
+ function exTb(){const a=E.a;$('#t5exTb').innerHTML=['A','B','C'].map(n=>{if(n===E.ref.n)return `<tr><td>${n}</td><td colspan="3" class="muted">기준(나)</td></tr>`;const d1=E.d(n,1),d2=E.d(n);return `<tr><td>${n}</td><td>${d1.toFixed(1)}</td><td>${d2.toFixed(1)}</td><td class="hl">${(d2-d1).toFixed(1)}</td></tr>`;}).join('');
+  $$('#t5refs button').forEach(b=>b.classList.toggle('au',b.textContent===E.ref.n));$('#t5exTo').textContent=String(+a.toFixed(2));}
+ function init5(){if(i5)return;i5=true;
+  B=U.Balloon(cvs('t5bl'),{fs:FS});const bo=()=>{const k=B.R/8;$('#t5blRo').textContent=k===1?'처음':k.toFixed(2).replace(/\.?0+$/,'')+'배';};
+  $('#t5blR').oninput=e=>{B.setR(+e.target.value);bo();};$$('.t5bm').forEach(b=>b.onclick=()=>{B.measure(b.dataset.p[0],b.dataset.p[1]);});
+  $('#t5bS').onclick=()=>{$('#t5blR').value=8;B.setR(8);bo();};$('#t5bB').onclick=()=>{$('#t5blR').value=16;B.setR(16);bo();};$('#t5bC').onclick=()=>B.clear();
+  E=U.Expansion(cvs('t5ex'),{fs:FS,onref:exTb});['우리은하','A','B','C'].forEach(n=>{const b=document.createElement('button');b.textContent=n;b.style.fontSize='22px';b.onclick=()=>{E.setRef(n);exTb();};$('#t5refs').appendChild(b);});
+  const sa=v=>{E.setA(v);$('#t5exT').value=v;exTb();};$('#t5exT').oninput=e=>sa(+e.target.value);$('#t5e1').onclick=()=>sa(1);$('#t5e2').onclick=()=>sa(1.5);
+  $('#t5eG').onclick=()=>{E.ghost=!E.ghost;E.a0=1;$('#t5eG').classList.toggle('au',E.ghost);E.draw();};exTb();
+  RW=U.Expansion(cvs('t5rw'),{fs:FS,seed:21});RW.lines=false;RW.draw();
+  const anim=(to)=>{const from=RW.a,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/2600),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;RW.setA(from+(to-from)*e);if(k<1)requestAnimationFrame(f);})(t0);};
+  $('#t5rwGo').onclick=()=>anim(0.05);$('#t5rwBack').onclick=()=>anim(1);
+  bread(1);}
+ const BR=(()=>{const r=U.rng(8),p=[];for(let i=0;i<14;i++){let a,b;do{a=r()*2-1;b=r()*2-1;}while(a*a+b*b>.75||p.some(q=>Math.hypot(q[0]-a,q[1]-b)<.32));p.push([a,b]);}return p;})();
+ function bread(k){const c=cvs('t5br'),x=c.x,w=c.w,h=c.h,cx=w/2,cy=h/2+8;x.fillStyle='#050913';x.fillRect(0,0,w,h);const rx=150*k,ry=90*k;
+  const g=x.createRadialGradient(cx-rx*.3,cy-ry*.5,10,cx,cy,rx);g.addColorStop(0,'#f6d39a');g.addColorStop(.7,'#d9984e');g.addColorStop(1,'#9c5a22');x.fillStyle=g;x.beginPath();x.ellipse(cx,cy,rx,ry,0,0,7);x.fill();
+  const P=q=>[cx+q[0]*rx*.95,cy+q[1]*ry*.95];const o=P(BR[0]);
+  [3,6,9].forEach(j=>{const q=P(BR[j]);x.setLineDash([5,4]);x.strokeStyle='#fff';x.lineWidth=1.5;x.beginPath();x.moveTo(o[0],o[1]);x.lineTo(q[0],q[1]);x.stroke();x.setLineDash([]);
+   const d=Math.hypot(BR[j][0]-BR[0][0],(BR[j][1]-BR[0][1])*.6)*4*k;U.TS(x,d.toFixed(1)+' cm',(o[0]+q[0])/2,(o[1]+q[1])/2-10,'#fff',11,'center',900,FS);});
+  BR.forEach((q,i)=>{const[X,Y]=P(q);x.fillStyle=i===0?'#ffd166':'#4a2a3a';x.beginPath();x.ellipse(X,Y,7,5,.5,0,7);x.fill();});
+  U.TS(x,'기준 건포도',o[0],o[1]+18,'#ffd166',11,'center',900,FS);txt(x,'부푼 정도 '+k.toFixed(2)+'배',12,18,'#9ba6d4',11,'left',700);}
+ let bk=1;$('#t5brGo').onclick=()=>{const t0=performance.now(),from=bk;(function f(n){const q=Math.min(1,(n-t0)/2200);bk=from+(1.6-from)*q;bread(bk);if(q<1)requestAnimationFrame(f);})(t0);};
+ $('#t5brR').onclick=()=>{bk=1;bread(1);};
+ /* ----- 6차시 ----- */
+ let i6=false;
+ function init6(){if(i6)return;i6=true;const S=U.SPACE;
+  const tt=$('#t6tech');S.TK.forEach(t=>{const d=document.createElement('div');d.className='tc '+(t[2]?'y':'n');d.innerHTML=`<div class="em">${t[0]}</div><div class="nm">${t[1]}</div><div class="ex">${t[2]?'🚀 ':'✖ '}${t[3]}</div>`;d.onclick=()=>d.classList.toggle('on');tt.appendChild(d);});
+  const tl=$('#t6tl');S.TL.forEach((t,i)=>{const b=document.createElement('button');b.innerHTML=`<b>${t[0]}</b>${t[1]}`;b.onclick=()=>{$$('#t6tl button').forEach(x=>x.classList.toggle('on',x===b));
+   $('#t6tlc').innerHTML=`<b class="gold" style="font-size:34px">${t[0]} · ${t[1]}</b> <span class="sm muted">${t[2]} · ${t[3]}</span><div style="margin-top:8px">🔭 ${t[4]}</div><div class="green" style="margin-top:6px">💡 ${t[5]}</div>`;};tl.appendChild(b);});
+  const dd=$('#t6dest');S.DS.forEach(d=>{const b=document.createElement('button');b.innerHTML=`${d[0]} ${d[1]}`;b.onclick=()=>{$$('#t6dest button').forEach(x=>x.classList.toggle('on',x===b));
+   $('#t6destI').innerHTML=`<table class="tsm dt"><tr><th>거리</th><td>${d[2]}</td><th>가는 시간</th><td>${d[3]}</td></tr><tr><th>통신 지연</th><td>${d[4]}</td><th>중력</th><td>${d[5]}</td></tr><tr><th>표면 온도</th><td>${d[6]}</td><th>대기</th><td>${d[7]}</td></tr></table><div style="margin-top:10px">📌 ${d[8]}</div>`;};dd.appendChild(b);});}
+ window.addEventListener('slidechange',e=>{const l=e.detail.L;if(l==='L4')setTimeout(init4,20);if(l==='L5')init5();if(l==='L6')init6();});
+})();
+
 /* ============ start ============ */
-const h=(location.hash||'').match(/^#l([123])-s(\d+)$/);
+const h=(location.hash||'').match(/^#l([1-6])-s(\d+)$/);
 if(h)show('L'+h[1],+h[2]-1,'fwd');else show('L1',0,'fwd');
-window.addEventListener('hashchange',()=>{const m=(location.hash||'').match(/^#l([123])-s(\d+)$/);if(m)show('L'+m[1],+m[2]-1,'fwd');});
+window.addEventListener('hashchange',()=>{const m=(location.hash||'').match(/^#l([1-6])-s(\d+)$/);if(m)show('L'+m[1],+m[2]-1,'fwd');});
 fit();
 }
 let __b=false;function __go(){if(__b)return;__b=true;__boot();}
