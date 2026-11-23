@@ -823,20 +823,16 @@ const TEACHER_HASH='1fa58357';
 
 <section class="slide" data-title="발문 · 오리온자리">
   <div class="sh"><span class="ph p1">도입</span><h2>별마다 색이 다른 까닭은?</h2></div>
-  <div class="sb row">
-    <canvas id="orC" data-w="560" data-h="470" style="width:480px"></canvas>
+  <div class="sb row" style="gap:20px;align-items:flex-start">
+    <canvas id="orC" data-w="560" data-h="470" style="width:660px;border-radius:12px;cursor:pointer;flex:none" title="별을 누르면 등급 보기"></canvas>
     <div class="col">
       <div class="q" style="font-size:32px;margin-bottom:10px">붉은 <span style="color:#ff9466">베텔게우스</span>, 청백색 <span style="color:#bcd4ff">리겔</span>, 백색 <span style="color:#e4ecff">시리우스</span> — 색이 다른 까닭은?</div>
-      <table class="tsm" style="font-size:25px"><tr><th>별</th><th class="clkh" title="누르면 이 열 모두 보기">색 👆</th><th class="clkh" title="누르면 이 열 모두 보기">겉보기 등급 👆</th><th class="clkh" title="누르면 이 열 모두 보기">절대 등급 👆</th></tr>
-        <tr><td style="color:#ff9466;font-weight:700">베텔게우스</td><td class="clk"><span>붉은색</span></td><td class="clk"><span>약 0.5</span></td><td class="clk"><span>약 −5.9</span></td></tr>
-        <tr><td style="color:#bcd4ff;font-weight:700">리겔</td><td class="clk"><span>청백색</span></td><td class="clk"><span>약 0.1</span></td><td class="clk"><span>약 −7.0</span></td></tr>
-        <tr><td style="color:#e4ecff;font-weight:700">시리우스</td><td class="clk"><span>백색</span></td><td class="clk"><span><b class="gold">−1.5</b></span></td><td class="clk"><span>+1.4</span></td></tr></table>
       <div class="box frag" style="font-size:26px;margin-top:10px">💬 가설: 크기? 거리? 성분? <b class="gold">온도?</b></div>
       <div class="ans frag" style="font-size:26px">용암처럼 <b>온도</b>에 따라 색이 다를까? → 확인!</div>
     </div>
   </div>
   <aside class="notes" data-time="3분"><p>여러 가설을 칠판에 적고, 용암 실험과 연결해 ‘온도’ 가설을 검증하자고 이끌어 갑니다. (실제로 별의 색은 표면 온도가 결정해요.)</p>
-    <h4>표 읽기 (2차시 등급과 연결)</h4>
+    <h4>그림의 별 누르기 (2차시 등급과 연결)</h4><p>베텔게우스·리겔·시리우스를 <b>누르면</b> 겉보기 등급과 절대 등급이 나타나고, 다시 누르면 사라져요. 먼저 “어느 별이 가장 밝게 보일까? 실제로 가장 밝은 별은?”을 묻고 하나씩 눌러 확인하세요.</p>
     <p class="say">“밤하늘에서 가장 밝게 보이는 별은? 실제로 가장 밝은 별은?”</p>
     <ul><li><b>시리우스</b>: 겉보기 등급 −1.46으로 밤하늘에서 가장 밝은 별. 하지만 절대 등급은 +1.42로 셋 중 가장 어두움 → 거리가 약 8.6광년(2.6 pc)으로 매우 <b>가까워서</b> 밝게 보임. 표면 온도 약 9900 K, 백색(청백색으로 소개하기도 함).</li>
       <li><b>리겔</b>: 겉보기 등급 약 0.13(0.05~0.18로 변함), 거리 약 860광년(약 260 pc). 절대 등급은 자료마다 약 −6.7~−7.8로 다름(거리 추정과 성간 먼지에 의한 감광 보정 차이). 겉보기 등급과 거리로 계산하면 약 −7.0.</li>
@@ -2208,17 +2204,27 @@ function dl(){const x=LV.x;x.fillStyle='#120c0c';x.fillRect(0,0,LV.w,LV.h);const
 $('#lavaGo').onclick=()=>{if(run)return;run=true;lt=1200;const t0=performance.now();(function f(n){lt=1200-800*Math.min(1,(n-t0)/7000);dl();if(lt>400)requestAnimationFrame(f);else run=false;})(t0);};dl();
 
 // Orion
-function drawOrion(id){const O=cv(id);if(!O)return;const x=O.x;bgStars(x,O.w,O.h,110,31,.8);
+function drawOrion(id,info){const O=cv(id);if(!O)return;const x=O.x;const pos={},shown={};
+ function draw(){x.clearRect(0,0,O.w,O.h);bgStars(x,O.w,O.h,110,31,.8);
  const P0={bet:[.30,.20,3300,'베텔게우스',9],bel:[.70,.24,21000,'',5],al:[.44,.52,25000,'',5],an:[.51,.49,25000,'',5],mi:[.58,.46,30000,'',5],sa:[.36,.84,25000,'',5],ri:[.72,.80,11800,'리겔',8.5],me:[.50,.08,30000,'',3.5]};const P={};Object.keys(P0).forEach(k=>{const p=P0[k];P[k]=[.32+.66*p[0],.04+.66*p[1],p[2],p[3],p[4]];});
  const ln=[['bet','bel'],['bet','al'],['bel','mi'],['al','an'],['an','mi'],['al','sa'],['mi','ri'],['bet','me'],['bel','me']];
  x.strokeStyle='#6ad1ff40';x.lineWidth=1.5;ln.forEach(([a,b])=>{x.beginPath();x.moveTo(P[a][0]*560,P[a][1]*470);x.lineTo(P[b][0]*560,P[b][1]*470);x.stroke();});
+ pos.bet=[P.bet[0]*560,P.bet[1]*470];pos.ri=[P.ri[0]*560,P.ri[1]*470];
  Object.values(P).forEach(p=>{glow(x,p[0]*560,p[1]*470,p[4],tcol(p[2]).join(','));if(p[3])txt(x,p[3],p[0]*560+(p[3]==='리겔'?-30:30),p[1]*470+(p[3]==='리겔'?34:-28),p[3]==='리겔'?'#bcd4ff':'#ff9466',19,'center',900);});
  {const ax=P.mi[0]*560,ay=P.mi[1]*470,bx=P.al[0]*560,by=P.al[1]*470,ux=(bx-ax),uy=(by-ay),sx=bx+ux*3.6,sy=by+uy*3.6;
   x.setLineDash([6,6]);x.strokeStyle='rgba(255,209,102,.55)';x.lineWidth=2;x.beginPath();x.moveTo(bx,by);x.lineTo(sx-ux*.25,sy-uy*.25);x.stroke();x.setLineDash([]);
-  glow(x,sx,sy,11,tcol(9700).join(','));txt(x,'시리우스',sx,sy+44,'#e4ecff',19,'center',900);txt(x,'(큰개자리)',sx,sy+70,'#9ba6d4',12,'center',700);
+  pos.si=[sx,sy];glow(x,sx,sy,11,tcol(9700).join(','));txt(x,'시리우스',sx,sy+44,'#e4ecff',19,'center',900);txt(x,'(큰개자리)',sx,sy+70,'#9ba6d4',12,'center',700);
   txt(x,'오리온의 띠를 따라 →',(bx+sx)/2-6,(by+sy)/2-20,'rgba(255,209,102,.8)',11,'center',700);}
- txt(x,'오리온자리',14,22,'#9ba6d4',15,'left',700);}
-drawOrion('orC');drawOrion('orC2');
+ txt(x,'오리온자리',14,22,'#9ba6d4',15,'left',700);
+  if(info){const D={bet:['베텔게우스','0.5','−5.9','#ff9466',-30,-114],ri:['리겔','0.1','−7.0','#bcd4ff',52,30],si:['시리우스','−1.5','+1.4','#e4ecff',84,0]};
+   Object.keys(shown).forEach(k=>{if(!shown[k])return;const[n,ap,ab,c,dy,cx]=D[k],[X,Y]=pos[k];const w=176,h=64,L=Math.max(6,Math.min(O.w-w-6,X+cx-w/2)),T=Math.max(30,Math.min(O.h-h-6,Y+dy));
+    x.fillStyle='rgba(11,18,41,.94)';x.strokeStyle=c;x.lineWidth=2;x.beginPath();x.roundRect(L,T,w,h,10);x.fill();x.stroke();x.lineWidth=1;
+    txt(x,'겉보기 '+ap+'등급',L+w/2,T+22,'#ffd166',11,'center',900);txt(x,'절대 '+ab+'등급',L+w/2,T+48,'#eef1ff',11,'center',900);});
+   txt(x,'별을 누르면 등급 👆',O.w-12,22,'#6a78b5',10,'right',700);}}
+ draw();
+ if(info)O.c.addEventListener('click',e=>{const r=O.c.getBoundingClientRect(),X=(e.clientX-r.left)*O.w/r.width,Y=(e.clientY-r.top)*O.h/r.height;let best=null,bd=55;
+  Object.keys(pos).forEach(k=>{const d=Math.hypot(pos[k][0]-X,pos[k][1]-Y);if(d<bd){bd=d;best=k;}});if(best){shown[best]=!shown[best];draw();}});}
+drawOrion('orC',true);drawOrion('orC2');
 
 // star+spectrum
 const SC=cv('starC'),SP=cv('specC');let tc=6000;const sr=rng(5),sbg=[];for(let i=0;i<60;i++)sbg.push({x:sr()*520,y:sr()*360,a:sr()*.5+.2});
