@@ -907,7 +907,7 @@ const TEACHER_HASH='1fa58357';
     <ul><li><b>알비레오 A</b>: 주황색 밝은 거성(K형, 표면 온도 약 4400 K). 겉보기 등급 약 3.1, 절대 등급 약 −2.4. 사실 아주 가까이 붙은 별들(Aa, Ac)로 이루어져 있고, 표의 절대 등급은 가장 밝은 Aa의 값이에요.</li>
       <li><b>알비레오 B</b>: 청백색 주계열성(B형, 표면 온도 약 13000 K). 겉보기 등급 약 5.1, 절대 등급 약 −0.3.</li>
       <li>둘 다 약 360~430광년 거리로 비슷하게 떨어져 있어서, 겉보기 등급 차이(약 2등급)가 거의 실제 밝기 차이예요.</li></ul>
-    <p class="say">“B가 훨씬 뜨거운데, 왜 A가 더 밝을까요?” → A가 훨씬 큰 거성이기 때문 (18쪽 H-R도·밝기 공식과 연결)</p>
+    <p class="say">“B가 훨씬 뜨거운데, 왜 A가 더 밝을까요?” → A가 훨씬 큰 거성이기 때문 (이어지는 [심화] 밝기 공식·H-R도와 연결)</p>
     <p>알비레오 A의 절대 등급은 거리 추정값에 따라 자료마다 약 −2.2~−2.5로 달라요. A와 B가 서로 도는 쌍인지, 우연히 같은 방향에 보이는 것인지는 아직 확실하지 않아요.</p></aside>
 </section>
 
@@ -919,6 +919,71 @@ const TEACHER_HASH='1fa58357';
     <div class="msg" id="colMsg"></div>
   </div>
   <aside class="notes" data-time="4분"><p>모둠별로 종이에 순서를 쓰게 한 뒤 발표하게 하고, 카드를 차례대로 눌러 확인합니다. [순서 확인]을 누르면 각 별의 대략적인 표면 온도가 나타나요.</p><p>정답: 알비레오 B &gt; 리겔 &gt; 시리우스 &gt; 태양 &gt; 알비레오 A &gt; 베텔게우스</p><p>리겔과 알비레오 B는 색이 비슷해 구분하기 어려워요. 둘의 순서를 바꿔도 칭찬해 주세요.</p></aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 별의 실제 밝기를 정하는 두 가지">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별의 실제 밝기는 무엇으로 정해질까?</h2></div>
+  <div class="sb">
+    <div style="text-align:center;font-size:84px;font-family:'Times New Roman',serif;color:#fff;margin:4px 0 10px">
+      <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup></div>
+    <div class="row" style="gap:14px">
+      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>L</i></b> : 별의 실제 밝기 (광도)</div>
+      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>R</i></b> : 별의 반지름<br><span class="muted" style="font-size:22px">(<i>R</i><sup>2</sup>은 별의 표면적에 비례)</span></div>
+      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>T</i></b> : 별의 표면 온도<br><span class="muted" style="font-size:22px">(σ: 일정한 값, 상수)</span></div>
+    </div>
+    <div class="row" style="gap:14px;margin-top:14px">
+      <div class="ans frag" style="flex:1;margin:0">🔥 표면 온도 <b>2배</b> → 밝기 2<sup>4</sup> = <b class="gold">16배</b></div>
+      <div class="ans frag" style="flex:1;margin:0">🎈 반지름 <b>2배</b> → 밝기 2<sup>2</sup> = <b class="gold">4배</b></div>
+    </div>
+    <div class="concept frag" style="margin-top:12px">별의 실제 밝기(절대 등급)는 <b>표면 온도</b>와 <b>크기(반지름)</b>가 함께 결정함</div>
+  </div>
+  <aside class="notes" data-time="(선택) 3분">
+    <p>교과서 범위 밖(고등학교 지구과학Ⅰ ‘별의 물리량’) 내용이에요. 공식을 외우게 하기보다 ‘뜨거울수록, 클수록 밝다’는 관계만 잡아 주세요.</p>
+    <p>σ는 슈테판-볼츠만 상수예요. 별의 표면 1 m²가 내는 에너지는 <i>T</i><sup>4</sup>에 비례하고(온도의 영향이 매우 큼), 별 전체 밝기는 여기에 표면적(4π<i>R</i><sup>2</sup>)을 곱한 것이에요.</p>
+    <p class="say">“붉은색 별은 표면 온도가 낮은데, 어떻게 아주 밝을 수 있을까요?” → 다음 화면의 베텔게우스</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] 베텔게우스 vs 시리우스">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>차가운 베텔게우스가 더 밝은 까닭은?</h2></div>
+  <div class="sb">
+    <table class="tsm"><tr><th style="width:250px">구분</th><th>🔴 베텔게우스</th><th>⚪ 시리우스 A</th></tr>
+      <tr><th>색과 표면 온도</th><td><b style="color:#ff8c5a">붉은색</b> (약 3500 K)<br><span class="muted" style="font-size:23px">상대적으로 차가움</span></td><td><b style="color:#cfe0ff">청백색</b> (약 9900 K)<br><span class="muted" style="font-size:23px">훨씬 뜨거움</span></td></tr>
+      <tr class="frag"><th>별의 크기 (반지름)</th><td>태양의 약 <b class="gold">700~900배</b><br><span class="muted" style="font-size:23px">적색 초거성</span></td><td>태양의 약 <b>1.7배</b><br><span class="muted" style="font-size:23px">주계열성</span></td></tr>
+      <tr class="frag"><th>절대 등급 (실제 밝기)</th><td><b class="gold">약 −5.85등급</b><br><span class="muted" style="font-size:23px">태양의 약 10만 배</span></td><td>약 <b>+1.42등급</b><br><span class="muted" style="font-size:23px">태양의 약 25배</span></td></tr>
+    </table>
+    <div class="row" style="gap:14px;margin-top:12px">
+      <div class="box frag" style="flex:1;font-size:25px;margin:0">🔴 <i>R</i><sup>2</sup> ≈ 800<sup>2</sup> = <b>64만</b> · <i>T</i><sup>4</sup> ≈ (3500/5800)<sup>4</sup> ≈ <b>0.13</b><br>→ 약 <b class="gold">8만 배</b> (태양 = 1)</div>
+      <div class="box frag" style="flex:1;font-size:25px;margin:0">⚪ <i>R</i><sup>2</sup> ≈ 1.7<sup>2</sup> ≈ <b>2.9</b> · <i>T</i><sup>4</sup> ≈ (9900/5800)<sup>4</sup> ≈ <b>8.5</b><br>→ 약 <b class="gold">25배</b></div>
+    </div>
+    <div class="concept frag" style="margin-top:12px">표면 온도는 낮아도 <b>엄청나게 크기 때문에</b> 베텔게우스가 훨씬 밝음</div>
+  </div>
+  <aside class="notes" data-time="(선택) 4분">
+    <p class="say">“시리우스가 훨씬 뜨거운데, 왜 베텔게우스의 절대 등급이 더 작을까요(더 밝을까요)?” → 표를 한 줄씩 공개</p>
+    <p>계산은 태양(표면 온도 약 5800 K, 반지름 1)과 비교한 값이에요. 베텔게우스는 반지름을 700배로 하면 약 6만 배, 900배로 하면 약 11만 배로, 문헌마다 크기 추정값이 달라 ‘약 10만 배’로 소개돼요.</p>
+    <p>절대 등급(눈으로 보이는 빛 기준) 차이 약 7.3등급은 약 800배인데, 광도(모든 빛) 비는 약 4000배예요. 차가운 별은 에너지를 적외선으로 많이 내기 때문이에요. 질문이 나올 때만 설명하세요.</p>
+    <p>베텔게우스는 밝기가 변하는 변광성이라 절대 등급도 자료마다 조금씩 달라요.</p>
+  </aside>
+</section>
+
+<section class="slide" data-title="[심화·선택] H-R도 · 표면 온도와 절대 등급">
+  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별을 온도와 밝기로 나열하면? (H-R도)</h2></div>
+  <div class="sb row" style="gap:18px">
+    <canvas id="hrC" data-w="640" data-h="470" style="width:640px"></canvas>
+    <div class="col">
+      <div class="btns"><button id="hrN" style="font-size:22px">⭐ 별 이름</button><button id="hrG" style="font-size:22px">무리 이름</button><button id="hrR" style="font-size:22px">⋯ 반지름 선</button></div>
+      <div class="box frag" style="font-size:24px;margin:6px 0 0"><b class="gold">주계열성</b>: 왼쪽 위 → 오른쪽 아래 띠, 대부분의 별 (태양, 시리우스 A)</div>
+      <div class="box frag" style="font-size:24px;margin:8px 0 0"><b style="color:#ff8c5a">거성·초거성</b>: 오른쪽 위 — 차갑지만 밝음 → <b>매우 큼</b> (베텔게우스)</div>
+      <div class="box frag" style="font-size:24px;margin:8px 0 0"><b style="color:#cfe0ff">백색 왜성</b>: 왼쪽 아래 — 뜨겁지만 어두움 → <b>매우 작음</b> (시리우스 B)</div>
+      <div class="concept frag" style="font-size:24px;margin-top:8px">점선(반지름이 같은 별)은 비스듬함 → <b>오른쪽 위</b>로 갈수록 반지름이 큼</div>
+    </div>
+  </div>
+  <aside class="notes" data-time="(선택) 4분">
+    <p>H-R도(헤르츠스프룽–러셀도): 가로축 = 표면 온도(왼쪽이 높음, 스펙트럼형 O B A F G K M), 세로축 = 절대 등급(위쪽이 밝음). 점들은 대략적인 분포를 그린 모형이에요.</p><p><b>반지름 점선</b>은 공식 <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup>로 계산해 그렸어요(절대 등급은 눈에 보이는 빛 기준이라 온도에 따른 보정을 넣음). 태양은 1배 선, 시리우스 B는 0.01배 선, 베텔게우스는 1000배 선 근처에 놓여요. 세로축만으로는 반지름을 알 수 없고, 같은 온도(같은 세로줄)일 때만 ‘위쪽일수록 크다’가 성립해요. 예: 베가(약 9600 K)와 아크투루스(약 4300 K)는 절대 등급이 비슷하지만 반지름은 약 2.5배와 25배예요.</p>
+    <p class="say">“주계열성 띠에서 벗어난 오른쪽 위 별들은 왜 차가운데도 밝을까요?” → 앞 화면의 공식 <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup>로 설명</p>
+    <p>‘별의 일생과 색의 변화’ 화면과 연결: 태양은 주계열성 → 적색 거성(오른쪽 위로 이동) → 백색 왜성(왼쪽 아래)으로 변해요.</p>
+    <p>시리우스 B: 시리우스 A 곁을 도는 백색 왜성(표면 온도 약 25000 K, 절대 등급 약 +11). 리겔: 오리온자리의 청색 초거성(약 12000 K) — 3차시 도입의 베텔게우스·리겔 비교와 이어져요.</p>
+  </aside>
 </section>
 
 <section class="slide" data-title="사고력 · 태양의 미래">
@@ -1028,71 +1093,6 @@ const TEACHER_HASH='1fa58357';
     <h4>그림 읽기</h4><ul><li>위: <b>태양 정도 질량</b> — 성운 → 주계열성(황색, 지금 태양) → 적색 거성 → 행성상 성운 + 백색 왜성</li><li>아래: <b>무거운 별</b> — 성운 → 주계열성(청색) → 적색 초거성 → 초신성 → 중성자별·블랙홀</li></ul>
     <p class="say">“사고력 문제에서 태양이 적색으로 변한다고 했죠? 왜 그런지 이제 설명할 수 있나요?”</p>
     <p>베텔게우스(적색 초거성, 늙은 별)와 리겔(청색 초거성, 젊은 별)이 같은 오리온자리에 있음 → 3차시 도입 발문과 연결. 호기심 은하 등급(☁️ 성운 → … → 💥 초신성)도 이 일생을 본떠 이름 붙였다고 소개해 보세요. 우리 몸의 칼슘·철도 오래전 별 속에서 만들어짐 → “우리는 별의 부스러기”.</p>
-  </aside>
-</section>
-
-<section class="slide" data-title="[심화·선택] 별의 실제 밝기를 정하는 두 가지">
-  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별의 실제 밝기는 무엇으로 정해질까?</h2></div>
-  <div class="sb">
-    <div style="text-align:center;font-size:84px;font-family:'Times New Roman',serif;color:#fff;margin:4px 0 10px">
-      <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup></div>
-    <div class="row" style="gap:14px">
-      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>L</i></b> : 별의 실제 밝기 (광도)</div>
-      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>R</i></b> : 별의 반지름<br><span class="muted" style="font-size:22px">(<i>R</i><sup>2</sup>은 별의 표면적에 비례)</span></div>
-      <div class="box" style="flex:1;font-size:27px;margin:0"><b class="gold"><i>T</i></b> : 별의 표면 온도<br><span class="muted" style="font-size:22px">(σ: 일정한 값, 상수)</span></div>
-    </div>
-    <div class="row" style="gap:14px;margin-top:14px">
-      <div class="ans frag" style="flex:1;margin:0">🔥 표면 온도 <b>2배</b> → 밝기 2<sup>4</sup> = <b class="gold">16배</b></div>
-      <div class="ans frag" style="flex:1;margin:0">🎈 반지름 <b>2배</b> → 밝기 2<sup>2</sup> = <b class="gold">4배</b></div>
-    </div>
-    <div class="concept frag" style="margin-top:12px">별의 실제 밝기(절대 등급)는 <b>표면 온도</b>와 <b>크기(반지름)</b>가 함께 결정함</div>
-  </div>
-  <aside class="notes" data-time="(선택) 3분">
-    <p>교과서 범위 밖(고등학교 지구과학Ⅰ ‘별의 물리량’) 내용이에요. 공식을 외우게 하기보다 ‘뜨거울수록, 클수록 밝다’는 관계만 잡아 주세요.</p>
-    <p>σ는 슈테판-볼츠만 상수예요. 별의 표면 1 m²가 내는 에너지는 <i>T</i><sup>4</sup>에 비례하고(온도의 영향이 매우 큼), 별 전체 밝기는 여기에 표면적(4π<i>R</i><sup>2</sup>)을 곱한 것이에요.</p>
-    <p class="say">“붉은색 별은 표면 온도가 낮은데, 어떻게 아주 밝을 수 있을까요?” → 다음 화면의 베텔게우스</p>
-  </aside>
-</section>
-
-<section class="slide" data-title="[심화·선택] 베텔게우스 vs 시리우스">
-  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>차가운 베텔게우스가 더 밝은 까닭은?</h2></div>
-  <div class="sb">
-    <table class="tsm"><tr><th style="width:250px">구분</th><th>🔴 베텔게우스</th><th>⚪ 시리우스 A</th></tr>
-      <tr><th>색과 표면 온도</th><td><b style="color:#ff8c5a">붉은색</b> (약 3500 K)<br><span class="muted" style="font-size:23px">상대적으로 차가움</span></td><td><b style="color:#cfe0ff">청백색</b> (약 9900 K)<br><span class="muted" style="font-size:23px">훨씬 뜨거움</span></td></tr>
-      <tr class="frag"><th>별의 크기 (반지름)</th><td>태양의 약 <b class="gold">700~900배</b><br><span class="muted" style="font-size:23px">적색 초거성</span></td><td>태양의 약 <b>1.7배</b><br><span class="muted" style="font-size:23px">주계열성</span></td></tr>
-      <tr class="frag"><th>절대 등급 (실제 밝기)</th><td><b class="gold">약 −5.85등급</b><br><span class="muted" style="font-size:23px">태양의 약 10만 배</span></td><td>약 <b>+1.42등급</b><br><span class="muted" style="font-size:23px">태양의 약 25배</span></td></tr>
-    </table>
-    <div class="row" style="gap:14px;margin-top:12px">
-      <div class="box frag" style="flex:1;font-size:25px;margin:0">🔴 <i>R</i><sup>2</sup> ≈ 800<sup>2</sup> = <b>64만</b> · <i>T</i><sup>4</sup> ≈ (3500/5800)<sup>4</sup> ≈ <b>0.13</b><br>→ 약 <b class="gold">8만 배</b> (태양 = 1)</div>
-      <div class="box frag" style="flex:1;font-size:25px;margin:0">⚪ <i>R</i><sup>2</sup> ≈ 1.7<sup>2</sup> ≈ <b>2.9</b> · <i>T</i><sup>4</sup> ≈ (9900/5800)<sup>4</sup> ≈ <b>8.5</b><br>→ 약 <b class="gold">25배</b></div>
-    </div>
-    <div class="concept frag" style="margin-top:12px">표면 온도는 낮아도 <b>엄청나게 크기 때문에</b> 베텔게우스가 훨씬 밝음</div>
-  </div>
-  <aside class="notes" data-time="(선택) 4분">
-    <p class="say">“시리우스가 훨씬 뜨거운데, 왜 베텔게우스의 절대 등급이 더 작을까요(더 밝을까요)?” → 표를 한 줄씩 공개</p>
-    <p>계산은 태양(표면 온도 약 5800 K, 반지름 1)과 비교한 값이에요. 베텔게우스는 반지름을 700배로 하면 약 6만 배, 900배로 하면 약 11만 배로, 문헌마다 크기 추정값이 달라 ‘약 10만 배’로 소개돼요.</p>
-    <p>절대 등급(눈으로 보이는 빛 기준) 차이 약 7.3등급은 약 800배인데, 광도(모든 빛) 비는 약 4000배예요. 차가운 별은 에너지를 적외선으로 많이 내기 때문이에요. 질문이 나올 때만 설명하세요.</p>
-    <p>베텔게우스는 밝기가 변하는 변광성이라 절대 등급도 자료마다 조금씩 달라요.</p>
-  </aside>
-</section>
-
-<section class="slide" data-title="[심화·선택] H-R도 · 표면 온도와 절대 등급">
-  <div class="sh"><span class="ph p5">심화 · 선택</span><h2>별을 온도와 밝기로 나열하면? (H-R도)</h2></div>
-  <div class="sb row" style="gap:18px">
-    <canvas id="hrC" data-w="640" data-h="470" style="width:640px"></canvas>
-    <div class="col">
-      <div class="btns"><button id="hrN" style="font-size:22px">⭐ 별 이름</button><button id="hrG" style="font-size:22px">무리 이름</button><button id="hrR" style="font-size:22px">⋯ 반지름 선</button></div>
-      <div class="box frag" style="font-size:24px;margin:6px 0 0"><b class="gold">주계열성</b>: 왼쪽 위 → 오른쪽 아래 띠, 대부분의 별 (태양, 시리우스 A)</div>
-      <div class="box frag" style="font-size:24px;margin:8px 0 0"><b style="color:#ff8c5a">거성·초거성</b>: 오른쪽 위 — 차갑지만 밝음 → <b>매우 큼</b> (베텔게우스)</div>
-      <div class="box frag" style="font-size:24px;margin:8px 0 0"><b style="color:#cfe0ff">백색 왜성</b>: 왼쪽 아래 — 뜨겁지만 어두움 → <b>매우 작음</b> (시리우스 B)</div>
-      <div class="concept frag" style="font-size:24px;margin-top:8px">점선(반지름이 같은 별)은 비스듬함 → <b>오른쪽 위</b>로 갈수록 반지름이 큼</div>
-    </div>
-  </div>
-  <aside class="notes" data-time="(선택) 4분">
-    <p>H-R도(헤르츠스프룽–러셀도): 가로축 = 표면 온도(왼쪽이 높음, 스펙트럼형 O B A F G K M), 세로축 = 절대 등급(위쪽이 밝음). 점들은 대략적인 분포를 그린 모형이에요.</p><p><b>반지름 점선</b>은 공식 <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup>로 계산해 그렸어요(절대 등급은 눈에 보이는 빛 기준이라 온도에 따른 보정을 넣음). 태양은 1배 선, 시리우스 B는 0.01배 선, 베텔게우스는 1000배 선 근처에 놓여요. 세로축만으로는 반지름을 알 수 없고, 같은 온도(같은 세로줄)일 때만 ‘위쪽일수록 크다’가 성립해요. 예: 베가(약 9600 K)와 아크투루스(약 4300 K)는 절대 등급이 비슷하지만 반지름은 약 2.5배와 25배예요.</p>
-    <p class="say">“주계열성 띠에서 벗어난 오른쪽 위 별들은 왜 차가운데도 밝을까요?” → 앞 화면의 공식 <i>L</i> = 4π<i>R</i><sup>2</sup>σ<i>T</i><sup>4</sup>로 설명</p>
-    <p>‘별의 일생과 색의 변화’ 화면과 연결: 태양은 주계열성 → 적색 거성(오른쪽 위로 이동) → 백색 왜성(왼쪽 아래)으로 변해요.</p>
-    <p>시리우스 B: 시리우스 A 곁을 도는 백색 왜성(표면 온도 약 25000 K, 절대 등급 약 +11). 리겔: 오리온자리의 청색 초거성(약 12000 K) — 3차시 도입의 베텔게우스·리겔 비교와 이어져요.</p>
   </aside>
 </section>
 
