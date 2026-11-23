@@ -21,6 +21,7 @@
  *       · 부적절한 글 → '숨김' 체크 (게시판에서 사라지고 점수도 빠짐)
  *       · 좋은 글 → '좋은 글' 체크 (+5점)
  *       · 선생님 답변 → '답변' 시트 새 줄에 질문 ID 복사, 반 칸에 "교사", 답변 칸에 내용
+ *   - 학생 화면에 보일 차시: 교사 화면 하단 [🔒 차시 공개]에서 켜고 끔 (처음엔 1~3차시만 공개)
  *   - 시트 메뉴 [⭐ 별 탐구실] → 반·번호 순 정렬 / 학생 점수 새로 계산 / 교사용 그래프 보기 비밀번호 설정
  */
 
@@ -42,6 +43,8 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'list') return json_(listQuestions_(String(p.lesson || 'all')));
   if (p.action === 'graphs') return json_(teacherGraphs_(String(p.key || '')));
+  if (p.action === 'open') return json_({ ok: true, open: openLessons_() });
+  if (p.action === 'setopen') return json_(setOpen_(String(p.key || ''), String(p.open || '')));
   return json_({ ok: true, msg: '별 탐구실 API 작동 중' });
 }
 
@@ -104,13 +107,31 @@ function setTeacherKey() {
   ui.alert('설정 완료! 교사 화면에서 이 비밀번호로 학생 그래프를 볼 수 있음');
 }
 
-/* ---------------- 교사용: 학생 실험 데이터 ---------------- */
-function teacherGraphs_(key) {
-  // 교사용 페이지 비밀번호로 열림 (시트 메뉴에서 따로 비밀번호를 정했다면 그것도 가능)
+/* ---------------- 교사용: 비밀번호 확인 · 차시 공개(잠금) ---------------- */
+// 교사용 페이지 비밀번호로 열림 (시트 메뉴에서 따로 비밀번호를 정했다면 그것도 가능)
+function teacherOk_(key) {
+  if (!key) return false;
   const real = PropertiesService.getScriptProperties().getProperty('TEACHER_KEY');
   const dg = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, 'starlab-teacher|' + key, Utilities.Charset.UTF_8)
     .map(function (x) { return ('0' + (x & 255).toString(16)).slice(-2); }).join('');
-  if (!key || (key !== real && dg !== TEACHER_PAGE_HASH)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  return key === real || dg === TEACHER_PAGE_HASH;
+}
+// 학생 화면에 보이는 차시 (처음에는 1~3차시만 공개). 교사 화면 [🔒 차시 공개]에서 바꿈
+function openLessons_() {
+  const v = PropertiesService.getScriptProperties().getProperty('OPEN_LESSONS');
+  if (v === null) return ['1', '2', '3'];
+  return v.split(',').filter(function (L) { return LESSONS.indexOf(L) >= 0; });
+}
+function setOpen_(key, open) {
+  if (!teacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  const list = open.split(',').filter(function (L) { return LESSONS.indexOf(L) >= 0; });
+  PropertiesService.getScriptProperties().setProperty('OPEN_LESSONS', list.join(','));
+  return { ok: true, open: list };
+}
+
+/* ---------------- 교사용: 학생 실험 데이터 ---------------- */
+function teacherGraphs_(key) {
+  if (!teacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
   const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('2차시 탐구');
   if (!s || s.getLastRow() < 2) return { ok: true, students: [] };
   const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();

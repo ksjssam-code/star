@@ -96,10 +96,13 @@ td.hl{color:var(--gold);font-weight:900}
 .ttab tr.flash td{animation:fl 1s}@keyframes fl{0%{background:#ffd16655}100%{background:transparent}}.ttab td.auto{color:var(--cyan);font-weight:700;font-size:22px}.ttab.hideauto td.auto{color:transparent}
 /* bottom bar */
 #bar{position:fixed;left:0;right:0;bottom:0;height:52px;background:#0a0f20;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;z-index:20}
-#bar button{font-size:15px;padding:7px 12px}
+#bar button{font-size:15px;padding:7px 10px;white-space:nowrap;flex:none}
+#bar .les button{padding:7px 8px}
+#bar{overflow-x:auto;scrollbar-width:none}
+@media (max-width:1250px){#bar{gap:5px;padding:0 8px}#bar button{font-size:13px;padding:6px 7px}#bar .les button{font-size:0;padding:6px 10px}#bar .les button::first-letter{font-size:14px}#bar .ctr{max-width:120px;min-width:70px;font-size:13px}}
 #bar .les{display:flex;gap:4px}
 #bar .les button.on{background:var(--gold);color:#1a1300;border-color:var(--gold);font-weight:700}
-#bar .ctr{font-variant-numeric:tabular-nums;color:var(--muted);font-size:15px;min-width:180px;text-align:center}
+#bar .ctr{font-variant-numeric:tabular-nums;color:var(--muted);font-size:15px;min-width:110px;max-width:240px;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 #bar .ctr b{color:var(--text)}
 #bar .sp{flex:1}
 #timer{font-variant-numeric:tabular-nums;min-width:96px}
@@ -1730,6 +1733,7 @@ const TEACHER_HASH='1fa58357';
   <button id="bFull">⛶ 전체 화면</button>
   <button id="bStu" style="color:#6ad1ff">🧑‍🎓 학생 탐구</button>
   <button id="bGraph" style="color:#63e6a3">📊 학생 그래프</button>
+  <button id="bOpen" style="color:#ffd166">🔒 차시 공개</button>
   <button id="bHelp">?</button>
 </div>
 
@@ -2279,6 +2283,40 @@ $('#grKey').addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation
 document.querySelectorAll('.grTab').forEach(b=>b.onclick=()=>{exp=b.dataset.e;document.querySelectorAll('.grTab').forEach(x=>x.classList.toggle('on',x===b));render();});
 $('#grLoad').onclick=load;$('#grClose').onclick=()=>{ov.style.display='none';};
 document.getElementById('bGraph').onclick=()=>{ov.style.display='flex';if(!data.length)load();else render();};
+})();
+</script>
+<div id="opOv" style="display:none;position:fixed;inset:0;background:#000b;z-index:80;align-items:center;justify-content:center;font-family:'Noto Sans KR',sans-serif">
+ <div style="background:#111934;border:1px solid #2a3666;border-radius:16px;padding:22px 26px;width:min(560px,92vw);color:#eef1ff">
+  <h3 style="margin:0 0 4px;font-size:22px">🔒 학생 화면에 공개할 차시</h3>
+  <p style="margin:0 0 14px;color:#9ba6d4;font-size:14px">끈 차시는 학생 메뉴·게시판에서 보이지 않아요. 학생 화면은 새로 고침하거나 2분 안에 반영돼요.</p>
+  <div id="opList" style="display:grid;gap:8px"></div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap">
+   <span id="opKeyBox" style="display:none;gap:6px;align-items:center"><input id="opKey" type="password" placeholder="교사용 페이지 비밀번호" style="padding:8px 10px;border-radius:8px;border:1px solid #2a3666;background:#050913;color:#eef1ff;font-size:15px"></span>
+   <button id="opSave" style="background:#ffd166;color:#1a1300;border:0;border-radius:10px;padding:9px 18px;font-weight:700;font-size:16px;cursor:pointer">저장</button>
+   <button id="opClose" style="background:#18224a;color:#eef1ff;border:1px solid #2a3666;border-radius:10px;padding:9px 18px;font-size:16px;cursor:pointer">닫기</button>
+   <span id="opMsg" style="color:#9ba6d4;font-size:14px"></span>
+  </div>
+ </div>
+</div>
+<script>
+(function(){
+const API='https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';
+const NAMES={'1':'1차시 · 별까지의 거리','2':'2차시 · 별의 등급과 밝기','3':'3차시 · 별의 표면 온도와 색','4':'4차시 · 우리은하','5':'5차시 · 팽창하는 우주','6':'6차시 · 우주 탐사'};
+const ov=document.getElementById('opOv'),list=document.getElementById('opList'),msg=document.getElementById('opMsg');let open=['1','2','3'];
+function draw(){list.innerHTML='';Object.keys(NAMES).forEach(L=>{const on=open.includes(L);const b=document.createElement('button');
+ b.style.cssText=`display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:10px;font-size:17px;cursor:pointer;border:1px solid ${on?'#63e6a3':'#2a3666'};background:${on?'#63e6a31a':'#050913'};color:${on?'#eef1ff':'#9ba6d4'}`;
+ b.innerHTML=`<span>${NAMES[L]}</span><b style="color:${on?'#63e6a3':'#ff7a90'}">${on?'🔓 공개':'🔒 잠금'}</b>`;
+ b.onclick=()=>{open=on?open.filter(x=>x!==L):open.concat(L).sort();draw();msg.textContent='저장을 눌러야 반영돼요';};list.appendChild(b);});}
+async function load(){msg.textContent='불러오는 중…';try{const j=await (await fetch(API+'?action=open')).json();if(j.ok&&Array.isArray(j.open)){open=j.open.map(String);msg.textContent='';}else msg.textContent='⚠ 새 Apps Script를 배포해야 잠금 기능이 작동해요 (지금은 학생 화면에 1~3차시만 보임)';}catch(e){msg.textContent='불러오기 실패';}draw();}
+document.getElementById('opSave').onclick=async()=>{let key='';try{key=localStorage.getItem('starlab_tkey')||'';}catch(e){}const kv=document.getElementById('opKey').value.trim();if(kv){key=kv;try{localStorage.setItem('starlab_tkey',kv);}catch(e){}}
+ if(!key){document.getElementById('opKeyBox').style.display='inline-flex';msg.textContent='교사용 페이지 비밀번호를 입력하고 저장';return;}
+ msg.textContent='저장 중…';try{const j=await (await fetch(API+'?action=setopen&key='+encodeURIComponent(key)+'&open='+open.join(','))).json();
+  if(j.ok){open=j.open.map(String);draw();msg.style.color='#63e6a3';msg.textContent='✔ 저장됨 · 공개: '+(open.length?open.map(L=>L+'차시').join(', '):'없음');setTimeout(()=>msg.style.color='',3000);}
+  else{msg.textContent=j.error||'저장 실패';if(j.badKey){try{localStorage.removeItem('starlab_tkey');}catch(e){}document.getElementById('opKeyBox').style.display='inline-flex';}}}
+ catch(e){msg.textContent='저장 실패: 새 Apps Script가 배포되었는지 확인';}};
+document.getElementById('opKey').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')document.getElementById('opSave').click();});
+document.getElementById('opClose').onclick=()=>{ov.style.display='none';};
+document.getElementById('bOpen').onclick=()=>{ov.style.display='flex';load();};
 })();
 </script>
 </body>

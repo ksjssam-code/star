@@ -959,7 +959,14 @@ showWho();
 
 /* ---------- routing ---------- */
 const MODS=['t1','t2','t3','t4','t5','t6','qa'];
-function route(){let h=location.hash.replace('#','');if(!MODS.includes(h))h='t1';document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();if(h==='t4'&&typeof GX!=='undefined'&&GX)setTimeout(GX.init,30);window.scrollTo(0,0);}
+/* 차시 공개(잠금): 선생님이 교사 화면에서 공개한 차시만 보임. 서버 응답 전에는 마지막 상태(처음엔 1~3차시) */
+const ALL_L=['1','2','3','4','5','6'];let OPEN=['1','2','3'];try{const o=JSON.parse(localStorage.getItem('starlab_open')||'null');if(Array.isArray(o))OPEN=o.map(String);}catch(e){}
+function isOpen(h){if(PREVIEW)return true;const m=String(h).match(/^t(\d)$/);return !m||OPEN.includes(m[1]);}
+function applyOpen(){ALL_L.forEach(L=>{const on=isOpen('t'+L);const a=$(`nav a[data-m="t${L}"]`);if(a)a.style.display=on?'':'none';const c=$(`#qaL button[data-l="${L}"]`);if(c)c.style.display=on?'':'none';const o=$(`#qaLsel option[value="${L}"]`);if(o){o.hidden=!on;o.disabled=!on;}});
+ const ng=$$('nav .ng');if(ng[1])ng[1].style.display=['4','5','6'].some(L=>isOpen('t'+L))?'':'none';
+ const sel=$('#qaLsel');if(sel&&!isOpen('t'+sel.value)){const op=ALL_L.filter(L=>isOpen('t'+L));sel.value=op[op.length-1]||'1';}}
+async function pullOpen(){if(PREVIEW||!API_URL)return;try{const j=await apiGet({action:'open'});if(j&&j.ok&&Array.isArray(j.open)){const nw=j.open.map(String);const ch=nw.join()!==OPEN.join();OPEN=nw;try{localStorage.setItem('starlab_open',JSON.stringify(OPEN));}catch(e){}if(ch){applyOpen();route();}}}catch(e){}}
+function route(){let h=location.hash.replace('#','');if(!MODS.includes(h)||!isOpen(h)){if(h&&!isOpen(h))try{history.replaceState(null,'','#t1');}catch(e){}h='t1';}document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();if(h==='t4'&&typeof GX!=='undefined'&&GX)setTimeout(GX.init,30);window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);
 
 /* ---------- predictions / reveal / autosave ---------- */
@@ -1457,7 +1464,7 @@ const EX=(function(){const c=document.getElementById('exC');if(!c||!U)return nul
 
 faRender('quiz1','1');faRender('quiz2','2');faRender('quiz3','3');faRender('quiz4','4');faRender('quiz5','5');faRender('quiz6','6');
 
-restore();route();drawGraphs();
+restore();applyOpen();route();drawGraphs();pullOpen();setInterval(pullOpen,120000);
 }
 let __b=false;function __go(){if(__b)return;__b=true;__boot();}
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(__go);setTimeout(__go,1500);
