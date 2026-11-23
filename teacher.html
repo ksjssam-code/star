@@ -821,16 +821,26 @@ const TEACHER_HASH='1fa58357';
 </section>
 
 <section class="slide" data-title="발문 · 오리온자리">
-  <div class="sh"><span class="ph p1">도입</span><h2>두 별의 색이 다른 까닭은?</h2></div>
+  <div class="sh"><span class="ph p1">도입</span><h2>별마다 색이 다른 까닭은?</h2></div>
   <div class="sb row">
-    <canvas id="orC" data-w="560" data-h="470" style="width:520px"></canvas>
+    <canvas id="orC" data-w="560" data-h="470" style="width:480px"></canvas>
     <div class="col">
-      <div class="q">붉은 <span style="color:#ff9466">베텔게우스</span>,<br>청백색 <span style="color:#bcd4ff">리겔</span><br>색이 다른 까닭은?</div>
-      <div class="box frag">💬 가설: 크기? 거리? 성분? <b class="gold">온도?</b></div>
-      <div class="ans frag">용암처럼 <b>온도</b>에 따라<br>색이 다를까? → 확인!</div>
+      <div class="q" style="font-size:32px;margin-bottom:10px">붉은 <span style="color:#ff9466">베텔게우스</span>, 청백색 <span style="color:#bcd4ff">리겔</span>, 백색 <span style="color:#e4ecff">시리우스</span> — 색이 다른 까닭은?</div>
+      <table class="tsm" style="font-size:25px"><tr><th>별</th><th>색</th><th>겉보기 등급</th><th>절대 등급</th></tr>
+        <tr><td style="color:#ff9466;font-weight:700">베텔게우스</td><td>붉은색</td><td>약 0.5</td><td>약 −5.9</td></tr>
+        <tr><td style="color:#bcd4ff;font-weight:700">리겔</td><td>청백색</td><td>약 0.1</td><td>약 −7.0</td></tr>
+        <tr><td style="color:#e4ecff;font-weight:700">시리우스</td><td>백색</td><td><b class="gold">−1.5</b></td><td>+1.4</td></tr></table>
+      <div class="box frag" style="font-size:26px;margin-top:10px">💬 가설: 크기? 거리? 성분? <b class="gold">온도?</b></div>
+      <div class="ans frag" style="font-size:26px">용암처럼 <b>온도</b>에 따라 색이 다를까? → 확인!</div>
     </div>
   </div>
-  <aside class="notes" data-time="3분"><p>여러 가설을 칠판에 적고, 용암 실험과 연결해 ‘온도’ 가설을 검증하자고 이끌어 갑니다. (실제로 별의 색은 표면 온도가 결정해요.)</p></aside>
+  <aside class="notes" data-time="3분"><p>여러 가설을 칠판에 적고, 용암 실험과 연결해 ‘온도’ 가설을 검증하자고 이끌어 갑니다. (실제로 별의 색은 표면 온도가 결정해요.)</p>
+    <h4>표 읽기 (2차시 등급과 연결)</h4>
+    <p class="say">“밤하늘에서 가장 밝게 보이는 별은? 실제로 가장 밝은 별은?”</p>
+    <ul><li><b>시리우스</b>: 겉보기 등급 −1.46으로 밤하늘에서 가장 밝은 별. 하지만 절대 등급은 +1.42로 셋 중 가장 어두움 → 거리가 약 8.6광년(2.6 pc)으로 매우 <b>가까워서</b> 밝게 보임. 표면 온도 약 9900 K, 백색(청백색으로 소개하기도 함).</li>
+      <li><b>리겔</b>: 겉보기 등급 약 0.13(0.05~0.18로 변함), 거리 약 860광년(약 260 pc). 절대 등급은 자료마다 약 −6.7~−7.8로 다름(거리 추정과 성간 먼지에 의한 감광 보정 차이). 겉보기 등급과 거리로 계산하면 약 −7.0.</li>
+      <li><b>베텔게우스</b>: 밝기가 변하는 변광성(겉보기 등급 약 0.0~1.6, 보통 0.5 안팎). 거리 약 550광년(약 170 pc), 절대 등급 약 −5.85.</li></ul>
+    <p>오리온자리 그림의 시리우스 위치는 오리온의 띠(삼태성)를 왼쪽 아래로 이어 찾는 방법을 보여 주려고 거리를 줄여 그렸어요. 실제로는 띠 길이의 약 7배만큼 떨어져 있어요(큰개자리).</p></aside>
 </section>
 
 <section class="slide" data-title="탐구 · 별의 표면 온도 바꾸기">
@@ -2177,10 +2187,14 @@ $('#lavaGo').onclick=()=>{if(run)return;run=true;lt=1200;const t0=performance.no
 
 // Orion
 (function(){const O=cv('orC'),x=O.x;bgStars(x,O.w,O.h,110,31,.8);
- const P={bet:[.30,.20,3300,'베텔게우스',9],bel:[.70,.24,21000,'',5],al:[.44,.52,25000,'',5],an:[.51,.49,25000,'',5],mi:[.58,.46,30000,'',5],sa:[.36,.84,25000,'',5],ri:[.72,.80,11800,'리겔',8.5],me:[.50,.08,30000,'',3.5]};
+ const P0={bet:[.30,.20,3300,'베텔게우스',9],bel:[.70,.24,21000,'',5],al:[.44,.52,25000,'',5],an:[.51,.49,25000,'',5],mi:[.58,.46,30000,'',5],sa:[.36,.84,25000,'',5],ri:[.72,.80,11800,'리겔',8.5],me:[.50,.08,30000,'',3.5]};const P={};Object.keys(P0).forEach(k=>{const p=P0[k];P[k]=[.32+.66*p[0],.04+.66*p[1],p[2],p[3],p[4]];});
  const ln=[['bet','bel'],['bet','al'],['bel','mi'],['al','an'],['an','mi'],['al','sa'],['mi','ri'],['bet','me'],['bel','me']];
  x.strokeStyle='#6ad1ff40';x.lineWidth=1.5;ln.forEach(([a,b])=>{x.beginPath();x.moveTo(P[a][0]*560,P[a][1]*470);x.lineTo(P[b][0]*560,P[b][1]*470);x.stroke();});
  Object.values(P).forEach(p=>{glow(x,p[0]*560,p[1]*470,p[4],tcol(p[2]).join(','));if(p[3])txt(x,p[3],p[0]*560+(p[3]==='리겔'?-30:30),p[1]*470+(p[3]==='리겔'?34:-28),p[3]==='리겔'?'#bcd4ff':'#ff9466',19,'center',900);});
+ {const ax=P.mi[0]*560,ay=P.mi[1]*470,bx=P.al[0]*560,by=P.al[1]*470,ux=(bx-ax),uy=(by-ay),sx=bx+ux*3.6,sy=by+uy*3.6;
+  x.setLineDash([6,6]);x.strokeStyle='rgba(255,209,102,.55)';x.lineWidth=2;x.beginPath();x.moveTo(bx,by);x.lineTo(sx-ux*.25,sy-uy*.25);x.stroke();x.setLineDash([]);
+  glow(x,sx,sy,11,tcol(9700).join(','));txt(x,'시리우스',sx,sy+44,'#e4ecff',19,'center',900);txt(x,'(큰개자리)',sx,sy+70,'#9ba6d4',12,'center',700);
+  txt(x,'오리온의 띠를 따라 →',(bx+sx)/2-6,(by+sy)/2-20,'rgba(255,209,102,.8)',11,'center',700);}
  txt(x,'오리온자리',14,22,'#9ba6d4',15,'left',700);})();
 
 // star+spectrum
