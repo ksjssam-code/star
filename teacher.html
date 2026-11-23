@@ -948,11 +948,14 @@ const TEACHER_HASH='1fa58357';
 <section class="slide" data-title="[심화·선택] 베텔게우스 vs 시리우스">
   <div class="sh"><span class="ph p5">심화 · 선택</span><h2>차가운 베텔게우스가 더 밝은 까닭은?</h2></div>
   <div class="sb">
-    <table class="tsm"><tr><th style="width:250px">구분</th><th>🔴 베텔게우스</th><th>⚪ 시리우스 A</th></tr>
+    <div class="row" style="gap:14px;align-items:center">
+      <canvas id="orC2" data-w="560" data-h="470" style="width:300px;border-radius:12px;flex:none"></canvas>
+      <table class="tsm" style="flex:1"><tr><th style="width:200px">구분</th><th>🔴 베텔게우스</th><th>⚪ 시리우스 A</th></tr>
       <tr><th>색과 표면 온도</th><td><b style="color:#ff8c5a">붉은색</b> (약 3500 K)<br><span class="muted" style="font-size:23px">상대적으로 차가움</span></td><td><b style="color:#cfe0ff">청백색</b> (약 9900 K)<br><span class="muted" style="font-size:23px">훨씬 뜨거움</span></td></tr>
       <tr class="frag"><th>별의 크기 (반지름)</th><td>태양의 약 <b class="gold">700~900배</b><br><span class="muted" style="font-size:23px">적색 초거성</span></td><td>태양의 약 <b>1.7배</b><br><span class="muted" style="font-size:23px">주계열성</span></td></tr>
       <tr class="frag"><th>절대 등급 (실제 밝기)</th><td><b class="gold">약 −5.85등급</b><br><span class="muted" style="font-size:23px">태양의 약 10만 배</span></td><td>약 <b>+1.42등급</b><br><span class="muted" style="font-size:23px">태양의 약 25배</span></td></tr>
     </table>
+    </div>
     <div class="row" style="gap:14px;margin-top:12px">
       <div class="box frag" style="flex:1;font-size:24px;margin:0">🎈 반지름의 영향<br><i>R</i><sup>2</sup> ≈ (800/1.7)<sup>2</sup> ≈ <b>22만 배</b></div>
       <div class="box frag" style="flex:1.15;font-size:24px;margin:0">🔥 표면 온도의 영향<br><i>T</i><sup>4</sup> ≈ (3500/9900)<sup>4</sup> ≈ <b style="white-space:nowrap">0.016배</b></div>
@@ -2205,7 +2208,7 @@ function dl(){const x=LV.x;x.fillStyle='#120c0c';x.fillRect(0,0,LV.w,LV.h);const
 $('#lavaGo').onclick=()=>{if(run)return;run=true;lt=1200;const t0=performance.now();(function f(n){lt=1200-800*Math.min(1,(n-t0)/7000);dl();if(lt>400)requestAnimationFrame(f);else run=false;})(t0);};dl();
 
 // Orion
-(function(){const O=cv('orC'),x=O.x;bgStars(x,O.w,O.h,110,31,.8);
+function drawOrion(id){const O=cv(id);if(!O)return;const x=O.x;bgStars(x,O.w,O.h,110,31,.8);
  const P0={bet:[.30,.20,3300,'베텔게우스',9],bel:[.70,.24,21000,'',5],al:[.44,.52,25000,'',5],an:[.51,.49,25000,'',5],mi:[.58,.46,30000,'',5],sa:[.36,.84,25000,'',5],ri:[.72,.80,11800,'리겔',8.5],me:[.50,.08,30000,'',3.5]};const P={};Object.keys(P0).forEach(k=>{const p=P0[k];P[k]=[.32+.66*p[0],.04+.66*p[1],p[2],p[3],p[4]];});
  const ln=[['bet','bel'],['bet','al'],['bel','mi'],['al','an'],['an','mi'],['al','sa'],['mi','ri'],['bet','me'],['bel','me']];
  x.strokeStyle='#6ad1ff40';x.lineWidth=1.5;ln.forEach(([a,b])=>{x.beginPath();x.moveTo(P[a][0]*560,P[a][1]*470);x.lineTo(P[b][0]*560,P[b][1]*470);x.stroke();});
@@ -2214,7 +2217,8 @@ $('#lavaGo').onclick=()=>{if(run)return;run=true;lt=1200;const t0=performance.no
   x.setLineDash([6,6]);x.strokeStyle='rgba(255,209,102,.55)';x.lineWidth=2;x.beginPath();x.moveTo(bx,by);x.lineTo(sx-ux*.25,sy-uy*.25);x.stroke();x.setLineDash([]);
   glow(x,sx,sy,11,tcol(9700).join(','));txt(x,'시리우스',sx,sy+44,'#e4ecff',19,'center',900);txt(x,'(큰개자리)',sx,sy+70,'#9ba6d4',12,'center',700);
   txt(x,'오리온의 띠를 따라 →',(bx+sx)/2-6,(by+sy)/2-20,'rgba(255,209,102,.8)',11,'center',700);}
- txt(x,'오리온자리',14,22,'#9ba6d4',15,'left',700);})();
+ txt(x,'오리온자리',14,22,'#9ba6d4',15,'left',700);}
+drawOrion('orC');drawOrion('orC2');
 
 // star+spectrum
 const SC=cv('starC'),SP=cv('specC');let tc=6000;const sr=rng(5),sbg=[];for(let i=0;i<60;i++)sbg.push({x:sr()*520,y:sr()*360,a:sr()*.5+.2});
