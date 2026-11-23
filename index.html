@@ -886,12 +886,11 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 <section class="module" id="m-qa">
   <div class="mhead"><div class="tag">🔭 함께 묻고, 상상하고, 탐구하기</div><h1>호기심 은하</h1><span class="goal">궁금한 점 · 해 보고 싶은 탐구 · 오늘의 발견을 자유롭게! 친구 글에 답도 달아 보기</span></div>
   <div class="step">
-    <div class="lchips" id="qaL"><button data-l="all" class="on">전체 차시</button><button data-l="1">1차시 별까지의 거리</button><button data-l="2">2차시 등급과 밝기</button><button data-l="3">3차시 표면 온도와 색</button><button data-l="4">4차시 우리은하</button><button data-l="5">5차시 팽창하는 우주</button><button data-l="6">6차시 우주 탐사</button></div>
-    <div class="lchips" id="qaT" style="margin-top:8px"><button data-t="all" class="on">모든 글</button><button data-t="궁금해요">❓ 궁금해요</button><button data-t="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</button><button data-t="오늘의 발견">💡 오늘의 발견</button></div>
+    <div class="lchips" id="qaT"><button data-t="all" class="on">모든 글</button><button data-t="궁금해요">❓ 궁금해요</button><button data-t="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</button><button data-t="오늘의 발견">💡 오늘의 발견</button></div>
     <div class="q c" style="margin-top:16px">새 글 쓰기 <span class="small muted" id="qaMine"></span></div>
     <div class="btns" style="margin:0 0 8px;align-items:center">
       <select id="qaTag"><option value="궁금해요">❓ 궁금해요</option><option value="해 보고 싶은 탐구">🔬 해 보고 싶은 탐구</option><option value="오늘의 발견">💡 오늘의 발견</option></select>
-      <select id="qaLsel"><option value="1">1차시</option><option value="2">2차시</option><option value="3">3차시</option><option value="4">4차시 우리은하</option><option value="5">5차시 팽창</option><option value="6">6차시 우주 탐사</option></select>
+      <select id="qaLsel" hidden><option value="1">1차시</option><option value="2">2차시</option><option value="3">3차시</option><option value="4">4차시 우리은하</option><option value="5">5차시 팽창</option><option value="6">6차시 우주 탐사</option></select>
       <label class="small" id="qaAnonL" style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="qaAnon"> 익명으로 올리기 (질문만)</label>
     </div>
     <textarea id="qaNew" maxlength="500" placeholder="예: 연주 시차가 너무 작은 별은 거리를 어떻게 재나요? / 우주가 팽창하면 우리 몸도 커지나요?"></textarea>
@@ -962,9 +961,9 @@ const MODS=['t1','t2','t3','t4','t5','t6','qa'];
 /* 차시 공개(잠금): 선생님이 교사 화면에서 공개한 차시만 보임. 서버 응답 전에는 마지막 상태(처음엔 1~3차시) */
 const ALL_L=['1','2','3','4','5','6'];let OPEN=['1','2','3'];try{const o=JSON.parse(localStorage.getItem('starlab_open')||'null');if(Array.isArray(o))OPEN=o.map(String);}catch(e){}
 function isOpen(h){if(PREVIEW)return true;const m=String(h).match(/^t(\d)$/);return !m||OPEN.includes(m[1]);}
-function applyOpen(){ALL_L.forEach(L=>{const on=isOpen('t'+L);const a=$(`nav a[data-m="t${L}"]`);if(a)a.style.display=on?'':'none';const c=$(`#qaL button[data-l="${L}"]`);if(c)c.style.display=on?'':'none';const o=$(`#qaLsel option[value="${L}"]`);if(o){o.hidden=!on;o.disabled=!on;}});
+function applyOpen(){ALL_L.forEach(L=>{const on=isOpen('t'+L);const a=$(`nav a[data-m="t${L}"]`);if(a)a.style.display=on?'':'none';const o=$(`#qaLsel option[value="${L}"]`);if(o){o.hidden=!on;o.disabled=!on;}});
  const ng=$$('nav .ng');if(ng[1])ng[1].style.display=['4','5','6'].some(L=>isOpen('t'+L))?'':'none';
- const sel=$('#qaLsel');if(sel&&!isOpen('t'+sel.value)){const op=ALL_L.filter(L=>isOpen('t'+L));sel.value=op[op.length-1]||'1';}}
+ const sel=$('#qaLsel');if(sel){const op=ALL_L.filter(L=>isOpen('t'+L));sel.value=op[op.length-1]||'1';}}// 게시판은 차시 구분 없이 모두 보기 · 새 글은 지금 공개된 마지막 차시로 기록
 async function pullOpen(){if(PREVIEW||!API_URL)return;try{const j=await apiGet({action:'open'});if(j&&j.ok&&Array.isArray(j.open)){const nw=j.open.map(String);const ch=nw.join()!==OPEN.join();OPEN=nw;try{localStorage.setItem('starlab_open',JSON.stringify(OPEN));}catch(e){}if(ch){applyOpen();route();}}}catch(e){}}
 function route(){let h=location.hash.replace('#','');if(!MODS.includes(h)||!isOpen(h)){if(h&&!isOpen(h))try{history.replaceState(null,'','#t1');}catch(e){}h='t1';}document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();if(h==='t4'&&typeof GX!=='undefined'&&GX)setTimeout(GX.init,30);window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);
@@ -1147,7 +1146,6 @@ async function pullServer(){if(PREVIEW||!API_URL||!user||!user.pin||user.legacy)
 /* ---------- 호기심 은하 (반별 4열 · 말머리 · 닉네임) ---------- */
 const CLS=['2-1','2-2','2-3','2-4'],TICON={'궁금해요':'❓','해 보고 싶은 탐구':'🔬','오늘의 발견':'💡'},TAG_OLD={'질문':'궁금해요','궁금해':'궁금해요','생각한 점':'오늘의 발견','새로 알게 된 점':'오늘의 발견'};
 let qaL='all',qaT='all',qaTimer,qaData=[];
-$$('#qaL button').forEach(b=>b.onclick=()=>{qaL=b.dataset.l;$$('#qaL button').forEach(x=>x.classList.toggle('on',x===b));if(qaL!=='all')$('#qaLsel').value=qaL;$('#qaList').innerHTML='';loadQA();});
 $$('#qaT button').forEach(b=>b.onclick=()=>{qaT=b.dataset.t;$$('#qaT button').forEach(x=>x.classList.toggle('on',x===b));if(qaT!=='all'){$('#qaTag').value=qaT;anonSync();}renderQA();});
 function anonSync(){const q=$('#qaTag').value==='궁금해요';$('#qaAnon').disabled=!q;if(!q)$('#qaAnon').checked=false;$('#qaAnonL').style.opacity=q?1:.4;}
 $('#qaTag').onchange=anonSync;anonSync();
@@ -1166,7 +1164,7 @@ function renderQA(){const list=$('#qaList');list.innerHTML='';const qs=qaData.fi
  CLS.forEach(c=>{const mine=c===myCls();const col=document.createElement('div');col.className='qacol'+(mine?' mine':'');const items=qs.filter(q=>q.cls===c);
   col.innerHTML=`<h3>${c}반 ${mine?'<span class="ltag" style="background:#ffd16633;color:#ffd166">우리 반</span>':''}<span class="cnt">글 ${items.length}</span></h3>`+(items.length?'':'<p class="muted small" style="padding:4px 6px">아직 글 없음</p>');
   items.forEach(q=>{const d=document.createElement('div');d.className='qitem';
-   d.innerHTML=`<div class="meta" style="flex-wrap:wrap"><span class="tagb tag-${q.tag.replace(/\s/g,'')}">${TICON[q.tag]||''} ${q.tag}</span><span class="ltag">${q.lesson}차시</span>${q.good?'<span class="goodb">⭐ 좋은 글</span>':''}</div>
+   d.innerHTML=`<div class="meta" style="flex-wrap:wrap"><span class="tagb tag-${q.tag.replace(/\s/g,'')}">${TICON[q.tag]||''} ${q.tag}</span>${q.good?'<span class="goodb">⭐ 좋은 글</span>':''}</div>
    <div class="meta" style="margin-top:4px"><span>${q.icon} <b style="color:#e9edff">${esc(q.who)}</b></span><span>${fmtT(q.time)}</span><span>💬 ${q.answers.length}</span></div><div class="qt">${esc(q.text)}</div>`+
     q.answers.map(x=>`<div class="ans${x.who==='선생님'?' teacher':''}"><div class="meta"><span>${x.icon} ${esc(x.who)}</span><span>${fmtT(x.time)}</span>${x.good?'<span class="goodb">⭐</span>':''}</div>${esc(x.text)}</div>`).join('')+
     `<div class="aform"><textarea maxlength="500" placeholder="답·의견 달기 (어느 반이든 가능)"></textarea><button class="pri">등록</button></div>`;
