@@ -1083,34 +1083,33 @@ const TEACHER_HASH='1fa58357';
   <aside class="notes" data-time="2분"><p>정답은 공개하지 않고 손 든 수만 셉니다. 다음 탐구 후 ‘탐구 결과’ 화면에서 이 투표의 정답이 공개돼요.</p><p>학생들은 학생 화면 ① 생각 열기 칸에 가설을 써요.</p></aside>
 </section>
 
-<section class="slide" data-title="탐구 · 우리은하 안에서 바라보기">
-  <div class="sh"><span class="ph p2">탐구</span><h2>우리은하 안에서 하늘 바라보기</h2></div>
+<section class="slide" data-title="탐구 · 지구가 공전하면 은하수는?">
+  <div class="sh"><span class="ph p2">탐구</span><h2>지구가 공전하면 밤하늘의 은하수는?</h2></div>
   <div class="sb row" style="gap:16px">
     <canvas id="t4top" data-w="470" data-h="470" style="width:440px"></canvas>
     <div class="col">
       <canvas id="t4sky" data-w="700" data-h="300" style="width:720px"></canvas>
       <canvas id="t4side" data-w="700" data-h="120" style="width:720px;margin-top:8px"></canvas>
-      <div class="ctrl" style="font-size:24px;margin-top:6px"><label>시선</label><input type="range" id="t4dir" min="-180" max="180" step="5" value="0"><output id="t4dirO" style="font-size:24px;min-width:200px">은하 중심 쪽</output></div>
-      <div class="ctrl" style="font-size:24px;margin-top:2px"><label>위로</label><input type="range" id="t4up" min="0" max="90" step="5" value="0"><output id="t4upO" style="font-size:24px;min-width:200px">0°</output></div>
-      <div class="btns" style="margin-top:6px"><button class="t4p" data-d="0" data-u="0" style="font-size:22px">A 은하 중심</button><button class="t4p" data-d="180" data-u="0" style="font-size:22px">B 반대쪽</button><button class="t4p" data-d="90" data-u="0" style="font-size:22px">옆쪽</button><button class="t4p" data-d="0" data-u="90" style="font-size:22px">원반 위쪽</button></div>
+      <div class="ctrl" style="font-size:24px;margin-top:6px"><label>지구 공전</label><input type="range" id="t4mon" min="1" max="12.75" step="0.25" value="7"><output id="t4monO" style="font-size:24px;min-width:170px">7월 (여름)</output><button class="au" id="t4play" style="font-size:22px">▶ 공전</button></div>
+      <div class="btns" style="margin-top:6px"><button class="t4p" data-m="7" style="font-size:22px">☀️ 여름 7월</button><button class="t4p" data-m="1" style="font-size:22px">❄️ 겨울 1월</button><button class="t4p" data-m="4" style="font-size:22px">🌸 봄 4월</button><button class="t4p" data-m="10" style="font-size:22px">🍂 가을 10월</button></div>
     </div>
   </div>
   <aside class="notes" data-time="7분">
     <h4>발문 (버튼을 차례로 누르며)</h4>
-    <ol style="padding-left:18px;margin:0"><li class="say">“A(은하 중심 쪽)를 보면 하늘이 어떻게 보이나요?”</li><li class="say">“B(반대쪽)는 A와 무엇이 다른가요?”</li><li class="say">“원반 위쪽(수직)을 보면? 왜 띠가 사라졌을까요?”</li><li class="say">“시선 슬라이더를 한 바퀴 돌려 보세요. 띠는 어디까지 이어지나요?” → 하늘을 한 바퀴 두르는 띠</li></ol>
-    <h4>지도 포인트</h4><ul><li>왼쪽 위에서 본 모습의 노란 부채꼴 = 지금 바라보는 방향</li><li>옆에서 본 모습은 두께를 2.5배 과장했어요. 실제 원반은 지름에 비해 매우 얇아요(약 1000 pc 이하).</li><li>여름철 밤에는 지구가 공전하여 밤하늘이 은하 중심(궁수자리) 쪽을 향함 → A 방향</li></ul>
+    <ol style="padding-left:18px;margin:0"><li class="say">“밤에는 왜 태양 반대쪽 하늘이 보일까요?” (지구의 밤 쪽 = 태양 반대쪽)</li><li class="say">“7월(여름)에 지구는 태양의 어느 쪽에 있나요? 한밤중 하늘은 은하의 어느 쪽을 향하나요?”</li><li class="say">“1월(겨울)에는요? 은하수의 두께와 밝기는 어떻게 달라졌나요?”</li><li class="say">“4월(봄)·10월(가을)에는 왜 은하수가 거의 안 보일까요?” → 밤하늘이 원반 위·아래쪽을 향함</li><li class="say">“▶ 공전을 눌러 1년을 지켜봅시다.”</li></ol>
+    <h4>지도 포인트</h4><ul><li>화살표 = 한밤중 하늘 방향. 위에서 본 그림에서 화살표가 짧아지면 원반 밖(위·아래)을 보는 것이에요.</li><li>지구 공전 궤도면은 은하 원반에 약 60° 기울어져 있고, 두 면이 만나는 선이 거의 은하 중심 방향이에요. 그래서 여름·겨울 밤에는 원반 면을, 봄·가을 밤에는 원반 위·아래를 보게 돼요(모형은 이를 단순화).</li><li>공전 궤도는 아주 크게 과장했어요. 실제 지구 공전 궤도(약 1 AU)는 8500 pc에 비하면 점보다 훨씬 작아요. 별의 위치는 그대로이고 ‘밤에 보이는 하늘’만 바뀌는 것이에요.</li><li>실제 밤하늘은 관측 시각·위도에 따라서도 달라요. 모형은 한밤중 기준이에요. 봄·가을에도 초저녁·새벽에는 지평선 근처로 은하수 일부가 보일 수 있어요.</li></ul>
   </aside>
 </section>
 
 <section class="slide" data-title="탐구 결과 · 은하수의 비밀">
   <div class="sh"><span class="ph p3">발견</span><h2>무엇을 발견했나?</h2></div>
   <div class="sb">
-    <div class="q g">① 원반 면 방향 vs 원반 위쪽, 별의 양은?</div>
-    <div class="ans frag">원반 면 방향: 별이 <b>겹겹이 많음</b> · 위쪽: 별이 <b>적음</b></div>
+    <div class="q g">① 여름·겨울(원반 면 쪽) vs 봄·가을(원반 위·아래쪽), 별의 양은?</div>
+    <div class="ans frag">원반 면 방향: 별이 <b>겹겹이 많음</b> · 원반 위·아래쪽: 별이 <b>적음</b></div>
     <div class="q g frag">② 은하수가 띠 모양인 까닭은?</div>
     <div class="ans frag" data-show="v43">별들이 대부분 <b>납작한 원반 면</b>에 모여 있고<br>태양계도 그 <b>원반 면 안</b>에 있기 때문</div>
-    <div class="q g frag">③ [협력적 소통] 여름철 은하수는 A, B 중 어느 방향?</div>
-    <div class="ans frag"><b>A(은하 중심) 방향</b> — 별이 많은 중심부 쪽이라 더 두껍고 밝음</div>
+    <div class="q g frag">③ [협력적 소통] 여름철 은하수가 더 두껍고 밝은 까닭은?</div>
+    <div class="ans frag">여름철 밤하늘은 <b>은하 중심 방향</b>을 향함 → 별이 많은 중심부가 보임</div>
   </div>
   <aside class="notes" data-time="3분"><p>②를 공개할 때 앞의 가설 투표 정답이 함께 표시돼요(목록 <kbd>M</kbd>으로 돌아가 확인 가능).</p><p>③은 교과서 해 보기 정리 2번(협력적 소통) — 모둠원에게 설명하게 한 뒤 공개하세요.</p></aside>
 </section>
@@ -2156,11 +2155,11 @@ $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';}
 /* ================== Ⅷ-2 우주 (4~6차시) ================== */
 (function(){const U=window.U2;if(!U)return;const FS=1.45,C={};const cvs=id=>C[id]||(C[id]=U.setup(id));
  /* ----- 4차시 ----- */
- let G=null,i4=false;const st={dir:0,up:0,map:{}};
+ let G=null,i4=false;const st={mon:7,map:{}};
  const dn=d=>{d=((d%360)+540)%360-180;return Math.abs(d)<=15?'은하 중심 쪽':Math.abs(d)>=165?'중심 반대쪽':(d>0?'오른쪽 ':'왼쪽 ')+Math.abs(d)+'°';};
- let raf=0;function v4(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{G.drawTop(cvs('t4top'),{dir:st.dir,fov:90,fs:FS,center:true});
-  G.drawSky(cvs('t4sky'),st.dir,st.up,90,{fs:FS,title:'태양계에서 본 하늘 · '+dn(st.dir)+(st.up?' · 위로 '+st.up+'°':'')});G.drawSide(cvs('t4side'),{zs:2.5,dir:st.dir,up:st.up,fs:FS});
-  $('#t4dirO').textContent=dn(st.dir);$('#t4upO').textContent=st.up+'°';});}
+ let raf=0,play=0;function v4(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{const n=U.night(st.mon);G.drawTop(cvs('t4top'),{earth:st.mon,fs:FS,center:true});
+  G.drawSky(cvs('t4sky'),n.l,n.b,90,{fs:FS,title:U.mLabel(st.mon)+' ('+n.season+') 한밤중 하늘'});G.drawSide(cvs('t4side'),{zs:2.5,earth:st.mon,fs:FS});
+  $('#t4monO').textContent=U.mLabel(st.mon)+' ('+n.season+')';});}
  function sunTry(r){$$('.t4s').forEach(b=>b.classList.toggle('au',+b.dataset.r===r));G.setSun(r);
   G.drawTop(cvs('t4top2'),{fs:FS,center:r!==0});const a=r===0?[90,-90]:[0,180];G.drawSky(cvs('t4c1'),a[0],4,100,{fs:FS,mark:false});G.drawSky(cvs('t4c2'),a[1],4,100,{fs:FS,mark:false});G.setSun(8500);}
  function maps(){G.drawTop(cvs('t4m1'),{show:st.map,fs:FS,title:'위에서 본 모습'});G.drawSide(cvs('t4m2'),{zs:2.5,show:st.map,fs:FS,title:'옆에서 본 모습'});}
@@ -2173,8 +2172,9 @@ $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';}
   const gal=$('#t4gal');OB.forEach(o=>{const d=document.createElement('div');d.className='gc';d.innerHTML=`<canvas data-w="220" data-h="185"></canvas><div class="nm">${o[0]}</div><div class="ty">${KN[o[1]]}</div>`;gal.appendChild(d);U.drawObject(U.setup(d.querySelector('canvas')),o[1],o[2],o[3]);});
   [['t4o1','open',21],['t4o2','glob',22],['t4o3','emis',23],['t4o4','refl',24],['t4o5','dark',20,{shape:'horse'}]].forEach(a=>U.drawObject(cvs(a[0]),a[1],a[2],a[3]));
   setTimeout(()=>sunTry(8500),50);}
- $('#t4dir').oninput=e=>{st.dir=+e.target.value;v4();};$('#t4up').oninput=e=>{st.up=+e.target.value;v4();};
- $$('.t4p').forEach(b=>b.onclick=()=>{st.dir=+b.dataset.d;st.up=+b.dataset.u;$('#t4dir').value=st.dir;$('#t4up').value=st.up;v4();});
+ const setM=v=>{st.mon=v>12.9?1:v;$('#t4mon').value=st.mon;v4();};const stop=()=>{clearInterval(play);play=0;$('#t4play').textContent='▶ 공전';};
+ $('#t4mon').oninput=e=>{stop();setM(+e.target.value);};$$('.t4p').forEach(b=>b.onclick=()=>{stop();setM(+b.dataset.m);});
+ $('#t4play').onclick=()=>{if(play){stop();return;}$('#t4play').textContent='⏸ 멈춤';play=setInterval(()=>setM(st.mon+.25),180);};
  $$('.t4s').forEach(b=>b.onclick=()=>{b.textContent.length;const r=+b.dataset.r;$('#t4c1').style.opacity=.4;setTimeout(()=>{sunTry(r);$('#t4c1').style.opacity=1;},30);});
  $$('.t4m').forEach(b=>b.onclick=()=>{const k=b.dataset.k;st.map[k]=!st.map[k];b.classList.toggle('au',st.map[k]);maps();});
  $('#t4galK').onclick=()=>{$('#t4gal').classList.toggle('rev');};

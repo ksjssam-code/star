@@ -20,6 +20,16 @@ function noise2(seed){const r=rng(seed),P=256,g=new Float32Array(P*P);for(let i=
  const n=(x,y)=>{const i=Math.floor(x),j=Math.floor(y),fx=sm(x-i),fy=sm(y-j);const a=at(i,j),b=at(i+1,j),c=at(i,j+1),d=at(i+1,j+1);return a+(b-a)*fx+(c-a)*fy+(a-b-c+d)*fx*fy;};
  return(x,y,oct)=>{let s=0,amp=.5,f=1;for(let k=0;k<(oct||5);k++){s+=amp*n(x*f,y*f);f*=2;amp*=.5;}return s;};}
 
+/* =================================================================== 지구 공전과 한밤중 하늘의 방향
+   month: 1~12 (소수 가능). 7월 한밤중 = 은하 중심(궁수자리) 쪽, 1월 = 반대쪽(쌍둥이·황소자리 쪽),
+   4월(봄) = 은하 원반 위쪽(처녀·사자자리 쪽), 10월(가을) = 원반 아래쪽.
+   지구 공전 궤도면은 은하 원반에 약 60° 기울어져 있고, 두 면이 만나는 선이 거의 은하 중심 방향임. */
+const TILT=60*Math.PI/180;
+function night(month){const th=(month-7)*Math.PI/6,v=[Math.sin(th)*Math.cos(TILT),Math.cos(th),-Math.sin(th)*Math.sin(TILT)];
+ const m=((Math.round(month)-1)%12+12)%12+1,se=m>=3&&m<=5?'봄':m>=6&&m<=8?'여름':m>=9&&m<=11?'가을':'겨울';
+ return{th,v,l:Math.atan2(v[0],v[1])*180/Math.PI,b:Math.asin(v[2])*180/Math.PI,season:se,m};}
+function mLabel(month){const m=((Math.round(month)-1)%12+12)%12+1;return m+'월';}
+
 /* =================================================================== 우리은하 */
 const KPITCH=Math.tan(19*Math.PI/180),R0=4500,BAR=0.393; // 막대 기울기 약 22.5°, 나선팔은 막대 끝에서 시작
 function Galaxy(seed){
@@ -69,9 +79,21 @@ function Galaxy(seed){
    TS(x,'막대 구조',cx+2600*s,cy-2600*s-6,'#ffe3b0',11,'left',700,fs);TS(x,'나선팔',cx-11500*s,cy-7200*s,'#bcd4ff',12,'center',700,fs);}
   if(o.dir!=null){const a=o.dir*Math.PI/180,L=Math.min(w,h)*.3,ex=cx+Math.sin(a)*L,ey=sy-Math.cos(a)*L;const fov=(o.fov||90)*Math.PI/360;
    x.fillStyle='rgba(255,209,102,.14)';x.beginPath();x.moveTo(cx,sy);x.arc(cx,sy,L,-Math.PI/2+a-fov,-Math.PI/2+a+fov);x.closePath();x.fill();arrow(x,cx,sy,ex,ey,'#ffd166',3,14);}
-  if(G.sunR>=0){glow(x,cx,sy,3.2,'255,225,120');TS(x,'태양계',cx+10,sy+14,'#ffd166',12,'left',900,fs);}
+  if(o.earth!=null){const n=night(o.earth),R=Math.min(w,h)*.085;
+   x.strokeStyle='rgba(106,209,255,.75)';x.lineWidth=1.5;x.setLineDash([4,3]);x.beginPath();x.ellipse(cx,sy,R*Math.cos(TILT),R,0,0,7);x.stroke();x.setLineDash([]);
+   const ex=cx+R*Math.cos(TILT)*Math.sin(n.th),ey=sy-R*Math.cos(n.th);
+   const hz=Math.hypot(n.v[0],n.v[1]);let L=Math.min(w,h)*.26*hz;const ux=n.v[0]/(hz||1),uy=-n.v[1]/(hz||1);
+   if(uy>0)L=Math.min(L,(h-14-ey)/uy);if(uy<0)L=Math.min(L,(ey-70)/-uy);if(ux>0)L=Math.min(L,(w-14-ex)/ux);if(ux<0)L=Math.min(L,(ex-14)/-ux);
+   if(L>6&&hz>.2)arrow(x,ex,ey,ex+ux*L,ey+uy*L,'#ffd166',3,13);
+   else{x.strokeStyle='#ffd166';x.lineWidth=2.5;x.beginPath();x.arc(ex,ey,9,0,7);x.stroke();x.lineWidth=1;}
+   glow(x,cx,sy,4.5,'255,215,90');const ang=Math.atan2(ey-sy,ex-cx);x.fillStyle='#4aa8ff';x.beginPath();x.arc(ex,ey,5.5,0,7);x.fill();x.fillStyle='#08142a';x.beginPath();x.arc(ex,ey,5.5,ang-Math.PI/2,ang+Math.PI/2);x.fill();
+   TS(x,'태양',cx-12,sy+16,'#ffd166',11,'right',900,fs);TS(x,'지구',ex+10,ey-12,'#8fd0ff',11,'left',900,fs);
+   const tip=Math.abs(n.v[2])>.5?(n.v[2]>0?' · 원반 위쪽을 봄':' · 원반 아래쪽을 봄'):'';
+   x.fillStyle='rgba(5,9,19,.82)';x.fillRect(8,8,w-16,50);T(x,mLabel(o.earth)+' ('+n.season+') 한밤중 · 화살표 = 밤하늘 방향'+tip,16,24,'#ffd166',11,'left',900,fs);
+   T(x,'※ 지구 공전 궤도는 아주 크게 과장 (실제는 점보다 훨씬 작음)',16,46,'#9ba6d4',10,'left',500,fs);}
+  else if(G.sunR>=0){glow(x,cx,sy,3.2,'255,225,120');TS(x,'태양계',cx+10,sy+14,'#ffd166',12,'left',900,fs);}
   if(o.center!==false)TS(x,'은하 중심',cx,cy-18,'#fff',11,'center',700,fs);
-  if(o.title)TS(x,o.title,12,16,'#e9edff',12,'left',900,fs);};
+  if(o.title&&o.earth==null)TS(x,o.title,12,16,'#e9edff',12,'left',900,fs);};
 
  /* ---- 옆에서 본 모습 ---- */
  G.drawSide=function(C,o){o=mk(o);const{x,w,h}=C,cx=w/2,cy=h/2,s=(w*.47)/16000,zs=s*(o.zs||1),fs=o.fs;
@@ -88,7 +110,12 @@ function Galaxy(seed){
   const sx=cx-G.sunR*s;
   if(o.dir!=null||o.up!=null){const L=Math.min(w,h)*.42,b=(o.up||0)*Math.PI/180,fw=Math.cos((o.dir||0)*Math.PI/180);// 옆모습: 은하 중심(오른쪽) 방향 성분만
    const dx=Math.cos(b)*fw,dy=Math.sin(b),n=Math.hypot(dx,dy)||1;arrow(x,sx,cy,sx+dx/n*L,cy-dy/n*L,'#ffd166',3,14);}
-  if(G.sunR>=0){glow(x,sx,cy,3,'255,225,120');TS(x,'태양계',sx,cy+20,'#ffd166',12,'center',900,fs);}
+  if(o.earth!=null){const n=night(o.earth),R=h*.32,ex=sx+R*Math.cos(n.th),ey=cy+R*Math.sin(n.th)*Math.sin(TILT);
+   x.strokeStyle='rgba(106,209,255,.75)';x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.ellipse(sx,cy,R,R*Math.sin(TILT),0,0,7);x.stroke();x.setLineDash([]);
+   const L=h*.42,vx=n.v[1],vy=-n.v[2];if(Math.hypot(vx,vy)>.15)arrow(x,ex,ey,ex+vx*L,ey+vy*L,'#ffd166',3,12);
+   glow(x,sx,cy,4,'255,215,90');x.fillStyle='#4aa8ff';x.beginPath();x.arc(ex,ey,5,0,7);x.fill();TS(x,'지구',ex+8,ey-10,'#8fd0ff',11,'left',900,fs);
+   TS(x,'← 바깥쪽',10,h-12,'#9ba6d4',10,'left',700,fs);TS(x,'은하 중심 쪽 →',w-10,h-12,'#9ba6d4',10,'right',700,fs);}
+  else if(G.sunR>=0){glow(x,sx,cy,3,'255,225,120');TS(x,'태양계',sx,cy+20,'#ffd166',12,'center',900,fs);}
   if(o.labels){TS(x,'중심부가 볼록',cx,cy-1500*zs-26,'#ffe3b0',12,'center',900,fs);TS(x,'납작한 원반',cx+10500*s,cy-22,'#bcd4ff',12,'center',700,fs);}
   if(o.title)TS(x,o.title,12,16,'#e9edff',12,'left',900,fs);};
 
@@ -248,5 +275,5 @@ DS:[['🌕','달','약 38만 km','약 3일','약 1.3초','지구의 약 1/6','�
   ['🟠','타이탄 (토성의 위성)','약 12억 ~ 16억 km','약 7년','약 1시간 10분 ~ 1시간 30분','지구의 약 0.14배','약 −180 ℃','짙은 질소 대기','메테인 호수와 비 · 두꺼운 대기 덕분에 비행 탐사 가능'],
   ['🛰️','국제 우주 정거장','지상 약 400 km','약 3시간 ~ 2일','거의 없음','미세 중력 (둥둥 뜸)','햇빛 쪽 매우 뜨겁고 그늘 쪽 매우 차가움','없음 (정거장 안은 공기 공급)','약 90분마다 지구를 한 바퀴 · 우주 환경 실험']]};
 
-window.U2={rng,gauss,setup,Galaxy,drawObject,OBJ,Balloon,Expansion,SPACE,glow,arrow,T,TS};
+window.U2={night,mLabel,rng,gauss,setup,Galaxy,drawObject,OBJ,Balloon,Expansion,SPACE,glow,arrow,T,TS};
 })();
