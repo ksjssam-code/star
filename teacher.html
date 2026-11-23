@@ -146,6 +146,7 @@ kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padd
 .krtl{display:flex;gap:14px;align-items:stretch}.krtl>div{flex:1;background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--cyan);border-radius:12px;padding:12px;font-size:28px;font-weight:700;text-align:center}.krtl b{display:block;color:var(--gold);font-size:34px}.krtl small{display:block;font-size:21px;color:var(--muted);font-weight:500;margin-top:4px}
 .tdest{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}.tdest button{font-size:24px;padding:8px 14px}.tdest button.on{border-color:var(--gold);background:#ffd16618}
 .dt td,.dt th{font-size:24px}
+td.clk{cursor:pointer;position:relative}td.clk>span{visibility:hidden}td.clk::after{content:'?';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:900}td.clk.on>span{visibility:visible}td.clk.on::after{display:none}td.clk:hover{background:#ffd16614}th.clkh{cursor:pointer}
 </style>
 </head>
 <body>
@@ -826,10 +827,10 @@ const TEACHER_HASH='1fa58357';
     <canvas id="orC" data-w="560" data-h="470" style="width:480px"></canvas>
     <div class="col">
       <div class="q" style="font-size:32px;margin-bottom:10px">붉은 <span style="color:#ff9466">베텔게우스</span>, 청백색 <span style="color:#bcd4ff">리겔</span>, 백색 <span style="color:#e4ecff">시리우스</span> — 색이 다른 까닭은?</div>
-      <table class="tsm" style="font-size:25px"><tr><th>별</th><th>색</th><th>겉보기 등급</th><th>절대 등급</th></tr>
-        <tr><td style="color:#ff9466;font-weight:700">베텔게우스</td><td>붉은색</td><td>약 0.5</td><td>약 −5.9</td></tr>
-        <tr><td style="color:#bcd4ff;font-weight:700">리겔</td><td>청백색</td><td>약 0.1</td><td>약 −7.0</td></tr>
-        <tr><td style="color:#e4ecff;font-weight:700">시리우스</td><td>백색</td><td><b class="gold">−1.5</b></td><td>+1.4</td></tr></table>
+      <table class="tsm" style="font-size:25px"><tr><th>별</th><th class="clkh" title="누르면 이 열 모두 보기">색 👆</th><th class="clkh" title="누르면 이 열 모두 보기">겉보기 등급 👆</th><th class="clkh" title="누르면 이 열 모두 보기">절대 등급 👆</th></tr>
+        <tr><td style="color:#ff9466;font-weight:700">베텔게우스</td><td class="clk"><span>붉은색</span></td><td class="clk"><span>약 0.5</span></td><td class="clk"><span>약 −5.9</span></td></tr>
+        <tr><td style="color:#bcd4ff;font-weight:700">리겔</td><td class="clk"><span>청백색</span></td><td class="clk"><span>약 0.1</span></td><td class="clk"><span>약 −7.0</span></td></tr>
+        <tr><td style="color:#e4ecff;font-weight:700">시리우스</td><td class="clk"><span>백색</span></td><td class="clk"><span><b class="gold">−1.5</b></span></td><td class="clk"><span>+1.4</span></td></tr></table>
       <div class="box frag" style="font-size:26px;margin-top:10px">💬 가설: 크기? 거리? 성분? <b class="gold">온도?</b></div>
       <div class="ans frag" style="font-size:26px">용암처럼 <b>온도</b>에 따라 색이 다를까? → 확인!</div>
     </div>
@@ -897,9 +898,9 @@ const TEACHER_HASH='1fa58357';
       <div class="ans frag">A <b>주황색</b>, B <b>청백색</b><br>→ <b>A &lt; B</b></div>
       <div class="q c frag">② 황색 태양은 두 별과 비교하면?</div>
       <div class="ans frag">A &lt; <b>태양</b> &lt; B</div>
-      <table class="tsm" style="font-size:25px;margin-top:10px"><tr><th>별</th><th>겉보기 등급</th><th>절대 등급</th></tr>
-        <tr><td style="color:#ffb066;font-weight:700">알비레오 A</td><td>약 3.1</td><td>약 −2.4</td></tr>
-        <tr><td style="color:#9fc0ff;font-weight:700">알비레오 B</td><td>약 5.1</td><td>약 −0.3</td></tr></table>
+      <table class="tsm" style="font-size:25px;margin-top:10px"><tr><th>별</th><th class="clkh" title="누르면 이 열 모두 보기">겉보기 등급 👆</th><th class="clkh" title="누르면 이 열 모두 보기">절대 등급 👆</th></tr>
+        <tr><td style="color:#ffb066;font-weight:700">알비레오 A</td><td class="clk"><span>약 3.1</span></td><td class="clk"><span>약 −2.4</span></td></tr>
+        <tr><td style="color:#9fc0ff;font-weight:700">알비레오 B</td><td class="clk"><span>약 5.1</span></td><td class="clk"><span>약 −0.3</span></td></tr></table>
     </div>
   </div>
   <aside class="notes" data-time="3분"><p>망원경으로 보면 실제로 주황색과 푸른색이 뚜렷하게 대비되어 ‘하늘에서 가장 아름다운 이중성’으로 불려요.</p>
@@ -2279,6 +2280,9 @@ $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';}
  }
  document.getElementById('hrN').onclick=()=>{showN=!showN;draw();};document.getElementById('hrR').onclick=()=>{showR=!showR;draw();};document.getElementById('hrG').onclick=()=>{showG=!showG;draw();};draw();
 })();
+/* 표 칸 클릭하면 보이기 (3쪽·7쪽 등급 표) · 머리글 누르면 그 열 모두 */
+document.addEventListener('click',e=>{const td=e.target.closest('td.clk');if(td){td.classList.toggle('on');return;}
+ const th=e.target.closest('th.clkh');if(th){const i=[...th.parentNode.children].indexOf(th),rows=[...th.closest('table').rows].slice(1),cs=rows.map(r=>r.cells[i]).filter(c=>c&&c.classList.contains('clk'));const all=cs.every(c=>c.classList.contains('on'));cs.forEach(c=>c.classList.toggle('on',!all));}});
 /* ================== Ⅷ-2 우주 (4~6차시) ================== */
 (function(){const U=window.U2;if(!U)return;const FS=1.45,C={};const cvs=id=>C[id]||(C[id]=U.setup(id));
  /* ----- 4차시 ----- */
