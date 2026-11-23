@@ -1130,7 +1130,11 @@ const TEACHER_HASH='1fa58357';
 <section class="slide" data-title="도입 · 은하수의 정체는?">
   <div class="sh"><span class="ph p1">도입</span><h2>밤하늘의 희뿌연 띠, 정체는?</h2><span class="pg">294쪽</span></div>
   <div class="sb row">
-    <div style="width:600px"><canvas id="t4mw" data-w="600" data-h="420" style="width:600px"></canvas><div class="cap">▲ 은하수 (모형) · 고구려 벽화에도 견우와 직녀 사이에 그려져 있음</div></div>
+    <div style="width:600px"><div id="t4mwBox" title="클릭하면 은하수 그림으로 바뀜" style="position:relative;width:600px;height:420px;cursor:pointer;border-radius:12px;overflow:hidden">
+      <canvas id="t4mw" data-w="600" data-h="420" style="width:600px;position:absolute;inset:0"></canvas>
+      <img id="t4gj" src="img/gyeonu-jiknyeo.jpg" alt="견우직녀도 (덕흥리 벽화고분)" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s">
+      <span id="t4gjHint" style="position:absolute;right:10px;bottom:10px;background:#050913cc;color:#ffd166;font-size:17px;padding:4px 10px;border-radius:8px">👆 클릭: 밤하늘의 은하수</span></div>
+      <div class="cap" id="t4mwCap">▲ 견우직녀도 — 덕흥리 벽화고분 (고구려, 408년)</div></div>
     <div class="col">
       <div class="q" style="font-size:34px">은하수는 무엇일까?</div>
       <div class="vote" id="v41" data-ans="1" style="flex-direction:column;gap:10px"><button class="vo" style="font-size:32px">빛나는 구름</button><button class="vo" style="font-size:32px">수많은 별의 집단</button><button class="vo" style="font-size:32px">달빛이 반사된 것</button></div>
@@ -1138,7 +1142,7 @@ const TEACHER_HASH='1fa58357';
     </div>
   </div>
   <aside class="notes" data-time="3분">
-    <h4>진행</h4><p>교과서 294쪽 그림(고구려 벽화의 견우·직녀) 이야기로 시작 → 투표 → <kbd>→</kbd> 정답.</p>
+    <h4>진행</h4><p>처음에는 견우직녀도(덕흥리 벽화고분)가 보여요. 그림 속 견우(소를 끄는 사람)와 직녀를 찾게 한 뒤 “둘 사이를 가로막는 강은 무엇일까요?” → 그림을 <b>클릭</b>하면 은하수 그림으로 바뀌어요 → 투표 → <kbd>→</kbd> 정답.</p>
     <p class="say">“은하수(銀河水)는 ‘은빛 강’이라는 뜻이에요. 영어로는 Milky Way(우유가 흐르는 길)! 옛사람들은 무엇이라고 생각했을까요?”</p>
     <h4>예상 반응</h4><ul><li>“구름이에요.” — 맨눈에는 희뿌옇게 보여 구름처럼 느껴져요.</li><li>“별이 많이 모인 거요.” — 그렇다면 왜 하늘 전체가 아니라 띠 모양일까? 다음 화면으로.</li></ul>
     <p>⚠ 도시에서는 빛 공해로 은하수를 거의 볼 수 없다는 점도 짚어 주세요.</p>
@@ -2285,6 +2289,10 @@ $('#colReset').onclick=()=>{pick=[];chk=false;rc();$('#colMsg').textContent='';}
 /* 표 칸 클릭하면 보이기 (3쪽·7쪽 등급 표) · 머리글 누르면 그 열 모두 */
 document.addEventListener('click',e=>{const td=e.target.closest('td.clk');if(td){td.classList.toggle('on');return;}
  const th=e.target.closest('th.clkh');if(th){const i=[...th.parentNode.children].indexOf(th),rows=[...th.closest('table').rows].slice(1),cs=rows.map(r=>r.cells[i]).filter(c=>c&&c.classList.contains('clk'));const all=cs.every(c=>c.classList.contains('on'));cs.forEach(c=>c.classList.toggle('on',!all));}});
+/* 4차시 도입: 견우직녀도 → 클릭하면 은하수 그림 */
+(function(){const b=document.getElementById('t4mwBox');if(!b)return;let sky=false;b.addEventListener('click',()=>{sky=!sky;document.getElementById('t4gj').style.opacity=sky?0:1;
+ document.getElementById('t4gjHint').textContent=sky?'👆 클릭: 견우직녀도':'👆 클릭: 밤하늘의 은하수';
+ document.getElementById('t4mwCap').textContent=sky?'▲ 은하수 (모형) · 견우와 직녀 사이를 흐르는 강':'▲ 견우직녀도 — 덕흥리 벽화고분 (고구려, 408년)';});})();
 /* ================== Ⅷ-2 우주 (4~6차시) ================== */
 (function(){const U=window.U2;if(!U)return;const FS=1.45,C={};const cvs=id=>C[id]||(C[id]=U.setup(id));
  /* ----- 4차시 ----- */
