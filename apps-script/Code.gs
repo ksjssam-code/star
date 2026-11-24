@@ -63,7 +63,7 @@ function doPost(e) {
   try {
     const pen = penaltyIn_(penaltySheet_(), d);
     if (pen) return json_({ ok: false, penalty: true, relogin: d.action !== 'login', error: penaltyMsg_(pen) });
-    if (d.action === 'login') return json_(login_(d));
+    if (d.action === 'login') { const lr = login_(d); if (lr.ok) lr.penHist = penaltyHistory_(d); return json_(lr); }
     const me = auth_(d);
     if (!me.ok) return json_(me);
     let res;
@@ -74,6 +74,7 @@ function doPost(e) {
     else if (d.action === 'mine') res = mine_(d);
     else return json_({ ok: false, error: '알 수 없는 요청' });
     if (res.ok) { const p = pointsOf_(d.cls, d.num); res.points = p; res.level = level_(p); }
+    if (res.ok && (d.action === 'mine' || d.action === 'me')) res.penHist = penaltyHistory_(d);
     return json_(res);
   } finally {
     lock.releaseLock();
@@ -419,22 +420,38 @@ function ymd_(v) {
   return m ? m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2) : '';
 }
 function mdKo_(ymd) { const p = ymd.split('-'); return Number(p[1]) + '월 ' + Number(p[2]) + '일'; }
-// 시트 하나에서 지금 패널티 중인 줄 찾기
-function penaltyIn_(s, d) {
-  if (!s || s.getLastRow() < 2) return null;
-  const today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
-  const rows = s.getRange(2, 1, s.getLastRow() - 1, 6).getValues();
-  for (let i = 0; i < rows.length; i++) {
-    const r = rows[i];
+// 시트 하나에서 이 학생의 패널티 줄 모두 찾기
+function penaltyRows_(s, d) {
+  const out = [];
+  if (!s || s.getLastRow() < 2) return out;
+  s.getRange(2, 1, s.getLastRow() - 1, 6).getValues().forEach(function (r) {
     const cls = String(r[0]).replace(/^'/, '').trim(), num = String(r[1]).trim(), name = String(r[2]).replace(/^'/, '').trim();
-    if (cls !== d.cls || (!num && !name)) continue;
-    if (num && Number(num) !== Number(d.num)) continue;
-    if (name && name !== String(d.name).trim()) continue;
+    if (cls !== d.cls || (!num && !name)) return;
+    if (num && Number(num) !== Number(d.num)) return;
+    if (name && name !== String(d.name).trim()) return;
     const a = ymd_(r[3]), b = ymd_(r[4]);
-    if (!a || !b || today < a || today > b) continue;
-    return { start: a, end: b, reason: String(r[5]).replace(/^'/, '').trim() };
-  }
-  return null;
+    if (a && b) out.push({ start: a, end: b, reason: String(r[5]).replace(/^'/, '').trim() });
+  });
+  return out;
+}
+function todayKst_() { return Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd'); }
+// 지금 패널티 중인지
+function penaltyIn_(s, d) {
+  const today = todayKst_();
+  const hit = penaltyRows_(s, d).filter(function (p) { return p.start <= today && today <= p.end; });
+  return hit.length ? hit[0] : null;
+}
+// 이미 받은 패널티 기록 (학생 화면에 계속 표시 → 앞으로 조심하도록)
+function penaltyHistory_(d) {
+  const today = todayKst_(), seen = {}, out = [];
+  PEN_SHEETS_().forEach(function (s) {
+    penaltyRows_(s, d).forEach(function (p) {
+      const k = p.start + '|' + p.end;
+      if (p.start > today || seen[k]) return;
+      seen[k] = 1; out.push(p);
+    });
+  });
+  return out.sort(function (x, y) { return x.start < y.start ? -1 : 1; });
 }
 function penaltyMsg_(p) {
   const n = new Date(Number(p.end.slice(0, 4)), Number(p.end.slice(5, 7)) - 1, Number(p.end.slice(8, 10)) + 1);
@@ -462,6 +479,7 @@ function markRosterPenalties_() {
   });
   rs.getRange(2, 10, out.length, 1).setValues(out);
 }
+function PEN_SHEETS_() { return [SpreadsheetApp.getActiveSpreadsheet().getSheetByName('패널티')]; }
 function refreshPenalties() { const s = penaltySheet_(); penaltyFormat_(s); markRosterPenalties_(); }
 
 /* ---------------- 👀 이탈 감지 (수업 중 다른 앱·탭으로 나간 학생 기록) ----------------

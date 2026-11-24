@@ -150,6 +150,7 @@ body.qa-wide main{max-width:1500px}
 nav .ng{color:var(--muted);font-size:13px;align-self:center;padding:0 2px 0 6px}
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:13px}
 #lgMsg{white-space:pre-line}
+.penRec{display:inline-block;font-size:13px;font-weight:700;color:#ff7a90;border:1px solid #ff7a90;border-radius:999px;padding:1px 10px;margin:0 6px;background:#ff7a901a}
 </style>
 </head>
 <body>
@@ -929,11 +930,12 @@ const LV=[[0,'성운','☁️'],[5,'적색 별','🔴'],[12,'주황색 별','�
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function saveUser(){try{localStorage.setItem('starlab_user',JSON.stringify(user));}catch(e){}}
 function setPoints(j){if(!user||j==null||j.points==null)return;user.points=j.points;user.level=j.level;saveUser();showWho();}
+function penRec(){const h=(user&&user.penHist)||[];if(!h.length)return '';const md=x=>Number(x.slice(5,7))+'월 '+Number(x.slice(8,10))+'일';const t=h.map(p=>md(p.start)+(p.reason?' ('+esc(p.reason)+')':'')).join(', ');return `<span class="penRec" title="패널티 기록">⚠ 패널티 기록 ${h.length}회 · ${t}</span>`;}
 function showWho(){if(PREVIEW){$('#who').innerHTML='<b>👩‍🏫 교사 미리보기</b> <span class="small">(제출·게시 안 됨, 게시판 읽기만)</span>';return;}
  if(!user||!user.nick){$('#who').innerHTML='';return;}
  const lv=user.level||{icon:'☁️',name:'성운',next:5,nextName:'적색 별'},p=user.points||0,cur=LV.find(x=>x[1]===lv.name)||LV[0];
  const pr=lv.next?Math.round((p-cur[0])/(lv.next-cur[0])*100):100;
- $('#who').innerHTML=`<span title="${user.cls}반 ${user.num}번">${lv.icon} <b>${esc(user.nick)}</b> · ${lv.name} ${p}점<span class="lvbar"><i style="width:${pr}%"></i></span>${lv.next?`<span class="small">${lv.nextName}까지 ${lv.next-p}점</span>`:'<span class="small">최고 등급!</span>'}</span><button id="lvBtn">등급 안내</button><button id="chg">로그아웃</button>`;
+ $('#who').innerHTML=`<span title="${user.cls}반 ${user.num}번">${lv.icon} <b>${esc(user.nick)}</b> · ${lv.name} ${p}점<span class="lvbar"><i style="width:${pr}%"></i></span>${lv.next?`<span class="small">${lv.nextName}까지 ${lv.next-p}점</span>`:'<span class="small">최고 등급!</span>'}</span>${penRec()}<button id="lvBtn">등급 안내</button><button id="chg">로그아웃</button>`;
  $('#chg').onclick=()=>{const u=user;user=null;try{localStorage.removeItem('starlab_user');}catch(e){}showWho();user=u?{cls:u.cls,num:u.num,name:u.name}:null;openLogin();user=null;};$('#lvBtn').onclick=()=>$('#lvHelp').classList.add('on');}
 $('#lvTb').innerHTML=LV.map(x=>`<tr><td>${x[2]} ${x[1]}</td><td>${x[0]}점</td></tr>`).join('');$('#lvClose').onclick=()=>$('#lvHelp').classList.remove('on');
 function openLogin(){$('#lgReg').style.display='none';$('#lgMsg').textContent='';if(user){$('#lgCls').value=user.cls||'';$('#lgNum').value=user.num||'';$('#lgName').value=user.name||'';}$('#lgPin').value='';$('#login').classList.add('on');}
@@ -949,7 +951,7 @@ $('#lgGo').onclick=async()=>{if(lgBusy)return;const cls=$('#lgCls').value,num=pa
   if(!j.ok&&j.error==='알 수 없는 요청'){user={cls,num,name,pin,nick:name,legacy:true};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();lgBusy=false;return;}
   if(j.need==='register'){$('#lgReg').style.display='block';m.textContent=j.error||'처음 왔어요! 닉네임과 PIN 확인을 입력하고 다시 [입장하기]';$('#lgNick').focus();}
   else if(!j.ok){m.style.color=j.penalty?'#e5484d':'';m.textContent=j.error||'로그인 실패';}
-  else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();pullServer();if($('#m-qa').classList.contains('on'))loadQA();}
+  else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level,penHist:j.penHist||[]};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();pullServer();if($('#m-qa').classList.contains('on'))loadQA();}
  }catch(e){m.style.color='';m.textContent='인터넷 연결 확인 후 다시 시도하기';}
  lgBusy=false;};
 ['lgPin','lgPin2','lgNick'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lgGo').click();}));
@@ -1119,7 +1121,7 @@ function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]
   it.o.forEach((t,j)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{if(QZ[lesson][i]===null)QZ[lesson][i]=j===it.a;o.querySelectorAll('button').forEach(x=>x.classList.remove('ok','no'));b.classList.add(j===it.a?'ok':'no');fb.innerHTML=j===it.a?'⭕ 정답! '+it.e:'❌ 다시 생각해 보기';fb.classList.add('show');};o.appendChild(b);});root.appendChild(d);});}
 
 /* ---------- API ---------- */
-async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin){openLogin();if(j.penalty){const m=$('#lgMsg');m.style.color='#e5484d';m.textContent=j.error;}}throw new Error(j.error||'오류');}setPoints(j);return j;}
+async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin){openLogin();if(j.penalty){const m=$('#lgMsg');m.style.color='#e5484d';m.textContent=j.error;}}throw new Error(j.error||'오류');}if(user&&Array.isArray(j.penHist)){user.penHist=j.penHist;try{saveUser();}catch(e){}if(j.points==null)showWho();}setPoints(j);return j;}
 async function apiGet(params){if(!API_URL)throw new Error('NOAPI');const r=await fetch(API_URL+'?'+new URLSearchParams(params));return r.json();}
 
 /* ---------- submit ---------- */
