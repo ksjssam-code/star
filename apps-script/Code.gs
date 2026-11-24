@@ -28,7 +28,8 @@
  */
 
 const CLASSES = ['2-1', '2-2', '2-3', '2-4'];
-const LESSONS = ['1', '2', '3', '4', '5', '6']; // 1~3: Ⅷ-1 별 · 4: 우리은하 · 5: 팽창하는 우주 · 6: 우주 탐사
+const LESSONS = ['1', '2', '3', '4', '5', '6', '7']; // 1~3: Ⅷ-1 별 · 4: 우리은하 · 5: 팽창하는 우주 · 6: 우주 탐사 · 7: 총괄평가
+function sheetName_(L) { return L === '7' ? '총괄평가' : L + '차시 탐구'; }
 const MAXLEN = 2000;
 const HEAD_BG = '#fff2cc';
 const R_HEAD = ['반', '번호', '이름', '닉네임', 'PIN', '점수 보정', '등록 시각', '현재 점수', '등급'];
@@ -92,7 +93,7 @@ function onOpen() {
 }
 function sortAllSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  LESSONS.map(function (L) { return L + '차시 탐구'; }).concat(['학생 명부']).forEach(function (n) {
+  LESSONS.map(sheetName_).concat(['학생 명부']).forEach(function (n) {
     const s = ss.getSheetByName(n);
     if (s) sortByClassNum_(s, n === '학생 명부' ? 1 : 2);
   });
@@ -260,7 +261,7 @@ function mine_(d) {
   const out = {};
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   LESSONS.forEach(function (L) {
-    const s = ss.getSheetByName(L + '차시 탐구');
+    const s = ss.getSheetByName(sheetName_(L));
     if (!s || s.getLastRow() < 2) return;
     const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
     const h = v[0].map(String);
@@ -284,7 +285,7 @@ function mine_(d) {
 function submit_(d) {
   const L = String(d.lesson);
   if (LESSONS.indexOf(L) < 0) return { ok: false, error: '차시 오류' };
-  const s = sheet_(L + '차시 탐구', ['최종 제출', '반', '번호', '이름', '제출 횟수']);
+  const s = sheet_(sheetName_(L), ['최종 제출', '반', '번호', '이름', '제출 횟수']);
   const fields = (d.fields || []).slice(0, 40).map(function (f) { return [clip_(f[0], 60), clip_(f[1], MAXLEN)]; });
   let headers = s.getRange(1, 1, 1, s.getLastColumn()).getValues()[0].map(String);
   fields.forEach(function (f) {

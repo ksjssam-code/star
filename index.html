@@ -148,6 +148,17 @@ body.qa-wide main{max-width:1500px}
 .dtab{font-size:15px}.dtab th{font-size:13px;white-space:nowrap}
 .dests{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.dests button{display:flex;flex-direction:column;align-items:center;min-width:110px}.dests button .em{font-size:30px}.dests button.on{border-color:var(--gold);background:#ffd16618}
 nav .ng{color:var(--muted);font-size:13px;align-self:center;padding:0 2px 0 6px}
+.exq{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 14px;background:#0d1430}
+.exh{font-size:17px;line-height:1.6;margin-bottom:8px}.exh b{color:var(--gold);font-size:19px;margin-right:2px}
+.exbo{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;font-size:16px;line-height:1.7;background:#0a1026}
+.extab{margin:8px 0;font-size:16px}.extab td,.extab th{padding:6px 12px;text-align:center}
+.exfig{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}.exfig canvas{border-radius:10px;width:100%}
+.exa{gap:8px}.exa button{font-size:16px}.exa.exlong{flex-direction:column;align-items:stretch}.exa.exlong button{text-align:left}
+.expair{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700}
+.exres{display:none;margin-top:8px;font-size:15px;line-height:1.6;color:var(--muted)}
+.exdone .exres{display:block}.exdone .exa button{cursor:default}.exdone .exq.ok{border-color:var(--green)}.exdone .exq.no{border-color:var(--pink)}
+.exq.ok .exres b{color:var(--green)}.exq.no .exres b{color:var(--pink)}.exdone .exa button.exright{border-color:var(--green);box-shadow:0 0 0 2px #63e6a355 inset}
+.exdone .submitBtn{display:none}
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:13px}
 #lgMsg{white-space:pre-line}
 .penRec{display:inline-block;font-size:13px;font-weight:700;color:#ff7a90;border:1px solid #ff7a90;border-radius:999px;padding:1px 10px;margin:0 6px;background:#ff7a901a}
@@ -167,6 +178,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
       <a href="#t4" data-m="t4">④ 우리은하</a>
       <a href="#t5" data-m="t5">⑤ 팽창하는 우주</a>
       <a href="#t6" data-m="t6">⑥ 우주 탐사</a>
+      <a href="#t7" data-m="t7">📝 총괄평가</a>
       <a href="#qa" data-m="qa">🔭 호기심 은하</a>
     </nav>
   </div>
@@ -884,6 +896,19 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   </div>
 </section>
 
+<!-- ======================= 총괄평가 (Ⅷ. 별과 우주) ======================= -->
+<section class="module" id="m-t7" data-lesson="7">
+  <div class="mhead"><div class="tag">Ⅷ. 별과 우주 · 총괄평가</div><h1>총괄평가</h1><span class="goal">📝 별(1~11번)과 우리은하·우주 탐사(12~24번)를 정리해 보자. 모두 풀고 맨 아래에서 제출하면 채점 결과와 해설이 나와요.</span></div>
+  <div class="step" id="exTop" style="font-size:16px">⚠ 한 번 제출하면 답을 바꿀 수 없어요. 차근차근 풀어 보세요. 답은 자동 저장돼요.</div>
+  <div class="step"><div id="exList"></div></div>
+  <div class="step submit">
+    <h2><span class="badge b2">📤 제출</span> 선생님께 답안 보내기</h2>
+    <div class="msg" id="exScore" data-f="점수" style="display:none"></div>
+    <button class="au submitBtn" data-lesson="7">총괄평가 제출하고 채점 결과 보기</button>
+    <div class="st" id="st7"></div>
+  </div>
+</section>
+
 <!-- ======================= 질문 게시판 ======================= -->
 <section class="module" id="m-qa">
   <div class="mhead"><div class="tag">🔭 함께 묻고, 상상하고, 탐구하기</div><h1>호기심 은하</h1><span class="goal">궁금한 점 · 해 보고 싶은 탐구 · 오늘의 발견을 자유롭게! 친구 글에 답도 달아 보기</span></div>
@@ -976,15 +1001,15 @@ else if(!PREVIEW&&user&&user.pin)setTimeout(pullServer,800);
 showWho();
 
 /* ---------- routing ---------- */
-const MODS=['t1','t2','t3','t4','t5','t6','qa'];
+const MODS=['t1','t2','t3','t4','t5','t6','t7','qa'];
 /* 차시 공개(잠금): 선생님이 교사 화면에서 공개한 차시만 보임. 서버 응답 전에는 마지막 상태(처음엔 1~3차시) */
-const ALL_L=['1','2','3','4','5','6'];let OPEN=['1','2','3'];try{const o=JSON.parse(localStorage.getItem('starlab_open')||'null');if(Array.isArray(o))OPEN=o.map(String);}catch(e){}
+const ALL_L=['1','2','3','4','5','6','7'];let OPEN=['1','2','3'];try{const o=JSON.parse(localStorage.getItem('starlab_open')||'null');if(Array.isArray(o))OPEN=o.map(String);}catch(e){}
 function isOpen(h){if(PREVIEW)return true;const m=String(h).match(/^t(\d)$/);return !m||OPEN.includes(m[1]);}
 function applyOpen(){ALL_L.forEach(L=>{const on=isOpen('t'+L);const a=$(`nav a[data-m="t${L}"]`);if(a)a.style.display=on?'':'none';const o=$(`#qaLsel option[value="${L}"]`);if(o){o.hidden=!on;o.disabled=!on;}});
  const ng=$$('nav .ng');if(ng[1])ng[1].style.display=['4','5','6'].some(L=>isOpen('t'+L))?'':'none';
  const sel=$('#qaLsel');if(sel){const op=ALL_L.filter(L=>isOpen('t'+L));sel.value=op[op.length-1]||'1';}}// 게시판은 차시 구분 없이 모두 보기 · 새 글은 지금 공개된 마지막 차시로 기록
 async function pullOpen(){if(PREVIEW||!API_URL)return;try{const j=await apiGet({action:'open'});if(j&&j.ok&&Array.isArray(j.open)){const nw=j.open.map(String);const ch=nw.join()!==OPEN.join();OPEN=nw;try{localStorage.setItem('starlab_open',JSON.stringify(OPEN));}catch(e){}if(ch){applyOpen();route();}}}catch(e){}}
-function route(){let h=location.hash.replace('#','');if(!MODS.includes(h)||!isOpen(h)){if(h&&!isOpen(h))try{history.replaceState(null,'','#t1');}catch(e){}h='t1';}document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();if(h==='t4'&&typeof GX!=='undefined'&&GX)setTimeout(GX.init,30);window.scrollTo(0,0);}
+function route(){let h=location.hash.replace('#','');if(!MODS.includes(h)||!isOpen(h)){if(h&&!isOpen(h))try{history.replaceState(null,'','#t1');}catch(e){}h='t1';}document.body.classList.toggle('qa-wide',h==='qa');MODS.forEach(m=>$('#m-'+m).classList.toggle('on',m===h));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.m===h));if(h==='qa')loadQA();if(h==='t4'&&typeof GX!=='undefined'&&GX)setTimeout(GX.init,30);if(h==='t7'&&window.__exFigs){setTimeout(window.__exFigs,30);if(window.__exCheck)window.__exCheck();}window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);
 
 /* ---------- predictions / reveal / autosave ---------- */
@@ -1081,7 +1106,7 @@ function faGrade(L,root,silent){const items=FA_DATA[L],st=FA[L];
  st.passed=res.every(Boolean);faSave(L);
  document.getElementById('faSt'+L).innerHTML=`<div class="chips"><div class="chip">첫 채점 <b>${st.firstScore} / 4</b></div><div class="chip">시도 <b>${st.attempts}</b>회</div>${st.passed?'<div class="chip" style="border-color:#63e6a3">🎉 <b style="color:#63e6a3">통과!</b></div>':'<div class="chip">통과까지 <b>'+res.filter(x=>!x).length+'</b>문제</div>'}</div>`+(st.passed?'<p class="small" style="color:#63e6a3;margin:4px 0">아래 [제출]을 눌러 선생님께 보내기</p>':'');
  if(st.passed)root.querySelectorAll('.item.fa').forEach((d,i)=>{const it=items[i];if(it.t==='essay'){d.querySelector('.fb').innerHTML='✍ 작성 완료 · <b>예시 답</b>: '+it.model;}});}
-function faFields(L){const st=FA[L]||faLoad(L),items=FA_DATA[L];const ess=items.findIndex(it=>it.t==='essay');
+function faFields(L){if(!FA_DATA[L])return [];const st=FA[L]||faLoad(L),items=FA_DATA[L];const ess=items.findIndex(it=>it.t==='essay');
  return [['형성평가 첫 채점(자동 4문항)',st.first?st.firstScore+' / 4':'미응시'],['형성평가 문항별 첫 결과',st.first?st.first.map((x,i)=>(i+1)+'번 '+x).join(', '):''],['형성평가 시도 횟수',String(st.attempts||0)],['형성평가 통과',st.passed?'통과':'미통과'],['형성평가 서술형',((st.ans||{})[ess]||{}).v||'']];}
 /* ---------- 실험 그래프 ---------- */
 function luxRowHTML(){return `<td><input inputmode="decimal" maxlength="5"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input inputmode="decimal" maxlength="10"></td><td><input maxlength="10" placeholder="예: 1/?"></td>`;}
@@ -1142,7 +1167,8 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
 /* ---------- 다른 기기에서 로그인해도 제출한 결과 불러오기 (빈 칸만 채움) ---------- */
 async function pullServer(){if(PREVIEW||!API_URL||!user||!user.pin||user.legacy)return;let j;try{j=await api({action:'mine'});}catch(e){return;}
  const D=(j&&j.data)||{};let n=0;
- ['1','2','3','4','5','6'].forEach(L=>{const o=D[L];const sec=$('#m-t'+L);if(!o||!sec)return;
+ if(D['7']&&Object.keys(D['7']).length&&window.__exDone)setTimeout(()=>window.__exDone(),50);
+ ['1','2','3','4','5','6','7'].forEach(L=>{const o=D[L];const sec=$('#m-t'+L);if(!o||!sec)return;
   $$('[data-f]',sec).forEach(el=>{const v=o[el.dataset.f];if(!v)return;
    if(el.classList.contains('predict')){if(el.querySelector('button.sel'))return;const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){b.classList.add('sel');n++;}}
    else if(el.tagName==='TEXTAREA'){if(el.value.trim())return;el.value=v;n++;}
@@ -1478,6 +1504,120 @@ const EX=(function(){const c=document.getElementById('exC');if(!c||!U)return nul
  let dc=-1;function dr(){$('#destCards').innerHTML='';DS.forEach((d,i)=>{const b=document.createElement('button');b.className=i===dc?'on':'';b.innerHTML=`<span class="em">${d[0]}</span>${d[1]}`;b.onclick=()=>{dc=i;dr();
    $('#destInfo').innerHTML=`<h3>${d[0]} ${d[1]}</h3><table class="dtab"><tr><th>지구에서 거리</th><td>${d[2]}</td><th>가는 데 걸리는 시간</th><td>${d[3]}</td></tr><tr><th>통신 지연(빛이 가는 시간)</th><td>${d[4]}</td><th>중력</th><td>${d[5]}</td></tr><tr><th>표면 온도</th><td>${d[6]}</td><th>대기</th><td>${d[7]}</td></tr></table><p style="margin:8px 0 0">📌 ${d[8]}</p><p class="small muted" style="margin:4px 0 0">이 환경에서 사람이나 로봇이 활동하려면 무엇이 필요할까?</p>`;};$('#destCards').appendChild(b);});}
  dr();})();
+
+/* ================== 총괄평가 (Ⅷ. 별과 우주) ================== */
+(function(){const box=document.getElementById('exList');if(!box||!window.U2)return;const U=window.U2;
+ const C=['①','②','③','④','⑤'];
+ const tb=(h,rows)=>`<table class="extab"><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`;
+ const EX=[
+ {q:'그림은 지구 공전 궤도상의 가장 멀리 떨어진 두 지점에서 관측한 별 A와 B의 위치 변화를 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',fig:'f1',bo:['별 A까지의 거리는 1 pc이다.','별 B의 연주 시차는 0.08″이다.','지구에서 별까지의 거리는 A가 B보다 가깝다.','별의 위치가 실제로 변한 것이다.'],o:['ㄱ, ㄴ','ㄴ, ㄷ','ㄷ, ㄹ','ㄱ, ㄴ, ㄷ','ㄴ, ㄷ, ㄹ'],a:1,
+  ex:'연주 시차는 위치 변화(시차)의 1/2이에요. 별 A의 연주 시차는 0.1″ → 거리 10 pc(ㄱ ✗), 별 B는 0.08″(ㄴ ⭕). 연주 시차가 큰 A가 더 가까워요(ㄷ ⭕). 위치가 달라 보이는 것은 별이 움직여서가 아니라 지구가 공전하기 때문이에요(ㄹ ✗).'},
+ {q:'표는 지구에서 관측한 별 A~E의 연주 시차를 나타낸 것이다. 별 A~E 중 지구로부터 거리가 가장 가까운 것은?',html:tb(['별','A','B','C','D','E'],[['연주 시차(″)','0.01','0.2','0.5','1','0.05']]),o:['A','B','C','D','E'],a:3,
+  ex:'연주 시차와 별까지의 거리는 반비례해요. 연주 시차가 가장 큰 D(1″, 1 pc)가 가장 가까워요.'},
+ {q:'지구에서 측정한 어느 별의 연주 시차는 1″이다. 지구에서 이 별까지의 거리가 현재보다 10배 멀어진다면 이 별의 연주 시차는 얼마일까?',o:['0.1″','0.5″','1″','5″','10″'],a:0,
+  ex:'거리가 10배 멀어지면 연주 시차는 1/10배가 되어 0.1″예요.'},
+ {q:'표는 별 A~C의 겉보기 등급과 절대 등급을 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',html:tb(['별','A','B','C'],[['겉보기 등급','−1.5','1.1','0.4'],['절대 등급','1.4','1.1','−6.0']]),bo:['별의 실제 밝기는 A>B>C 순으로 밝다.','A~C 중 우리 눈에 가장 밝게 보이는 별은 A이다.','지구에서 별까지의 거리는 A가 B보다 가깝다.'],o:['ㄱ','ㄴ','ㄷ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:3,
+  ex:'실제 밝기는 절대 등급으로 비교해요. 절대 등급이 작을수록 밝으므로 C>B>A(ㄱ ✗). 겉보기 등급이 가장 작은 A가 가장 밝게 보여요(ㄴ ⭕). A는 겉보기 등급<절대 등급이라 10 pc보다 가깝고, B는 두 등급이 같아 10 pc에 있어요(ㄷ ⭕).'},
+ {q:'그림은 지구로부터 거리가 다른 별 A~C를 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',fig:'f5',bo:['A는 겉보기 등급이 절대 등급보다 작다.','B와 같은 위치에 별이 있다고 가정하고 측정한 별의 등급을 겉보기 등급이라고 한다.','C는 절대 등급이 겉보기 등급보다 크다.'],o:['ㄱ','ㄴ','ㄷ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:0,
+  ex:'A는 10 pc보다 가까워서 실제보다 밝게 보이므로 겉보기 등급<절대 등급(ㄱ ⭕). 별이 10 pc(B의 위치)에 있다고 가정하고 정한 등급은 절대 등급이에요(ㄴ ✗). C는 10 pc보다 멀어서 절대 등급이 겉보기 등급보다 작아요(ㄷ ✗).'},
+ {q:'어떤 별의 겉보기 등급은 2등급이고 지구에서 100 pc 떨어져 있다. 이 별의 절대 등급은?',o:['−5등급','−3등급','−2등급','5등급','8등급'],a:1,
+  ex:'10 pc으로 옮기면 거리가 1/10이 되어 100배 밝아지므로 5등급 작아져요. 2 − 5 = −3등급이에요.'},
+ {q:'겉보기 등급이 3등급이고 절대 등급이 −2등급인 어떤 별이 지구로부터의 거리가 현재보다 100배 멀어졌을 때에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',bo:['절대 등급은 8등급이 된다.','겉보기 등급과 절대 등급의 차는 15가 된다.','겉보기 등급은 3등급으로, 변하지 않는다.'],o:['ㄱ','ㄴ','ㄷ','ㄱ, ㄴ','ㄱ, ㄴ, ㄷ'],a:1,
+  ex:'절대 등급은 10 pc에 있다고 가정한 밝기라서 거리가 변해도 −2등급 그대로예요(ㄱ ✗). 거리가 100배 멀어지면 10000배 어둡게 보여 겉보기 등급이 10 커진 13등급이 돼요(ㄷ ✗). 13 − (−2) = 15(ㄴ ⭕).'},
+ {q:'연주 시차는 1″이고 겉보기 등급은 0등급인 어떤 별에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',bo:['이 별의 절대 등급은 5등급이다.','이 별을 10 pc 거리에 둔다면 지금보다 밝기는 100배 어두워진다.','이 별을 연주 시차가 0.01″가 되는 위치에 둔다면 겉보기 등급과 절대 등급의 차는 5이다.'],o:['ㄱ','ㄴ','ㄷ','ㄱ, ㄴ','ㄱ, ㄴ, ㄷ'],a:4,
+  ex:'연주 시차 1″ → 거리 1 pc. 10 pc에 두면 거리가 10배 멀어져 100배 어두워지고(ㄴ ⭕), 5등급 커져 절대 등급은 5등급(ㄱ ⭕). 연주 시차 0.01″ → 100 pc. 지금보다 100배 멀어져 10000배 어두워지므로 겉보기 등급은 10등급, 절대 등급 5등급과의 차는 5(ㄷ ⭕).'},
+ {q:'별의 색과 표면 온도에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',bo:['태양은 청색인 별보다 표면 온도가 낮다.','별의 표면 온도는 주황색 별이 흰색 별보다 낮다.','별의 색이 다양한 것은 별의 표면 온도가 다르기 때문이다.'],o:['ㄱ','ㄴ','ㄷ','ㄱ, ㄴ','ㄱ, ㄴ, ㄷ'],a:4,
+  ex:'표면 온도가 높을수록 청색, 낮을수록 적색을 띠어요. 태양(황색)은 청색 별보다, 주황색 별은 흰색 별보다 온도가 낮아요. 모두 옳아요.'},
+ {q:'그림은 별의 표면 온도에 따른 별의 색을 나타낸 것이다. (가)와 (나)는 각각 ‘높다.’와 ‘낮다.’ 중 하나이다. (가)와 (나)에 알맞은 말을 고르시오.',fig:'f10',pair:true,
+  ex:'표면 온도가 높을수록 청색, 낮을수록 적색을 띠어요. (가) 높다. (나) 낮다.'},
+ {q:'표는 별 A~C의 색을 나타낸 것이다. A, B, C의 표면 온도는 각각 3500 K, 9000 K, 11000 K 중 하나이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',html:tb(['별','A','B','C'],[['별의 색','청백색','적색','백색']]),bo:['별 A의 표면 온도가 별 C의 표면 온도보다 낮다.','태양의 표면 온도는 별 B의 표면 온도보다 낮다.','별 C의 표면 온도는 9000 K이다.'],o:['ㄱ','ㄴ','ㄷ','ㄱ, ㄴ','ㄱ, ㄴ, ㄷ'],a:2,
+  ex:'청백색 → 백색 → 적색으로 갈수록 온도가 낮아요. A 11000 K, C 9000 K, B 3500 K. A가 C보다 높고(ㄱ ✗), 황색인 태양은 적색인 B보다 높아요(ㄴ ✗). C는 9000 K(ㄷ ⭕).'},
+ {q:'우리은하에 대한 설명으로 옳지 <u>않은</u> 것은?',o:['태양계는 우리은하의 중심에 위치한다.','우리은하는 태양계가 속해 있는 은하를 말한다.','우리은하는 옆에서 보면 중심부가 부풀어 오른 원반 모양이다.','우리은하는 중심부의 막대 구조 주변으로 나선 모양의 나선팔이 있다.','우리은하의 중심부에는 수많은 별이 막대 모양을 이루며 집중적으로 모여 있다.'],a:0,long:true,
+  ex:'태양계는 우리은하의 중심에서 약 8500 pc 떨어진 나선팔에 있어요.'},
+ {q:'그림은 우리은하를 옆에서 본 모습을 나타낸 것이다. A, B에 해당하는 거리를 옳게 짝 지은 것은?',fig:'f13',o:['A 약 8500 pc · B 약 4000 pc','A 약 15000 pc · B 약 7000 pc','A 약 15000 pc · B 약 8500 pc','A 약 30000 pc · B 약 7000 pc','A 약 30000 pc · B 약 8500 pc'],a:2,long:true,
+  ex:'우리은하의 지름은 약 30000 pc이므로 A(가장자리~중심)는 약 15000 pc, B(태양계~중심)는 약 8500 pc이에요.'},
+ {q:'은하수와 우리은하에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',bo:['우리은하는 옆에서 보면 원반 모양이다.','은하수는 지구에서 본 우리은하의 일부분이다.','태양계는 우리은하의 나선팔에 있다.'],o:['ㄱ','ㄷ','ㄱ, ㄴ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:4,
+  ex:'모두 옳아요. 은하수는 지구에서 본 우리은하의 일부이고, 태양계는 중심에서 약 8500 pc 떨어진 나선팔에 있어요.'},
+ {q:'성운을 구성하는 주요 성분은 무엇인가?',o:['얼음 알갱이','가스와 티끌','작은 암석 조각','온도가 높은 별','온도가 낮은 별'],a:1,
+  ex:'성운은 성간 물질(가스와 티끌)이 모여 구름처럼 보이는 천체예요.'},
+ {q:'산개 성단에 대한 설명으로 옳은 것은?',o:['별이 공 모양으로 모여 있다.','성간 물질이 많이 모여 있어 구름처럼 보이는 천체이다.','성간 물질이 별 뒤쪽에서 오는 별빛을 가로막아 어둡게 보인다.','수십 개~수만 개의 별이 일정한 모양 없이 모여 있는 성단이다.','수만 개~수십만 개의 별이 공 모양으로 빽빽하게 모여 있는 성단이다.'],a:3,long:true,
+  ex:'산개 성단은 수십 개~수만 개의 별이 일정한 모양 없이 엉성하게 모여 있는 성단이에요. ①, ⑤는 구상 성단, ②는 성운, ③은 암흑 성운에 대한 설명이에요.'},
+ {q:'그림은 두 종류의 성단을 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',fig:'f17',bo:['(가)는 산개 성단이다.','(나)는 구상 성단이다.','(가)는 (나)보다 많은 별이 모여 있다.'],o:['ㄱ','ㄷ','ㄱ, ㄴ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:1,
+  ex:'(가)는 많은 별이 공 모양으로 빽빽하게 모인 구상 성단, (나)는 별이 엉성하게 모인 산개 성단이에요. 구상 성단인 (가)에 더 많은 별이 모여 있어요(ㄷ ⭕).'},
+ {q:'그림은 성운의 한 종류를 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',fig:'f18',bo:['별이 모여 있는 천체이다.','성간 물질이 모여 구름처럼 보이는 천체이다.','뒤쪽에서 오는 별빛을 가로막아 어둡게 보이는 천체이다.'],o:['ㄱ','ㄴ','ㄱ, ㄷ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:1,
+  ex:'그림은 고온의 별에게서 에너지를 받아 스스로 붉은빛을 내는 방출 성운이에요. 성간 물질이 모여 구름처럼 보이는 천체(ㄴ ⭕)이고, 어둡게 보이는 것은 암흑 성운이에요(ㄷ ✗).'},
+ {q:'성운과 성단에 대한 설명으로 옳지 <u>않은</u> 것은?',o:['성단은 수많은 별이 무리를 이루고 있는 천체이다.','산개 성단은 수십 개~수만 개의 별들이 엉성하게 모여 있는 별의 무리이다.','성운은 별과 별 사이에 있는 성간 물질이 모여 구름처럼 보이는 천체이다.','반사 성운은 주변의 별빛을 흡수하여 가열되면서 스스로 빛을 내는 성운이다.','암흑 성운은 뒤쪽에서 오는 별빛을 가로막아 어둡게 보이는 성운이다.'],a:3,long:true,
+  ex:'스스로 빛을 내는 것은 방출 성운이에요. 반사 성운은 주변의 별빛을 반사하여 밝게(파랗게) 보이는 성운이에요.'},
+ {q:'그림은 붙임딱지를 붙인 풍선으로 우주 팽창 실험을 하는 모습을 나타낸 것이다. 이 실험에 대한 설명으로 옳지 <u>않은</u> 것은?',fig:'f20',o:['붙임딱지는 은하를 나타낸다.','풍선 표면은 우주를 나타낸다.','풍선의 표면이 팽창할수록 붙임딱지 사이의 거리는 멀어진다.','풍선을 불었을 때 붙임딱지 사이의 거리 변화는 붙임딱지 사이의 거리가 멀수록 더 크다.','풍선 표면의 붙임딱지 중 하나는 우주 팽창의 중심이다.'],a:4,long:true,
+  ex:'우주는 특별한 중심 없이 모든 방향으로 팽창해요. 어느 붙임딱지에서 보아도 다른 붙임딱지가 모두 멀어져요.'},
+ {q:'우주 팽창에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',bo:['은하는 서로 멀어지고 있다.','가까이 있는 은하일수록 더 빨리 멀어진다.','우주 팽창의 중심은 없다.'],o:['ㄱ','ㄴ','ㄱ, ㄷ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:2,
+  ex:'은하들은 서로 멀어지고(ㄱ ⭕), 멀리 있는 은하일수록 더 빨리 멀어져요(ㄴ ✗). 우주 팽창의 중심은 없어요(ㄷ ⭕).'},
+ {q:'그림 (가)와 (나)는 우주 탐사 장비를 나타낸 것이다. 이에 대한 설명으로 옳은 것을 〈보기〉에서 모두 고른 것은?',fig:'f22',bo:['(가)는 우주 망원경이다.','(나)는 천체에 직접 착륙하여 탐사하는 우주 탐사 차이다.','(가)와 (나)는 모두 지상에서 얻기 어려운 천체 정보를 수집한다.'],o:['ㄱ','ㄴ','ㄱ, ㄷ','ㄴ, ㄷ','ㄱ, ㄴ, ㄷ'],a:4,
+  ex:'(가) 우주 망원경과 (나) 우주 탐사 차(탐사 로봇)는 모두 지상에서 얻기 어려운 천체 정보를 수집해요. 모두 옳아요.'},
+ {q:'우주 탐사가 인류에게 미치는 영향으로 옳지 <u>않은</u> 것은?',o:['우주 탐사로 우주에 대한 이해가 깊어졌다.','우주 탐사와 관련된 다양한 직업이 생겼다.','인공위성을 활용하여 위치 정보를 얻게 되었다.','우주 탐사를 위한 국가 사이의 협력이 사라졌다.','우주 탐사와 관련된 과학기술은 다양하게 활용된다.'],a:3,long:true,
+  ex:'오늘날에는 국제 우주 정거장처럼 여러 국가가 협력하여 우주를 탐사하고 있어요.'},
+ {q:'다음은 우주 탐사를 위한 과학기술을 산업 분야에 적용한 예이다. (가)와 (나)를 옳게 짝 지은 것은?<div class="exbo" style="margin-top:8px">(가) 아폴로 계획을 진행하면서 식수 문제를 해결하기 위해 만든 것이다.<br>(나) 우주에서 전력을 얻기 위해 만든 것이다.</div>',o:['(가) 정수기 · (나) 태양 전지','(가) 정수기 · (나) 위성 위치 확인 시스템','(가) 태양 전지 · (나) 정수기','(가) 진공청소기 · (나) 화재경보기','(가) 위성 위치 확인 시스템 · (나) 정수기'],a:0,long:true,
+  ex:'정수기는 우주에서 식수 문제를 해결하기 위해, 태양 전지는 우주에서 전력을 얻기 위해 쓰인 기술이에요.'}];
+ const KO='ㄱㄴㄷㄹ';
+ box.innerHTML=EX.map((e,i)=>{const n=i+1;
+  return `<div class="exq" id="exq${n}"><div class="exh"><b>${n}.</b> ${e.q}</div>`+
+   (e.fig?`<div class="exfig" id="exf${n}"></div>`:'')+(e.html||'')+
+   (e.bo?`<div class="exbo"><b>〈보기〉</b><br>${e.bo.map((b,k)=>KO[k]+'. '+b).join('<br>')}</div>`:'')+
+   (e.pair?`<div class="expair"><span>(가)</span><div class="btns predict exa" data-f="10번 (가)"><button>높다.</button><button>낮다.</button></div><span>(나)</span><div class="btns predict exa" data-f="10번 (나)"><button>높다.</button><button>낮다.</button></div></div>`
+    :`<div class="btns predict exa ${e.long?'exlong':''}" data-f="${n}번">${e.o.map((o,k)=>`<button data-v="${C[k]}">${C[k]} ${o}</button>`).join('')}</div>`)+
+   `<div class="exres"></div></div>`;}).join('');
+ $$('.exa',box).forEach(g=>g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if($('#m-t7').classList.contains('exdone'))return;g.querySelectorAll('button').forEach(o=>o.classList.remove('sel'));b.classList.add('sel');save();})));
+ /* predict 값은 버튼 글자 전체 → 채점은 앞 글자(①~⑤)로 */
+ const val=n=>{const s=document.querySelector(`[data-f="${n}번"] button.sel`);return s?s.textContent.trim().charAt(0):'';};
+ function grade(){let ok=0;EX.forEach((e,i)=>{const n=i+1;let r;if(e.pair){const a=($('[data-f="10번 (가)"] button.sel')||{}).textContent,b=($('[data-f="10번 (나)"] button.sel')||{}).textContent;r=a==='높다.'&&b==='낮다.';}else r=val(n)===C[e.a];if(r)ok++;e._r=r;});return ok;}
+ function show(){const ok=grade();EX.forEach((e,i)=>{const n=i+1,q=$('#exq'+n);q.classList.add(e._r?'ok':'no');q.querySelector('.exres').innerHTML=`<b>${e._r?'⭕ 정답':'❌ 오답'}</b> · 정답 ${e.pair?'(가) 높다. (나) 낮다.':C[e.a]}<br>${e.ex}`;
+   if(!e.pair)q.querySelectorAll('.exa button').forEach(b=>{if(b.dataset.v===C[e.a])b.classList.add('exright');});});
+  $('#m-t7').classList.add('exdone');$('#exScore').textContent=`24문항 중 ${ok}개 정답`;$('#exTop').innerHTML=`<b>📊 결과: 24문항 중 <span style="color:#ffd166">${ok}개</span> 정답</b> · 틀린 문항의 해설을 읽어 보세요.`;}
+ const dk=()=>key()+'_exdone';
+ window.__exDone=()=>{try{localStorage.setItem(dk(),'1');}catch(e){}show();};
+ window.__exCheck=()=>{let d=null;try{d=localStorage.getItem(dk());}catch(e){}if(d)show();};
+ /* 제출 직전에 점수 기록 · 제출 완료되면 채점 결과 공개 */
+ $('#m-t7').addEventListener('click',e=>{if(e.target.closest('.submitBtn'))$('#exScore').textContent=`24문항 중 ${grade()}개 정답`;
+  if($('#m-t7').classList.contains('exdone')&&e.target.closest('.exa')){e.stopPropagation();e.preventDefault();}},true);
+ new MutationObserver(()=>{if(/제출 완료/.test($('#st7').textContent))window.__exDone();}).observe($('#st7'),{childList:true,characterData:true,subtree:true});
+ /* ---- 그림 (교재 그림을 다시 그린 것) ---- */
+ const cv=(id,w,h)=>{const c=document.createElement('canvas');c.dataset.w=w;c.dataset.h=h;c.style.maxWidth=w+'px';$('#'+id).appendChild(c);return U.setup(c);};
+ const T=(x,s,X,Y,col,sz,al,wt)=>U.T(x,s,X,Y,col,sz,al,wt,1.3);
+ const dark=(x,X,Y,W,H,seed)=>{x.fillStyle='#05070f';x.fillRect(X,Y,W,H);const r=U.rng(seed);for(let i=0;i<70;i++){x.fillStyle=`rgba(220,225,255,${r()*.6+.1})`;x.fillRect(X+r()*W,Y+r()*H,1.2,1.2);}};
+ const star=(x,X,Y,r)=>U.glow(x,X,Y,r||4,'255,170,90',1);
+ const dimL=(x,x1,x2,y,lab,col)=>{x.strokeStyle=col||'#fff';x.fillStyle=col||'#fff';x.lineWidth=1.5;x.beginPath();x.moveTo(x1+6,y);x.lineTo(x2-6,y);x.stroke();[[x1,1],[x2,-1]].forEach(([p,d])=>{x.beginPath();x.moveTo(p,y);x.lineTo(p+8*d,y-4);x.lineTo(p+8*d,y+4);x.closePath();x.fill();});T(x,lab,(x1+x2)/2,y-12,col||'#fff',11,'center',700);};
+ const F={
+  f1(){const c=cv('exf1',620,150),x=c.x;dark(x,0,0,300,150,3);dark(x,320,0,300,150,4);
+   star(x,40,70);star(x,250,70);dimL(x,48,242,70,'0.2″');T(x,'A',40,100,'#fff',12,'center',700);T(x,'A′',250,100,'#fff',12,'center',700);
+   star(x,400,70);star(x,520,70);dimL(x,408,512,70,'0.16″');T(x,'B',400,100,'#fff',12,'center',700);T(x,'B′',520,100,'#fff',12,'center',700);},
+  f5(){const c=cv('exf5',620,210),x=c.x;dark(x,0,0,620,210,5);const ex=50,ey=175,R=420;
+   x.strokeStyle='#fff';x.lineWidth=2;x.beginPath();x.arc(ex,ey,R,-Math.PI/2.6,-Math.PI/40);x.stroke();T(x,'10 pc',ex+R*Math.cos(-.38)+10,ey+R*Math.sin(-.38)+4,'#fff',11,'left',700);
+   x.fillStyle='#4aa8ff';x.beginPath();x.arc(ex,ey,8,0,7);x.fill();T(x,'지구',ex+14,ey,'#fff',12,'left',700);
+   const P=(d,a)=>[ex+d*Math.cos(a),ey+d*Math.sin(a)];[['A',300,-.5],['B',R,-.27],['C',520,-.32]].forEach(([n,d,a])=>{const[X,Y]=P(d,a);star(x,X,Y,4);T(x,n,X-14,Y-2,'#fff',12,'right',700);});},
+  f10(){const c=cv('exf10',620,150),x=c.x;x.fillStyle='#0b1022';x.fillRect(0,0,620,150);const cols=[['청색','#3aa7ff'],['청백색','#a9d6ff'],['백색','#f0f0f0'],['황백색','#fff1b8'],['황색','#ffd23a'],['주황색','#ff9a3a'],['적색','#ff5a3a']];
+   cols.forEach(([n,cl],i)=>{const X=50+i*87;const g=x.createRadialGradient(X-6,42,3,X,48,26);g.addColorStop(0,'#fff');g.addColorStop(.35,cl);g.addColorStop(1,cl+'55');x.fillStyle=g;x.beginPath();x.arc(X,48,24,0,7);x.fill();T(x,n,X,90,'#eef1ff',11,'center',700);});
+   const g=x.createLinearGradient(20,0,600,0);g.addColorStop(0,'#3aa7ff');g.addColorStop(.5,'#f5e7b0');g.addColorStop(1,'#ff5a3a');x.fillStyle=g;x.fillRect(40,114,540,16);
+   x.beginPath();x.moveTo(20,122);x.lineTo(40,108);x.lineTo(40,136);x.closePath();x.fillStyle='#3aa7ff';x.fill();x.beginPath();x.moveTo(600,122);x.lineTo(580,108);x.lineTo(580,136);x.closePath();x.fillStyle='#ff5a3a';x.fill();
+   T(x,'(가)',58,122,'#05070f',11,'center',900);T(x,'표면 온도',310,122,'#05070f',11,'center',900);T(x,'(나)',560,122,'#05070f',11,'center',900);},
+  f13(){const c=cv('exf13',620,230),G=U.Galaxy(7),x=c.x;G.drawSide(c,{zs:2.5,fs:1.3});const w=620,h=230,cx=w/2,cy=h/2,s=(w*.47)/16000,sx=cx-8500*s;
+   x.strokeStyle='#fff';x.setLineDash([4,4]);x.beginPath();x.moveTo(cx,cy-60);x.lineTo(cx,h-14);x.moveTo(cx-15000*s,cy+10);x.lineTo(cx-15000*s,h-14);x.moveTo(sx,cy-6);x.lineTo(sx,cy-60);x.stroke();x.setLineDash([]);
+   dimL(x,sx,cx,cy-56,'B');dimL(x,cx-15000*s,cx,h-22,'A');},
+  f17(){const a=cv('exf17',300,190),b=cv('exf17',300,190);U.drawObject(a,'glob',41,{label:'(가)'});U.drawObject(b,'open',42,{label:'(나)'});},
+  f18(){const a=cv('exf18',420,240);U.drawObject(a,'emis',43);},
+  f20(){const a=cv('exf20',420,300);const B=U.Balloon(a);B.setR(14);B.measure('1','3');},
+  f22(){const a=cv('exf22',300,200),b=cv('exf22',300,200);
+   {const x=a.x;x.fillStyle='#05070f';x.fillRect(0,0,300,200);// 우주 망원경
+    x.fillStyle='#b9a4d8';x.beginPath();x.moveTo(40,150);x.lineTo(250,120);x.lineTo(270,150);x.lineTo(60,178);x.closePath();x.fill();x.strokeStyle='#7d6aa8';for(let k=1;k<5;k++){x.beginPath();x.moveTo(40+k*4,150+k*6);x.lineTo(250+k*4,120+k*6);x.stroke();}
+    const hx=(X,Y,r)=>{x.beginPath();for(let k=0;k<6;k++){const t=Math.PI/3*k+Math.PI/6;x.lineTo(X+r*Math.cos(t),Y+r*Math.sin(t));}x.closePath();x.fill();x.strokeStyle='#5a4300';x.stroke();};
+    x.fillStyle='#e8c35a';const R=13;[[0,0],[1,0],[-1,0],[.5,.87],[-.5,.87],[.5,-.87],[-.5,-.87],[1.5,.87],[-1.5,.87],[1.5,-.87],[-1.5,-.87],[0,1.74],[0,-1.74],[1,1.74],[-1,1.74],[1,-1.74],[-1,-1.74],[2,0]].forEach(([u,v])=>hx(150+u*R*1.75,78+v*R*1.75,R));
+    x.strokeStyle='#ddd';x.lineWidth=2;x.beginPath();x.moveTo(150,78);x.lineTo(150,20);x.moveTo(110,40);x.lineTo(150,20);x.lineTo(190,40);x.stroke();x.lineWidth=1;T(x,'(가)',150,192,'#eef1ff',11,'center',900);}
+   {const x=b.x;const g=x.createLinearGradient(0,0,0,200);g.addColorStop(0,'#d9a27a');g.addColorStop(.55,'#c9875c');g.addColorStop(1,'#8f5537');x.fillStyle=g;x.fillRect(0,0,300,200);// 탐사 차
+    x.fillStyle='#e9e4da';x.fillRect(70,92,160,40);x.fillStyle='#bdb6a8';x.fillRect(80,84,140,10);x.fillStyle='#555';x.fillRect(190,40,8,52);x.fillStyle='#e9e4da';x.fillRect(178,28,32,16);x.fillStyle='#223';x.beginPath();x.arc(186,36,4,0,7);x.arc(202,36,4,0,7);x.fill();
+    x.strokeStyle='#555';x.lineWidth=4;x.beginPath();x.moveTo(80,132);x.lineTo(60,150);x.moveTo(150,132);x.lineTo(150,150);x.moveTo(220,132);x.lineTo(240,150);x.stroke();x.lineWidth=1;
+    [[60,158],[105,158],[150,158],[195,158],[240,158]].forEach(([X,Y])=>{x.fillStyle='#333';x.beginPath();x.arc(X,Y,16,0,7);x.fill();x.fillStyle='#888';x.beginPath();x.arc(X,Y,6,0,7);x.fill();});
+    x.strokeStyle='#666';x.lineWidth=3;x.beginPath();x.moveTo(75,100);x.lineTo(40,80);x.lineTo(30,100);x.stroke();x.lineWidth=1;T(x,'(나)',150,192,'#fff',11,'center',900);}}};
+ let drawn=false;window.__exFigs=()=>{if(drawn)return;drawn=true;Object.keys(F).forEach(k=>{try{F[k]();}catch(err){console.error(err);}});};
+})();
 
 faRender('quiz1','1');faRender('quiz2','2');faRender('quiz3','3');faRender('quiz4','4');faRender('quiz5','5');faRender('quiz6','6');
 

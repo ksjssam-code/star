@@ -2452,7 +2452,7 @@ document.getElementById('bGraph').onclick=()=>{ov.style.display='flex';if(!data.
 <script>
 (function(){
 const API='https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';
-const NAMES={'1':'1차시 · 별까지의 거리','2':'2차시 · 별의 등급과 밝기','3':'3차시 · 별의 표면 온도와 색','4':'4차시 · 우리은하','5':'5차시 · 팽창하는 우주','6':'6차시 · 우주 탐사'};
+const NAMES={'1':'1차시 · 별까지의 거리','2':'2차시 · 별의 등급과 밝기','3':'3차시 · 별의 표면 온도와 색','4':'4차시 · 우리은하','5':'5차시 · 팽창하는 우주','6':'6차시 · 우주 탐사','7':'📝 총괄평가'};
 const ov=document.getElementById('opOv'),list=document.getElementById('opList'),msg=document.getElementById('opMsg');let open=['1','2','3'];
 function draw(){list.innerHTML='';Object.keys(NAMES).forEach(L=>{const on=open.includes(L);const b=document.createElement('button');
  b.style.cssText=`display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:10px;font-size:17px;cursor:pointer;border:1px solid ${on?'#63e6a3':'#2a3666'};background:${on?'#63e6a31a':'#050913'};color:${on?'#eef1ff':'#9ba6d4'}`;
