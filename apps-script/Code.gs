@@ -22,6 +22,7 @@
  *       · 좋은 글 → '좋은 글' 체크 (+5점)
  *       · 선생님 답변 → '답변' 시트 새 줄에 질문 ID 복사, 반 칸에 "교사", 답변 칸에 내용
  *   - 학생 화면에 보일 차시: 교사 화면 하단 [🔒 차시 공개]에서 켜고 끔 (처음엔 1~3차시만 공개)
+ *   - 패널티 : 기간 동안 로그인 막기 (반·번호·이름·시작일·종료일·사유) → 학생 명부 '패널티' 칸에도 기간 표시
  *   - 시트 메뉴 [⭐ 별 탐구실] → 반·번호 순 정렬 / 학생 점수 새로 계산 / 교사용 그래프 보기 비밀번호 설정
  */
 
@@ -55,6 +56,8 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
+    const pen = penaltyIn_(penaltySheet_(), d);
+    if (pen) return json_({ ok: false, penalty: true, relogin: d.action !== 'login', error: penaltyMsg_(pen) });
     if (d.action === 'login') return json_(login_(d));
     const me = auth_(d);
     if (!me.ok) return json_(me);
@@ -77,6 +80,7 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('⭐ 별 탐구실')
     .addItem('탐구 결과 반·번호 순으로 정렬', 'sortAllSheets')
     .addItem('학생 명부 점수·등급 새로 계산', 'refreshRoster')
+    .addItem('패널티 시트 정리 (상태·학생 명부 표시)', 'refreshPenalties')
     .addItem('교사용 그래프 보기 비밀번호 설정', 'setTeacherKey')
     .addToUi();
 }
@@ -365,6 +369,95 @@ function listQuestions_(lesson) {
   }).sort(function (x, y) { return x.time < y.time ? 1 : -1; });
   return { ok: true, questions: out };
 }
+
+/* ---------------- 패널티 (기간 동안 로그인 막기) ----------------
+ * '패널티' 시트에 한 줄 = 한 명
+ *   반 · 번호(비워도 됨) · 이름 · 시작일 · 종료일 · 사유 · 상태(자동)
+ *   → 시작일~종료일(종료일 포함) 동안 로그인·제출·게시 모두 막힘, 종료일 다음 날 자동으로 풀림
+ *   → 일찍 풀어 주려면 그 줄을 지우거나 종료일을 어제 날짜로 바꾸기
+ */
+const P_HEAD = ['반', '번호', '이름', '시작일', '종료일', '사유', '상태'];
+const P_SEED = [
+  ['2-1', '', '백송이', '2026-11-24', '2026-11-30', '수업 시간에 태블릿으로 다른 활동'],
+  ['2-1', '', '박규배', '2026-11-24', '2026-11-30', '수업 시간에 태블릿으로 다른 활동']
+];
+function penaltySheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let s = ss.getSheetByName('패널티');
+  const props = PropertiesService.getScriptProperties();
+  if (!s) s = sheet_('패널티', P_HEAD);
+  if (props.getProperty('PENALTY_SEED_1') !== 'done') {
+    P_SEED.forEach(function (p) {
+      s.appendRow([safe_(p[0]), p[1], safe_(p[2]), dateOf_(p[3]), dateOf_(p[4]), safe_(p[5]), '']);
+    });
+    props.setProperty('PENALTY_SEED_1', 'done');
+    penaltyFormat_(s);
+    markRosterPenalties_();
+  }
+  return s;
+}
+function penaltyFormat_(s) {
+  const last = s.getLastRow();
+  if (last < 2) return;
+  s.getRange(2, 4, last - 1, 2).setNumberFormat('yyyy-mm-dd');
+  const f = [];
+  for (let r = 2; r <= last; r++) f.push(['=IF(OR(D' + r + '="",E' + r + '=""),"",IF(TODAY()<D' + r + ',"예정",IF(TODAY()<=E' + r + ',"🚫 패널티 중","종료")))']);
+  s.getRange(2, 7, last - 1, 1).setFormulas(f);
+}
+function dateOf_(v) {
+  const m = String(v).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+  return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : '';
+}
+function ymd_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone() || 'Asia/Seoul', 'yyyy-MM-dd');
+  const m = String(v || '').match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+  return m ? m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2) : '';
+}
+function mdKo_(ymd) { const p = ymd.split('-'); return Number(p[1]) + '월 ' + Number(p[2]) + '일'; }
+// 시트 하나에서 지금 패널티 중인 줄 찾기
+function penaltyIn_(s, d) {
+  if (!s || s.getLastRow() < 2) return null;
+  const today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
+  const rows = s.getRange(2, 1, s.getLastRow() - 1, 6).getValues();
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const cls = String(r[0]).replace(/^'/, '').trim(), num = String(r[1]).trim(), name = String(r[2]).replace(/^'/, '').trim();
+    if (cls !== d.cls || (!num && !name)) continue;
+    if (num && Number(num) !== Number(d.num)) continue;
+    if (name && name !== String(d.name).trim()) continue;
+    const a = ymd_(r[3]), b = ymd_(r[4]);
+    if (!a || !b || today < a || today > b) continue;
+    return { start: a, end: b, reason: String(r[5]).replace(/^'/, '').trim() };
+  }
+  return null;
+}
+function penaltyMsg_(p) {
+  const n = new Date(Number(p.end.slice(0, 4)), Number(p.end.slice(5, 7)) - 1, Number(p.end.slice(8, 10)) + 1);
+  return '🚫 패널티 기간 (' + mdKo_(p.start) + ' ~ ' + mdKo_(p.end) + ')' + (p.reason ? ' · 사유: ' + p.reason : '') +
+    '\n이 기간에는 로그인할 수 없음. ' + (n.getMonth() + 1) + '월 ' + n.getDate() + '일부터 다시 들어올 수 있음';
+}
+// 학생 명부 '패널티' 칸(10열)에 기간 표시
+function markRosterPenalties_() {
+  const ps = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('패널티');
+  const rs = sheet_('학생 명부', R_HEAD);
+  if (!ps || rs.getLastRow() < 2) { rs.getRange(1, 10).setValue('패널티').setFontWeight('bold').setBackground(HEAD_BG); return; }
+  rs.getRange(1, 10).setValue('패널티').setFontWeight('bold').setBackground(HEAD_BG);
+  const plist = ps.getLastRow() < 2 ? [] : ps.getRange(2, 1, ps.getLastRow() - 1, 6).getValues();
+  const rows = rs.getRange(2, 1, rs.getLastRow() - 1, 3).getValues();
+  const out = rows.map(function (r) {
+    const cls = String(r[0]).replace(/^'/, ''), num = Number(r[1]), name = String(r[2]).replace(/^'/, '').trim();
+    const hit = [];
+    plist.forEach(function (p) {
+      const pc = String(p[0]).replace(/^'/, '').trim(), pn = String(p[1]).trim(), pm = String(p[2]).replace(/^'/, '').trim();
+      if (pc !== cls || (!pn && !pm) || (pn && Number(pn) !== num) || (pm && pm !== name)) return;
+      const a = ymd_(p[3]), b = ymd_(p[4]);
+      if (a && b) hit.push('패널티 ' + a + ' ~ ' + b);
+    });
+    return [hit.join(' / ')];
+  });
+  rs.getRange(2, 10, out.length, 1).setValues(out);
+}
+function refreshPenalties() { const s = penaltySheet_(); penaltyFormat_(s); markRosterPenalties_(); }
 
 /* ---------------- 도우미 ---------------- */
 function sheet_(name, headers) {

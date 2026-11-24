@@ -149,6 +149,7 @@ body.qa-wide main{max-width:1500px}
 .dests{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.dests button{display:flex;flex-direction:column;align-items:center;min-width:110px}.dests button .em{font-size:30px}.dests button.on{border-color:var(--gold);background:#ffd16618}
 nav .ng{color:var(--muted);font-size:13px;align-self:center;padding:0 2px 0 6px}
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:13px}
+#lgMsg{white-space:pre-line}
 </style>
 </head>
 <body>
@@ -947,7 +948,7 @@ $('#lgGo').onclick=async()=>{if(lgBusy)return;const cls=$('#lgCls').value,num=pa
  try{const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(body)});const j=await r.json();m.style.color='';
   if(!j.ok&&j.error==='알 수 없는 요청'){user={cls,num,name,pin,nick:name,legacy:true};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();lgBusy=false;return;}
   if(j.need==='register'){$('#lgReg').style.display='block';m.textContent=j.error||'처음 왔어요! 닉네임과 PIN 확인을 입력하고 다시 [입장하기]';$('#lgNick').focus();}
-  else if(!j.ok){m.textContent=j.error||'로그인 실패';}
+  else if(!j.ok){m.style.color=j.penalty?'#e5484d':'';m.textContent=j.error||'로그인 실패';}
   else{user={cls,num,name,pin,nick:j.nick,points:j.points,level:j.level};saveUser();$('#login').classList.remove('on');showWho();restore();if(typeof drawGraphs==='function')drawGraphs();pullServer();if($('#m-qa').classList.contains('on'))loadQA();}
  }catch(e){m.style.color='';m.textContent='인터넷 연결 확인 후 다시 시도하기';}
  lgBusy=false;};
@@ -1102,7 +1103,7 @@ function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]
   it.o.forEach((t,j)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{if(QZ[lesson][i]===null)QZ[lesson][i]=j===it.a;o.querySelectorAll('button').forEach(x=>x.classList.remove('ok','no'));b.classList.add(j===it.a?'ok':'no');fb.innerHTML=j===it.a?'⭕ 정답! '+it.e:'❌ 다시 생각해 보기';fb.classList.add('show');};o.appendChild(b);});root.appendChild(d);});}
 
 /* ---------- API ---------- */
-async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin)openLogin();throw new Error(j.error||'오류');}setPoints(j);return j;}
+async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin){openLogin();if(j.penalty){const m=$('#lgMsg');m.style.color='#e5484d';m.textContent=j.error;}}throw new Error(j.error||'오류');}setPoints(j);return j;}
 async function apiGet(params){if(!API_URL)throw new Error('NOAPI');const r=await fetch(API_URL+'?'+new URLSearchParams(params));return r.json();}
 
 /* ---------- submit ---------- */
