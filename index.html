@@ -955,6 +955,22 @@ $('#lgGo').onclick=async()=>{if(lgBusy)return;const cls=$('#lgCls').value,num=pa
 ['lgPin','lgPin2','lgNick'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lgGo').click();}));
 if(!PREVIEW&&(!user||!user.pin||!user.nick))openLogin();
 else if(!PREVIEW&&user&&user.pin)setTimeout(pullServer,800);
+/* ---------- 👀 수업 중 이탈 감지 (선생님이 켠 시간에만 · 이 화면을 벗어난 시각만 기록) ---------- */
+(function(){
+ if(PREVIEW||!API_URL)return;
+ let on=false,leftAt=0,lid='';
+ const bn=document.createElement('div');bn.id='awBan';bn.style.cssText='display:none;position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;background:#2a1420ee;border:1px solid #ff7a90;color:#ffd6de;padding:6px 14px;border-radius:999px;font-size:14px;pointer-events:none;white-space:nowrap';bn.textContent='👀 수업 중 · 다른 앱이나 탭으로 나가면 선생님께 기록돼요';document.body.appendChild(bn);
+ const me=()=>user&&user.pin&&user.cls?{cls:user.cls,num:user.num,name:user.name}:null;
+ const view=()=>location.hash.replace('#','');
+ const set=t=>{on=!!(t&&t.on&&me()&&(t.cls==='all'||t.cls===user.cls));bn.style.display=on?'block':'none';};
+ async function ping(){const u=me();if(!u){set(null);return;}try{const j=await(await fetch(API_URL,{method:'POST',body:JSON.stringify(Object.assign({action:'ping',view:view(),visible:!document.hidden},u))})).json();set(j.track);}catch(e){}}
+ function send(o){const u=me();if(!u)return;const b=JSON.stringify(Object.assign(o,u,{view:view()}));try{if(navigator.sendBeacon&&navigator.sendBeacon(API_URL,new Blob([b],{type:'text/plain;charset=utf-8'})))return;}catch(e){}try{fetch(API_URL,{method:'POST',body:b,keepalive:true,mode:'no-cors'});}catch(e){}}
+ document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){if(!on||leftAt)return;leftAt=Date.now();lid=Math.random().toString(36).slice(2,10);send({action:'leave',id:lid});}
+  else{if(leftAt){send({action:'back',id:lid,sec:Math.round((Date.now()-leftAt)/1000)});leftAt=0;}setTimeout(ping,1500);}
+ });
+ setTimeout(ping,1200);setInterval(()=>{if(!document.hidden)ping();},45000);
+})();
 showWho();
 
 /* ---------- routing ---------- */

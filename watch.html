@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>👀 이탈 감지 · 별 탐구실</title>
+<style>
+:root{--bg:#0a0f1f;--panel:#121a33;--panel2:#18224a;--line:#2a3666;--text:#e9edff;--muted:#9ba6d4;--gold:#ffd166;--pink:#ff7a90;--green:#63e6a3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR",system-ui,sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:0 0 2px}
+.muted{color:var(--muted);font-size:14px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,select{font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+button.on{border-color:var(--gold);color:var(--gold);font-weight:700}
+#go{background:var(--gold);color:#1a1300;border:0;font-weight:700}
+#stop{border-color:var(--pink);color:var(--pink)}
+#status{font-weight:700}
+.sum{display:flex;gap:14px;flex-wrap:wrap;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
+.card .n{font-weight:700;font-size:17px}
+.card .s{font-size:14px}
+.card.away{border-color:var(--pink);background:#ff7a9022}
+.card.away .s{color:var(--pink);font-weight:700}
+.card.here .s{color:var(--green)}
+.card.off{opacity:.55}
+.card .c{font-size:13px;color:var(--muted)}
+.card .c b{color:var(--gold)}
+#gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9}
+#gate form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;width:min(340px,90vw)}
+#gate input{width:100%;font-size:18px;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text)}
+</style>
+</head>
+<body>
+<div id="gate"><form id="gateF">
+ <div style="font-size:20px;font-weight:900;margin-bottom:4px">👀 이탈 감지 · 별 탐구실</div>
+ <div class="muted" style="margin-bottom:12px">교사용 페이지 비밀번호</div>
+ <input id="gateP" type="password" autocomplete="current-password">
+ <div id="gateM" style="color:var(--pink);font-size:14px;min-height:20px;margin:6px 0"></div>
+ <button style="width:100%;background:var(--gold);color:#1a1300;border:0;font-weight:700">열기</button>
+</form></div>
+
+<div class="wrap">
+ <h1>👀 수업 중 이탈 감지 · 별 탐구실</h1>
+ <div class="muted">학생이 별 탐구실 화면을 벗어나면(다른 앱·다른 탭·홈 화면·화면 꺼짐) 기록돼요. 무엇을 했는지는 알 수 없어요. ⚠ 학생 이름이 보이니 화면 공유 중이라면 휴대폰이나 다른 기기에서 여세요.</div>
+
+ <div class="box">
+  <div class="row" id="clsRow"></div>
+  <div class="row" style="margin-top:10px">
+   <select id="min"><option value="45">45분 동안</option><option value="50" selected>50분 동안</option><option value="90">90분 동안 (블록 수업)</option><option value="20">20분 동안</option></select>
+   <button id="go">▶ 이 반 감지 시작</button>
+   <button id="stop">■ 끄기</button>
+   <span id="status" class="muted"></span>
+  </div>
+  <div class="muted" style="margin-top:6px">켜면 학생 화면 아래에 “👀 수업 중 · 다른 앱이나 탭으로 나가면 선생님께 기록돼요”가 보여요. 학생 화면은 1분 안에 반영돼요. 정한 시간이 지나면 자동으로 꺼져요.</div>
+ </div>
+
+ <div class="box">
+  <div class="sum" id="sum"></div>
+  <div class="muted" id="upd" style="margin:4px 0 10px"></div>
+  <div class="grid" id="grid"></div>
+ </div>
+ <div class="muted">전체 기록은 구글 시트 ‘이탈 기록’ 탭에 남아요 (나간 시각 · 돌아온 시각 · 이탈 시간 · 보던 화면). 3초 미만은 횟수에서 빼요.</div>
+</div>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';
+const TEACHER_HASH='1fa58357';
+const CLS=['2-1','2-2','2-3','2-4'];
+const VIEW={"t1": "1차시", "t2": "2차시", "t3": "3차시", "t4": "4차시", "t5": "5차시", "t6": "6차시", "qa": "호기심 은하"};
+let key='',cls='2-1',track={on:false},timer=null;
+function h(s){let x=0x811c9dc5;for(const b of new TextEncoder().encode(s)){x^=b;x=Math.imul(x,0x01000193)>>>0;}return x.toString(16).padStart(8,'0');}
+try{key=sessionStorage.getItem('aw_tkey')||'';cls=localStorage.getItem('aw_cls')||'2-1';}catch(e){}
+if(key&&h(key)===TEACHER_HASH)document.getElementById('gate').remove(),start();
+document.getElementById('gateF').onsubmit=e=>{e.preventDefault();const p=document.getElementById('gateP').value;if(h(p)===TEACHER_HASH){key=p;try{sessionStorage.setItem('aw_tkey',p);}catch(e){}document.getElementById('gate').remove();start();}else document.getElementById('gateM').textContent='비밀번호가 다름';};
+const $=id=>document.getElementById(id);
+const t2=s=>s>=60?Math.floor(s/60)+'분 '+(s%60)+'초':s+'초';
+const hm=ms=>{const d=new Date(ms);return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');};
+function drawCls(){$('clsRow').innerHTML='';CLS.forEach(c=>{const b=document.createElement('button');b.textContent=c+'반';if(c===cls)b.className='on';b.onclick=()=>{cls=c;try{localStorage.setItem('aw_cls',c);}catch(e){}drawCls();load();};$('clsRow').appendChild(b);});}
+function showTrack(){const s=$('status');if(track.on){s.style.color='var(--green)';s.textContent='● 감지 중: '+(track.cls==='all'?'모든 반':track.cls+'반')+' · '+hm(track.until)+'까지';}else{s.style.color='';s.textContent='○ 꺼져 있음';}}
+async function call(q){const r=await fetch(API+'?'+q);return r.json();}
+async function load(){
+ try{const j=await call('action=away&cls='+encodeURIComponent(cls)+'&key='+encodeURIComponent(key));
+  if(!j.ok){$('upd').textContent=j.badKey?'비밀번호가 맞지 않아요 (새로 고침 후 다시 입력)':(j.error||'불러오기 실패')+' — 새 Apps Script가 배포되었는지 확인';return;}
+  track=j.track||{on:false};showTrack();
+  const st=j.students.slice().sort((a,b)=>a.num-b.num);
+  const n={away:0,here:0,off:0};st.forEach(x=>n[x.state]++);
+  $('sum').innerHTML=`<span style="color:var(--pink)">🔴 지금 이탈 중 <b>${n.away}</b>명</span><span style="color:var(--green)">🟢 보는 중 <b>${n.here}</b>명</span><span class="muted">⚪ 접속 안 함 ${n.off}명</span>`;
+  $('upd').textContent=(track.on&&track.cls!=='all'&&track.cls!==cls?'⚠ 지금 감지 중인 반은 '+track.cls+'반이에요 · ':'')+'마지막 갱신 '+new Date().toLocaleTimeString('ko-KR')+' (8초마다 자동)';
+  const g=$('grid');g.innerHTML='';
+  st.forEach(x=>{const d=document.createElement('div');d.className='card '+x.state;
+   const s=x.state==='away'?'🔴 이탈 중 '+t2(x.awaySec):x.state==='here'?'🟢 보는 중'+(x.view&&VIEW[x.view]?' · '+VIEW[x.view]:''):'⚪ 접속 안 함';
+   d.innerHTML=`<div class="n">${x.num}번 ${String(x.name||'').replace(/[<>&]/g,'')}</div><div class="s">${s}</div><div class="c">${x.count?`이탈 <b>${x.count}회</b> · 모두 ${t2(x.total)}`:'이탈 없음'}</div>`;g.appendChild(d);});
+  if(!st.length)g.innerHTML='<div class="muted">이 반 학생 기록이 아직 없어요.</div>';
+ }catch(e){$('upd').textContent='불러오기 실패 (인터넷 확인)';}
+}
+$('go').onclick=async()=>{$('status').textContent='켜는 중…';try{const j=await call('action=settrack&on=1&cls='+encodeURIComponent(cls)+'&min='+$('min').value+'&key='+encodeURIComponent(key));if(j.ok){track=j.track;showTrack();load();}else $('status').textContent=j.error||'실패';}catch(e){$('status').textContent='실패: 새 Apps Script 배포 확인';}};
+$('stop').onclick=async()=>{try{const j=await call('action=settrack&on=0&key='+encodeURIComponent(key));if(j.ok){track={on:false};showTrack();}}catch(e){}};
+function start(){drawCls();load();clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)load();},8000);}
+</script>
+</body>
+</html>

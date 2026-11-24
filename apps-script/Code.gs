@@ -23,6 +23,7 @@
  *       · 선생님 답변 → '답변' 시트 새 줄에 질문 ID 복사, 반 칸에 "교사", 답변 칸에 내용
  *   - 학생 화면에 보일 차시: 교사 화면 하단 [🔒 차시 공개]에서 켜고 끔 (처음엔 1~3차시만 공개)
  *   - 패널티 : 기간 동안 로그인 막기 (반·번호·이름·시작일·종료일·사유) → 학생 명부 '패널티' 칸에도 기간 표시
+ *   - 이탈 기록 : 교사 화면 [👀 이탈 감지]를 켠 동안, 학생이 이 화면을 벗어난 시각·시간 기록
  *   - 시트 메뉴 [⭐ 별 탐구실] → 반·번호 순 정렬 / 학생 점수 새로 계산 / 교사용 그래프 보기 비밀번호 설정
  */
 
@@ -43,6 +44,9 @@ const PTS = { post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'list') return json_(listQuestions_(String(p.lesson || 'all')));
+  if (p.action === 'track') { const t = trackState_(); return json_({ ok: true, track: t.on ? { on: true, cls: t.cls, until: t.until } : { on: false } }); }
+  if (p.action === 'settrack') return json_(setTrack_(String(p.key || ''), String(p.on || ''), String(p.cls || ''), String(p.min || '')));
+  if (p.action === 'away') return json_(awayList_(String(p.key || ''), String(p.cls || '')));
   if (p.action === 'graphs') return json_(teacherGraphs_(String(p.key || '')));
   if (p.action === 'open') return json_({ ok: true, open: openLessons_() });
   if (p.action === 'setopen') return json_(setOpen_(String(p.key || ''), String(p.open || '')));
@@ -53,6 +57,7 @@ function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: '잘못된 요청' }); }
   if (!isValidStudent_(d)) return json_({ ok: false, error: '반·번호·이름을 확인하기' });
+  if (d.action === 'ping' || d.action === 'leave' || d.action === 'back') return json_(trackEvent_(d));
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
@@ -458,6 +463,115 @@ function markRosterPenalties_() {
   rs.getRange(2, 10, out.length, 1).setValues(out);
 }
 function refreshPenalties() { const s = penaltySheet_(); penaltyFormat_(s); markRosterPenalties_(); }
+
+/* ---------------- 👀 이탈 감지 (수업 중 다른 앱·탭으로 나간 학생 기록) ----------------
+ * 교사 화면 [👀 이탈 감지](watch.html)에서 반·시간을 정해 켜면 그 시간 동안만 기록함
+ *   - 학생 화면 위쪽에 "수업 중 이탈 기록 중" 안내가 보임
+ *   - '이탈 기록' 시트: 나간 시각 · 반 · 번호 · 이름 · 돌아온 시각 · 이탈 시간(초) · 보던 화면
+ *   - 무엇을 했는지는 알 수 없고, 이 화면을 벗어났다는 것(다른 앱·탭·홈 화면·화면 꺼짐)만 기록됨
+ */
+const AW_HEAD = ['나간 시각', '반', '번호', '이름', '돌아온 시각', '이탈 시간(초)', '보던 화면', 'ID'];
+function teacherHash_(key) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, 'starlab-teacher|' + key, Utilities.Charset.UTF_8)
+    .map(function (x) { return ('0' + (x & 255).toString(16)).slice(-2); }).join('');
+}
+function trackState_() {
+  let t = null;
+  try { t = JSON.parse(PropertiesService.getScriptProperties().getProperty('TRACK') || 'null'); } catch (e) { t = null; }
+  if (!t || !t.on || Date.now() > Number(t.until)) return { on: false };
+  return t;
+}
+function trackFor_(cls) { const t = trackState_(); return t.on && (t.cls === 'all' || t.cls === cls) ? t : null; }
+function setTrack_(key, on, cls, min) {
+  if (!awTeacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  const props = PropertiesService.getScriptProperties();
+  if (on !== '1') { props.setProperty('TRACK', JSON.stringify({ on: false })); return { ok: true, track: { on: false } }; }
+  if (cls !== 'all' && CLASSES.indexOf(cls) < 0) return { ok: false, error: '반 확인' };
+  const m = Math.max(5, Math.min(180, Number(min) || 50));
+  const t = { on: true, cls: cls, since: Date.now(), until: Date.now() + m * 60000 };
+  props.setProperty('TRACK', JSON.stringify(t));
+  return { ok: true, track: t };
+}
+function awCache_() { return CacheService.getScriptCache(); }
+function awKey_(cls, num) { return 'aw|' + cls + '#' + Number(num); }
+function awGet_(cls, num) { try { return JSON.parse(awCache_().get(awKey_(cls, num)) || 'null'); } catch (e) { return null; } }
+function awPut_(cls, num, o) { awCache_().put(awKey_(cls, num), JSON.stringify(o), 21600); }
+// 학생 화면에서 오는 신호: ping(보는 중) · leave(나감) · back(돌아옴)
+function trackEvent_(d) {
+  const t = trackFor_(d.cls);
+  if (!t) return { ok: true, track: { on: false } };
+  const now = Date.now(), name = clip_(d.name, 20).trim(), view = clip_(d.view, 30);
+  const st = awGet_(d.cls, d.num) || {};
+  st.name = name; st.seen = now; st.view = view;
+  if (d.action === 'leave') {
+    st.away = now; st.id = clip_(d.id, 20);
+    awPut_(d.cls, d.num, st);
+    awWrite_(function (s) { s.appendRow([new Date(st.away), safe_(d.cls), Number(d.num), safe_(name), '', '', safe_(view), safe_(st.id)]); });
+  } else if (d.action === 'back') {
+    const id = clip_(d.id, 20), sec = Math.max(0, Math.min(6 * 3600, Math.round(Number(d.sec) || 0))), at = now - sec * 1000;
+    st.away = 0; st.lastAway = sec; awPut_(d.cls, d.num, st);
+    awWrite_(function (s) {
+      const last = s.getLastRow(), from = Math.max(2, last - 300);
+      if (last >= 2) {
+        const ids = s.getRange(from, 8, last - from + 1, 1).getValues();
+        for (let i = ids.length - 1; i >= 0; i--) if (String(ids[i][0]).replace(/^'/, '') === id) { s.getRange(from + i, 5, 1, 2).setValues([[new Date(now), sec]]); return; }
+      }
+      s.appendRow([new Date(at), safe_(d.cls), Number(d.num), safe_(name), new Date(now), sec, safe_(view), safe_(id)]); // 나간 신호를 놓친 경우
+    });
+  } else {
+    if (st.away && d.visible === true) st.away = 0;
+    awPut_(d.cls, d.num, st);
+  }
+  return { ok: true, track: { on: true, cls: t.cls, until: t.until } };
+}
+function awWrite_(fn) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const s = sheet_('이탈 기록', AW_HEAD);
+    fn(s);
+  } finally { lock.releaseLock(); }
+}
+// 교사용: 한 반 학생들의 지금 상태 + 이번 감지 시간 동안의 이탈 횟수·시간
+function awayList_(key, cls) {
+  if (!awTeacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  if (CLASSES.indexOf(cls) < 0) return { ok: false, error: '반 확인' };
+  const t = trackState_(), now = Date.now();
+  const since = t.on ? Number(t.since) : now - 60 * 60000;
+  const people = {};
+  const rs = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('학생 명부');
+  if (rs && rs.getLastRow() >= 2) rs.getRange(2, 1, rs.getLastRow() - 1, 3).getValues().forEach(function (r) {
+    if (String(r[0]).replace(/^'/, '') === cls) people[Number(r[1])] = { num: Number(r[1]), name: String(r[2]).replace(/^'/, ''), count: 0, total: 0 };
+  });
+  const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('이탈 기록');
+  if (s && s.getLastRow() >= 2) {
+    const last = s.getLastRow(), from = Math.max(2, last - 1500);
+    s.getRange(from, 1, last - from + 1, 6).getValues().forEach(function (r) {
+      const at = new Date(r[0]).getTime();
+      if (!(at >= since) || String(r[1]).replace(/^'/, '') !== cls) return;
+      const n = Number(r[2]);
+      const p = people[n] || (people[n] = { num: n, name: String(r[3]).replace(/^'/, ''), count: 0, total: 0 });
+      const sec = r[5] === '' ? Math.round((now - at) / 1000) : Number(r[5]);
+      if (sec >= 3) { p.count++; p.total += sec; }
+    });
+  }
+  const keys = []; for (let n = 1; n <= 40; n++) keys.push(awKey_(cls, n));
+  const cached = awCache_().getAll(keys);
+  const out = [];
+  for (let n = 1; n <= 40; n++) {
+    let st = null; try { st = JSON.parse(cached[awKey_(cls, n)] || 'null'); } catch (e) { st = null; }
+    const p = people[n];
+    if (!p && !st) continue;
+    const o = p || { num: n, name: st.name, count: 0, total: 0 };
+    if (st && st.away && now - st.away < 3 * 3600000) { o.state = 'away'; o.awaySec = Math.round((now - st.away) / 1000); }
+    else if (st && now - st.seen < 100000) o.state = 'here';
+    else o.state = 'off';
+    o.view = st ? st.view || '' : '';
+    out.push(o);
+  }
+  return { ok: true, track: t, now: now, students: out };
+}
+function awTeacherOk_(key) { return teacherOk_(key); }
 
 /* ---------------- 도우미 ---------------- */
 function sheet_(name, headers) {
