@@ -898,13 +898,13 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 
 <!-- ======================= 총괄평가 (Ⅷ. 별과 우주) ======================= -->
 <section class="module" id="m-t7" data-lesson="7">
-  <div class="mhead"><div class="tag">Ⅷ. 별과 우주 · 총괄평가</div><h1>총괄평가</h1><span class="goal">📝 별(1~11번)과 우리은하·우주 탐사(12~24번)를 정리해 보자. 모두 풀고 맨 아래에서 제출하면 채점 결과와 해설이 나와요.</span></div>
-  <div class="step" id="exTop" style="font-size:16px">⚠ 한 번 제출하면 답을 바꿀 수 없어요. 차근차근 풀어 보세요. 답은 자동 저장돼요.</div>
+  <div class="mhead"><div class="tag">Ⅷ. 별과 우주 · 총괄평가</div><h1>총괄평가</h1><span class="goal">📝 별(1~11번)과 우리은하·우주 탐사(12~24번)를 정리해 보자. 모두 풀고 맨 아래에서 제출하면 채점 결과가 나와요.</span></div>
+  <div class="step" id="exTop" style="font-size:16px">✏️ 연습용 평가예요. 다 풀고 제출하면 몇 개 맞았는지와 문항별 ⭕/❌가 나와요. 몇 번이든 [다시 풀기]로 다시 도전할 수 있어요. 답은 자동 저장돼요.</div>
   <div class="step"><div id="exList"></div></div>
   <div class="step submit">
     <h2><span class="badge b2">📤 제출</span> 선생님께 답안 보내기</h2>
     <div class="msg" id="exScore" data-f="점수" style="display:none"></div>
-    <button class="au submitBtn" data-lesson="7">총괄평가 제출하고 채점 결과 보기</button>
+    <button class="au submitBtn" data-lesson="7">제출하고 채점 결과 보기</button>
     <div class="st" id="st7"></div>
   </div>
 </section>
@@ -1167,8 +1167,7 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
 /* ---------- 다른 기기에서 로그인해도 제출한 결과 불러오기 (빈 칸만 채움) ---------- */
 async function pullServer(){if(PREVIEW||!API_URL||!user||!user.pin||user.legacy)return;let j;try{j=await api({action:'mine'});}catch(e){return;}
  const D=(j&&j.data)||{};let n=0;
- if(D['7']&&Object.keys(D['7']).length&&window.__exDone)setTimeout(()=>window.__exDone(),50);
- ['1','2','3','4','5','6','7'].forEach(L=>{const o=D[L];const sec=$('#m-t'+L);if(!o||!sec)return;
+['1','2','3','4','5','6'].forEach(L=>{const o=D[L];const sec=$('#m-t'+L);if(!o||!sec)return;
   $$('[data-f]',sec).forEach(el=>{const v=o[el.dataset.f];if(!v)return;
    if(el.classList.contains('predict')){if(el.querySelector('button.sel'))return;const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){b.classList.add('sel');n++;}}
    else if(el.tagName==='TEXTAREA'){if(el.value.trim())return;el.value=v;n++;}
@@ -1570,10 +1569,13 @@ const EX=(function(){const c=document.getElementById('exC');if(!c||!U)return nul
  /* predict 값은 버튼 글자 전체 → 채점은 앞 글자(①~⑤)로 */
  const val=n=>{const s=document.querySelector(`[data-f="${n}번"] button.sel`);return s?s.textContent.trim().charAt(0):'';};
  function grade(){let ok=0;EX.forEach((e,i)=>{const n=i+1;let r;if(e.pair){const a=($('[data-f="10번 (가)"] button.sel')||{}).textContent,b=($('[data-f="10번 (나)"] button.sel')||{}).textContent;r=a==='높다.'&&b==='낮다.';}else r=val(n)===C[e.a];if(r)ok++;e._r=r;});return ok;}
- function show(){const ok=grade();EX.forEach((e,i)=>{const n=i+1,q=$('#exq'+n);q.classList.add(e._r?'ok':'no');q.querySelector('.exres').innerHTML=`<b>${e._r?'⭕ 정답':'❌ 오답'}</b> · 정답 ${e.pair?'(가) 높다. (나) 낮다.':C[e.a]}<br>${e.ex}`;
-   if(!e.pair)q.querySelectorAll('.exa button').forEach(b=>{if(b.dataset.v===C[e.a])b.classList.add('exright');});});
-  $('#m-t7').classList.add('exdone');$('#exScore').textContent=`24문항 중 ${ok}개 정답`;$('#exTop').innerHTML=`<b>📊 결과: 24문항 중 <span style="color:#ffd166">${ok}개</span> 정답</b> · 틀린 문항의 해설을 읽어 보세요.`;}
- const dk=()=>key()+'_exdone';
+ function show(){const ok=grade();EX.forEach((e,i)=>{const n=i+1,q=$('#exq'+n);q.classList.add(e._r?'ok':'no');q.querySelector('.exres').innerHTML=`<b>${e._r?'⭕ 맞았어요':'❌ 다시 생각해 보기'}</b>`;});
+  $('#m-t7').classList.add('exdone');$('#exScore').textContent=`24문항 중 ${ok}개 정답`;const wrong=EX.map((e,i)=>e._r?0:i+1).filter(Boolean);
+  $('#exTop').innerHTML=`<b>📊 결과: 24문항 중 <span style="color:#ffd166">${ok}개</span> 맞음</b>`+(wrong.length?`<br><span class="small muted">❌ 다시 생각해 볼 문항: ${wrong.join(', ')}번 · 교과서와 탐구 활동을 다시 보고 [다시 풀기]로 도전해 보세요.</span>`:' 🎉 모두 맞았어요!')+`<div class="btns" style="margin-top:8px"><button class="pri" id="exRetry">🔄 다시 풀기</button></div>`;
+  $('#exRetry').onclick=retry;window.scrollTo({top:$('#m-t7').offsetTop-80,behavior:'smooth'});}
+ function retry(){try{localStorage.removeItem(dk());}catch(e){}$$('.exa button',box).forEach(b=>b.classList.remove('sel'));$$('.exq',box).forEach(q=>{q.classList.remove('ok','no');q.querySelector('.exres').innerHTML='';});
+  $('#m-t7').classList.remove('exdone');$('#exScore').textContent='';$('#st7').textContent='';$('#exTop').innerHTML=EXTOP;save();window.scrollTo({top:$('#m-t7').offsetTop-80,behavior:'smooth'});}
+ const dk=()=>key()+'_exdone',EXTOP=$('#exTop').innerHTML;
  window.__exDone=()=>{try{localStorage.setItem(dk(),'1');}catch(e){}show();};
  window.__exCheck=()=>{let d=null;try{d=localStorage.getItem(dk());}catch(e){}if(d)show();};
  /* 제출 직전에 점수 기록 · 제출 완료되면 채점 결과 공개 */
