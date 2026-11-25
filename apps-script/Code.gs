@@ -78,6 +78,7 @@ function doPost(e) {
     else if (d.action === 'me') res = { ok: true };
     else if (d.action === 'mine') res = mine_(d);
     else if (d.action === 'groupPlan') res = groupPlan_(d);
+    else if (d.action === 'groupAll') res = groupAll_(d);
     else return json_({ ok: false, error: '알 수 없는 요청' });
     if (needLock) { lock.releaseLock(); }
     if (res.ok) { try { const p = pointsOf_(d.cls, d.num); res.points = p; res.level = level_(p); } catch (err) { } }
@@ -288,6 +289,30 @@ function mine_(d) {
     }
   });
   return { ok: true, data: out };
+}
+
+/* 6차시: 같은 반·같은 모둠 번호 모둠원 전원의 계획 (나는 빼고, 대표 먼저) */
+function groupAll_(d) {
+  const g = String(d.group || '');
+  const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName_('6'));
+  if (!g || !s || s.getLastRow() < 2) return { ok: true, members: [] };
+  const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
+  const h = v[0].map(String), gi = h.indexOf('계획-모둠'), li = h.indexOf('계획-모둠 대표');
+  if (gi < 0) return { ok: true, members: [] };
+  const out = [];
+  for (let i = 1; i < v.length; i++) {
+    if (String(v[i][1]).replace(/^'/, '') !== d.cls || String(v[i][gi]).replace(/^'/, '') !== g) continue;
+    if (Number(v[i][2]) === Number(d.num)) continue;
+    const o = {}; let len = 0;
+    for (let j = 5; j < h.length; j++) {
+      if (h[j].indexOf('계획-') !== 0) continue;
+      const x = String(v[i][j] === null ? '' : v[i][j]).replace(/^'/, '');
+      if (x) { o[h[j]] = x; len += x.length; }
+    }
+    if (len) out.push({ name: String(v[i][3]).replace(/^'/, ''), num: Number(v[i][2]), leader: li >= 0 && String(v[i][li]).indexOf('모둠 대표') >= 0, fields: o });
+  }
+  out.sort(function (a, b) { return (b.leader ? 1 : 0) - (a.leader ? 1 : 0) || a.num - b.num; });
+  return { ok: true, members: out };
 }
 
 /* 6차시: 같은 반·같은 모둠 번호의 탐사 계획 (가장 많이 쓴 것) */

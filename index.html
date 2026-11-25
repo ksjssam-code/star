@@ -871,8 +871,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
       <div><div class="q c" style="margin-top:0">우리 모둠 번호</div><div class="btns predict" data-f="계획-모둠"><button>1모둠</button><button>2모둠</button><button>3모둠</button><button>4모둠</button><button>5모둠</button><button>6모둠</button><button>7모둠</button><button>8모둠</button></div></div>
       <div><div class="q c" style="margin-top:0">모둠원 이름</div><textarea data-f="계획-모둠원" placeholder="예: 김민준, 이서연, 박지호, 최유나" style="min-height:44px"></textarea></div>
     </div>
-    <div class="q c" style="margin-top:0">나의 역할</div><div class="btns predict" data-f="계획-모둠 대표"><button>👑 모둠 대표 (계획을 써서 제출)</button><button>🙋 모둠원 (대표 계획 불러오기)</button></div>
-    <div class="btns"><button id="grpLoad">👥 우리 모둠 계획 불러오기</button><span class="small muted" id="grpMsg">모둠 대표가 계획을 제출하면, 같은 모둠 번호를 고른 모둠원이 불러올 수 있음</span></div>
+    <div class="q c" style="margin-top:0">나의 역할</div><div class="btns predict" data-f="계획-모둠 대표"><button>👑 모둠 대표</button><button>🙋 모둠원</button></div>
+    <div class="btns"><button id="grpLoad">👥 모둠원 내용 모두 불러오기</button><span class="small muted" id="grpMsg">역할을 나눠 각자 쓰고 제출 → 누르면 모둠원들이 쓴 내용이 내 칸에 더해짐</span></div>
     <div class="dests" id="destCards"></div>
     <div class="tlcard" id="destInfo"><p class="muted" style="margin:0">목적지를 눌러 보세요.</p></div>
     <div class="q c">우리 모둠의 탐사 목적지</div>
@@ -1229,11 +1229,17 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  $('#grpLoad').onclick=async()=>{const m=$('#grpMsg'),g=val('계획-모둠');if(!g){m.style.color='#ff7a90';m.textContent='먼저 모둠 번호를 고르기';return;}
   if(PREVIEW||!user||!user.pin){m.textContent='로그인한 학생 화면에서 불러올 수 있음';return;}
   m.style.color='#9ba6d4';m.textContent='불러오는 중…';
-  try{const j=await api({action:'groupPlan',group:g});const o=j.fields||{};let n=0;
-   Object.keys(o).forEach(k=>{const el=F(k),v=o[k];if(!el||!v||k==='계획-모둠'||k==='계획-모둠 대표')return;
-    if(el.classList.contains('predict')){const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){el.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');n++;}}
-    else if(el.tagName==='TEXTAREA'&&!el.value.trim()){el.value=v;n++;}});
-   save();ppSync();m.style.color=n?'#63e6a3':'#ffd166';m.textContent=j.from?(n?`✔ ${j.leader?'👑 대표 ':''}${j.from}이(가) 제출한 ${g} 계획을 불러왔어요 (빈 칸만 채움)`:'이미 모두 채워져 있어요'):`아직 ${g}에서 제출한 계획이 없어요. 대표가 먼저 제출하기`;}
+  try{const j=await api({action:'groupAll',group:g});const ms=j.members||[];let n=0;const who=new Set();
+   if(!ms.length){m.style.color='#ffd166';m.textContent=`아직 ${g}에서 제출한 친구가 없어요. 모둠원이 먼저 제출하기`;return;}
+   const norm=t=>String(t||'').replace(/\s+/g,'');
+   ms.forEach(mb=>Object.keys(mb.fields).forEach(k=>{const el=F(k),v=String(mb.fields[k]||'').trim();if(!el||!v||k==='계획-모둠'||k==='계획-모둠 대표')return;
+    if(el.classList.contains('predict')){if(el.querySelector('button.sel'))return;const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){b.classList.add('sel');n++;who.add(mb.name);}return;}
+    if(el.tagName!=='TEXTAREA')return;const cur=el.value.trim();
+    if(k==='계획-모둠원'){const set=new Set(cur.split(/[,，、\s]+/).filter(Boolean));const before=set.size;v.split(/[,，、\s]+/).filter(Boolean).forEach(x=>set.add(x));if(set.size>before){el.value=[...set].join(', ');n++;}return;}
+    if(cur&&norm(cur).includes(norm(v)))return;
+    el.value=cur?cur+'\n'+v:v;n++;who.add(mb.name);}));
+   save();ppSync();m.style.color=n?'#63e6a3':'#ffd166';
+   m.textContent=n?`✔ ${[...who].join(', ')}의 내용을 내 칸에 더했어요 (${n}칸). 고친 뒤 제출하기`:'이미 모둠원 내용이 모두 들어 있어요';}
   catch(e){m.style.color='#ff7a90';m.textContent=e.message==='알 수 없는 요청'?'선생님께: 서버 업데이트가 필요해요':'불러오기 실패: 인터넷 연결 확인';}};
  const E=(t,ph)=>t?esc(t).replace(/\n/g,'<br>'):`<span class="empty">(${ph})</span>`;
  const ed=(t,ph)=>`<span contenteditable="true">${E(t,ph)}</span>`;
