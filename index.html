@@ -162,6 +162,21 @@ nav .ng{color:var(--muted);font-size:13px;align-self:center;padding:0 2px 0 6px}
 footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:13px}
 #lgMsg{white-space:pre-line}
 .penRec{display:inline-block;font-size:13px;font-weight:700;color:#ff7a90;border:1px solid #ff7a90;border-radius:999px;padding:1px 10px;margin:0 6px;background:#ff7a901a}
+#presOv{position:fixed;inset:0;z-index:80;background:#05081499;backdrop-filter:blur(6px);display:none;flex-direction:column}
+#presOv.on{display:flex}#presBar{display:flex;gap:8px;align-items:center;padding:10px 14px;background:#0b1229;border-bottom:1px solid #2a3666;flex-wrap:wrap}
+#presBar b{color:#ffd166}#presBar .sp{flex:1}#presBody{flex:1;overflow:auto;padding:18px}
+.paper{background:#fffdf7;color:#1b2340;max-width:1000px;margin:0 auto;border-radius:14px;padding:30px 36px;box-shadow:0 10px 40px #0008;font-size:19px;line-height:1.65}
+.paper h1{font-size:32px;margin:0 0 6px;color:#14204a}.paper h2{font-size:23px;margin:20px 0 8px;color:#2e3f8f;border-bottom:2px solid #e3e7f5;padding-bottom:4px}
+.paper .sub{color:#5a6488;font-size:16px;margin-bottom:14px}.paper [contenteditable]{outline:none;border-radius:4px}.paper [contenteditable]:focus{background:#fff3c4}
+.paper .ln{margin:6px 0;display:flex;gap:10px;justify-content:flex-start;text-align:left}.paper .ln>div:last-child{flex:1}.paper .who{flex:none;min-width:120px;font-weight:800;color:#2e3f8f}.paper .who small{display:block;font-weight:600;color:#7a83a6;font-size:13px}
+.paper .stage{color:#7a83a6;font-style:italic;margin:8px 0}.paper .empty{color:#c0392b}
+.paper .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.paper .pbox{border:2px solid #e3e7f5;border-radius:12px;padding:12px 14px;background:#fff}.paper .pbox h3{margin:0 0 6px;font-size:18px;color:#2e3f8f}
+.paper .draw{border:3px dashed #b8c0dd;border-radius:14px;min-height:260px;display:flex;align-items:center;justify-content:center;color:#8a93b8;text-align:center;font-size:17px;background:#f7f8fd}
+.paper table.ft{width:100%;border-collapse:collapse;font-size:16px}.paper table.ft th,.paper table.ft td{border:1px solid #e3e7f5;padding:6px 8px;text-align:left}.paper table.ft th{background:#f1f3fb;width:38%}
+.slide16{aspect-ratio:16/9;background:linear-gradient(135deg,#0d1b4a,#2a1b5a);color:#fff;border-radius:14px;padding:44px 56px;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;box-shadow:0 10px 40px #0008}
+.slide16 .k{color:#ffd166;font-size:18px;font-weight:800;letter-spacing:1px}.slide16 h1{font-size:44px;margin:8px 0 16px;line-height:1.25}.slide16 p,.slide16 li{font-size:24px;line-height:1.6}.slide16 .n{opacity:.6;font-size:15px;margin-top:auto}
+.slide16 [contenteditable]:focus{background:#ffffff22;outline:none}.slide16 .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:20px}
+@media print{body *{visibility:hidden}#presOv,#presOv *{visibility:visible}#presOv{position:absolute;inset:0;background:#fff;display:block}#presBar{display:none}#presBody{padding:0;overflow:visible}.paper,.slide16{box-shadow:none}.slide16{break-after:page;margin-bottom:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -201,6 +216,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   <div class="btns"><button class="au" id="lgGo" style="width:100%;font-size:18px">입장하기</button></div>
   <p class="small muted" style="margin:6px 0 0">※ 게시판에는 닉네임만 표시됨. PIN을 잊으면 선생님께 말하기.</p>
 </div></div>
+<div id="presOv"><div id="presBar"><b id="presTitle">발표 자료</b><span class="small muted">글자를 눌러 고칠 수 있음</span><span class="sp"></span><button id="presPrev" style="display:none">◀</button><span id="presPg" class="small"></span><button id="presNext" style="display:none">▶</button><button id="presFull">⛶ 전체 화면</button><button id="presPrint">🖨 인쇄</button><button id="presClose">✕ 닫기</button></div><div id="presBody"></div></div>
 <div id="lvHelp" class="ovl2"><div class="card">
   <h2 style="margin:0 0 6px">⭐ 별 등급 안내</h2>
   <p class="small muted" style="margin:0 0 8px"><b>호기심 은하</b>에서 묻고 답할수록 별의 <b>표면 온도</b>가 올라가요! (3차시 내용 복습)</p>
@@ -850,6 +866,11 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
   <div class="step">
     <h2><span class="badge b2">3 탐구하기</span> 우주 탐사 계획 세우기 (304~305쪽)</h2>
     <p class="small muted">모둠별로 탐사할 곳을 정하고 가상의 우주 탐사 계획을 세워 보자. 목적지 카드를 눌러 환경을 먼저 조사하기.</p>
+    <div class="grid2" style="margin-bottom:8px">
+      <div><div class="q c" style="margin-top:0">우리 모둠 번호</div><div class="btns predict" data-f="계획-모둠"><button>1모둠</button><button>2모둠</button><button>3모둠</button><button>4모둠</button><button>5모둠</button><button>6모둠</button><button>7모둠</button><button>8모둠</button></div></div>
+      <div><div class="q c" style="margin-top:0">모둠원 이름</div><textarea data-f="계획-모둠원" placeholder="예: 김민준, 이서연, 박지호, 최유나" style="min-height:44px"></textarea></div>
+    </div>
+    <div class="btns"><button id="grpLoad">👥 우리 모둠 계획 불러오기</button><span class="small muted" id="grpMsg">모둠 대표가 계획을 제출하면, 같은 모둠 번호를 고른 친구도 불러올 수 있음</span></div>
     <div class="dests" id="destCards"></div>
     <div class="tlcard" id="destInfo"><p class="muted" style="margin:0">목적지를 눌러 보세요.</p></div>
     <div class="q c">우리 모둠의 탐사 목적지</div>
@@ -861,7 +882,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
       <div><div class="q c" style="margin-top:6px">기대 성과 (인류에게 미칠 영향)</div><textarea data-f="계획-기대 성과" style="min-height:90px"></textarea></div>
     </div>
     <div class="q c">발표 방법</div>
-    <div class="btns predict" data-f="계획-발표 방법"><button>미래 뉴스 보도(역할극)</button><button>모형·가상 기지</button><button>정보 그림 포스터</button><button>우주 기업 투자 설명</button><button>연극</button></div>
+    <div class="btns predict" data-f="계획-발표 방법"><button>미래 뉴스 보도(역할극)</button><button>가상 기지·정보 그림 포스터</button><button>우주 기업 투자 설명</button><button>연극</button></div>
+    <div class="btns"><button class="pri" id="presMake">📣 발표 자료 만들기</button><span class="small muted" id="presMsg">계획을 쓰고 발표 방법을 고른 뒤 누르기</span></div>
     <div class="q g">우주 탐사 계획을 세울 때 고려해야 할 점은?</div>
     <textarea data-f="정리-계획 시 고려할 점" placeholder="내 생각"></textarea>
     <div class="btns"><button class="rv" data-t="r63">정리 확인</button></div>
@@ -1164,6 +1186,75 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  catch(e){st.style.color='#ff7a90';st.textContent=e.message==='NOAPI'?'아직 제출 기능이 설정되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':e.message==='차시 오류'?'아직 이 차시 제출 기능이 준비되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':'제출 실패: 인터넷 연결 확인 후 다시 시도하기';}
  b.disabled=false;});
 
+/* ---------- 6차시: 모둠 계획 불러오기 · 발표 자료 만들기 ---------- */
+(function(){const sec=$('#m-t6');if(!sec||!$('#presMake'))return;
+ const F=k=>sec.querySelector(`[data-f="${k}"]`);
+ const val=k=>{const el=F(k);if(!el)return'';if(el.classList.contains('predict')){const b=el.querySelector('button.sel');return b?b.textContent:'';}return (el.value||'').trim();};
+ $('#grpLoad').onclick=async()=>{const m=$('#grpMsg'),g=val('계획-모둠');if(!g){m.style.color='#ff7a90';m.textContent='먼저 모둠 번호를 고르기';return;}
+  if(PREVIEW||!user||!user.pin){m.textContent='로그인한 학생 화면에서 불러올 수 있음';return;}
+  m.style.color='#9ba6d4';m.textContent='불러오는 중…';
+  try{const j=await api({action:'groupPlan',group:g});const o=j.fields||{};let n=0;
+   Object.keys(o).forEach(k=>{const el=F(k),v=o[k];if(!el||!v||k==='계획-모둠')return;
+    if(el.classList.contains('predict')){const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){el.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');n++;}}
+    else if(el.tagName==='TEXTAREA'&&!el.value.trim()){el.value=v;n++;}});
+   save();m.style.color=n?'#63e6a3':'#ffd166';m.textContent=j.from?(n?`✔ ${j.from}이(가) 제출한 ${g} 계획을 불러왔어요 (빈 칸만 채움)`:'이미 모두 채워져 있어요'):`아직 ${g}에서 제출한 계획이 없어요. 대표가 먼저 제출하기`;}
+  catch(e){m.style.color='#ff7a90';m.textContent=e.message==='알 수 없는 요청'?'선생님께: 서버 업데이트가 필요해요':'불러오기 실패: 인터넷 연결 확인';}};
+ const E=(t,ph)=>t?esc(t).replace(/\n/g,'<br>'):`<span class="empty">(${ph})</span>`;
+ const ed=(t,ph)=>`<span contenteditable="true">${E(t,ph)}</span>`;
+ function dest(){const d=val('계획-목적지');const D=(window.U2&&U2.SPACE.DS)||[];return {name:d||'○○',info:D.find(x=>d&&x[1].startsWith(d))};}
+ function names(){return val('계획-모둠원').split(/[,，、\s]+/).filter(Boolean);}
+ function roles(list){const n=names();return list.map((r,i)=>[r,n.length?n[i%n.length]:'']);}
+ let slides=[],si=0;
+ function make(){const how=val('계획-발표 방법'),P={목적:val('계획-탐사 목적'),방법:val('계획-탐사 방법·장비'),어려움:val('계획-어려움과 해결'),성과:val('계획-기대 성과')};
+  const d=dest(),I=d.info,cls=user?user.cls+'반':'',grp=val('계획-모둠'),team=[cls,grp].filter(Boolean).join(' '),nm=names().join(', ');
+  const yr=2045,fact=I?`이곳은 지구에서 ${I[2]} 떨어져 있고, 가는 데 ${I[3]}이 걸립니다. 중력은 ${I[5]}, 표면 온도는 ${I[6]}입니다.`:'';
+  const L=(r,t)=>`<div class="ln"><div class="who">${esc(r[0])}${r[1]?`<small>${esc(r[1])}</small>`:''}</div><div contenteditable="true">${t}</div></div>`;
+  const ST=t=>`<div class="stage" contenteditable="true">${t}</div>`;
+  slides=[];si=0;let html='';
+  if(how.startsWith('미래 뉴스')){const [a,b,c]=roles(['앵커','현장 기자','탐사 대원']);
+   html=`<div class="paper"><h1 contenteditable="true">📺 [속보] ${yr}년, 인류 ${esc(d.name)} 탐사 성공!</h1><div class="sub">미래 뉴스 보도 대본 · ${esc(team)}${nm?' · '+esc(nm):''}</div>
+   ${ST('(뉴스 시작 음악. 앵커가 정면을 보며)')}
+   ${L(a,`시청자 여러분, 놀라운 소식입니다. 오늘 우리 탐사대가 ${esc(d.name)}에 도착했습니다. 현장 기자를 연결합니다.`)}
+   ${L(b,`네, 저는 지금 ${esc(d.name)}에 나와 있습니다. ${esc(fact)}`)}
+   ${L(a,'이번 탐사의 목적은 무엇인가요?')}${L(c,E(P.목적,'탐사 목적을 써 넣기'))}
+   ${L(b,'이렇게 먼 곳까지 어떤 기술과 장비로 왔나요?')}${L(c,E(P.방법,'탐사 방법·장비를 써 넣기'))}
+   ${L(a,'위험하거나 어려운 점은 없었나요?')}${L(c,E(P.어려움,'어려움과 해결 방법을 써 넣기'))}
+   ${L(b,'이번 탐사로 인류에게 어떤 변화가 생길까요?')}${L(c,E(P.성과,'기대 성과를 써 넣기'))}
+   ${L(a,`인류의 새로운 도전, ${esc(d.name)} 탐사 소식이었습니다. 지금까지 ${yr}년 미래 뉴스였습니다.`)}</div>`;}
+  else if(how.startsWith('가상 기지')||how.startsWith('모형')||how.startsWith('정보 그림')){
+   const ft=I?`<table class="ft"><tr><th>지구에서 거리</th><td>${esc(I[2])}</td></tr><tr><th>가는 데 걸리는 시간</th><td>${esc(I[3])}</td></tr><tr><th>통신 지연</th><td>${esc(I[4])}</td></tr><tr><th>중력</th><td>${esc(I[5])}</td></tr><tr><th>표면 온도</th><td>${esc(I[6])}</td></tr><tr><th>대기</th><td>${esc(I[7])}</td></tr></table><p style="font-size:15px;margin:8px 0 0">📌 ${esc(I[8])}</p>`:'<p class="empty">(목적지를 고르면 환경 정보가 들어감)</p>';
+   html=`<div class="paper"><h1 contenteditable="true">${I?I[0]+' ':''}${esc(d.name)} 탐사 기지 계획</h1><div class="sub">${esc(team)}${nm?' · '+esc(nm):''}</div>
+   <div class="pgrid"><div class="draw"><div>🖍 여기에 우리 기지 그림을 그리거나 붙이기<br><span style="font-size:14px">(인쇄한 뒤 직접 그리기 · 기지의 모양, 에너지, 물, 통신 장치 표시)</span></div></div><div class="pbox"><h3>🌍 목적지 환경</h3>${ft}</div>
+   <div class="pbox"><h3>🎯 탐사 목적</h3>${ed(P.목적,'탐사 목적')}</div><div class="pbox"><h3>🛠 탐사 방법 · 장비</h3>${ed(P.방법,'탐사 방법·장비')}</div>
+   <div class="pbox"><h3>⚠️ 어려움과 해결</h3>${ed(P.어려움,'어려움과 해결')}</div><div class="pbox"><h3>✨ 기대 성과</h3>${ed(P.성과,'기대 성과')}</div></div></div>`;}
+  else if(how.startsWith('우주 기업')){const co=`${esc(d.name)} 스페이스`;
+   slides=[`<div class="k">INVESTOR PITCH · ${esc(team)}</div><h1 contenteditable="true">${co}</h1><p contenteditable="true">${yr}년, 우리는 ${esc(d.name)}로 갑니다.</p><p style="font-size:18px;opacity:.8">발표: ${esc(nm||'모둠원 이름')}</p><div class="n">1 / 5 · 회사 이름을 눌러 바꾸기</div>`,
+    `<div class="k">왜 ${esc(d.name)}인가?</div><h1 contenteditable="true">우리의 탐사 목적</h1><p contenteditable="true">${E(P.목적,'탐사 목적')}</p>${I?`<div class="facts"><div>📏 거리: ${esc(I[2])}</div><div>⏱ 이동: ${esc(I[3])}</div><div>🪶 중력: ${esc(I[5])}</div><div>🌡 온도: ${esc(I[6])}</div></div>`:''}<div class="n">2 / 5</div>`,
+    `<div class="k">OUR TECHNOLOGY</div><h1 contenteditable="true">우리만의 기술과 장비</h1><p contenteditable="true">${E(P.방법,'탐사 방법·장비')}</p><div class="n">3 / 5</div>`,
+    `<div class="k">RISK &amp; SOLUTION</div><h1 contenteditable="true">위험은 이렇게 해결합니다</h1><p contenteditable="true">${E(P.어려움,'어려움과 해결')}</p><div class="n">4 / 5</div>`,
+    `<div class="k">RETURN</div><h1 contenteditable="true">투자하면 얻는 것</h1><p contenteditable="true">${E(P.성과,'기대 성과')}</p><p style="color:#ffd166;font-weight:800" contenteditable="true">지금 ${co}에 투자하세요! 🚀</p><div class="n">5 / 5</div>`];}
+  else if(how==='연극'){const [h,c,m1,m2,g]=roles(['해설','탐사 대장','대원 1','대원 2','관제사']);
+   html=`<div class="paper"><h1 contenteditable="true">🎭 연극 「${esc(d.name)}로 가는 길」</h1><div class="sub">${esc(team)}${nm?' · '+esc(nm):''} · 등장인물: 해설, 탐사 대장, 대원 1, 대원 2, 관제사</div>
+   <h2>장면 1 · 출발 전, 지구의 관제실</h2>${ST('(대원들이 우주복을 입고 모여 있다)')}
+   ${L(h,`${yr}년, 인류는 ${esc(d.name)} 탐사를 준비하고 있었습니다. ${esc(fact)}`)}${L(g,'대장님, 이번 임무의 목적을 다시 말해 주세요.')}${L(c,E(P.목적,'탐사 목적을 대사로 써 넣기'))}
+   ${L(m1,'우리가 가져갈 장비는 이것입니다.')}${L(m2,E(P.방법,'탐사 방법·장비를 대사로 써 넣기'))}
+   <h2>장면 2 · 위기의 순간</h2>${ST('(경고음이 울리고 조명이 붉게 바뀐다)')}${L(m1,'대장님, 문제가 생겼어요!')}${L(c,E(P.어려움,'어려움과 해결 방법을 대사로 써 넣기'))}${L(m2,'해결했습니다! 다시 출발합니다.')}
+   <h2>장면 3 · 탐사 성공</h2>${ST('(대원들이 목적지에 서서 지구를 바라본다)')}${L(g,'탐사대, 들리나요? 지구에서 모두 응원하고 있어요!')}${L(c,E(P.성과,'기대 성과를 대사로 써 넣기'))}
+   ${L(h,'이들의 도전은 인류의 미래를 바꾸었습니다. (모두 인사)')}</div>`;}
+  else return false;
+  return html||'slides';}
+ function showSlide(){$('#presBody').innerHTML=`<div class="slide16">${slides[si]}</div>`;$('#presPg').textContent=(si+1)+' / '+slides.length;}
+ $('#presMake').onclick=()=>{const m=$('#presMsg'),how=val('계획-발표 방법');if(!how){m.style.color='#ff7a90';m.textContent='먼저 발표 방법을 고르기';return;}
+  const r=make();if(!r){m.textContent='이 발표 방법은 아직 자동 만들기가 없어요';return;}
+  const many=slides.length>0;$('#presPrev').style.display=$('#presNext').style.display=many?'':'none';$('#presPg').textContent='';$('#presTitle').textContent='📣 '+how;
+  if(many)showSlide();else $('#presBody').innerHTML=r;$('#presOv').classList.add('on');m.style.color='#63e6a3';m.textContent='✔ 만들었어요. 빈 칸(빨간 글씨)은 눌러서 채우기';};
+ $('#presPrev').onclick=()=>{if(si>0){slides[si]=$('#presBody .slide16').innerHTML;si--;showSlide();}};
+ $('#presNext').onclick=()=>{if(si<slides.length-1){slides[si]=$('#presBody .slide16').innerHTML;si++;showSlide();}};
+ $('#presPrint').onclick=()=>{if(slides.length){slides[si]=$('#presBody .slide16').innerHTML;$('#presBody').innerHTML=slides.map(x=>`<div class="slide16">${x}</div>`).join('');window.print();showSlide();}else window.print();};
+ $('#presFull').onclick=()=>{const o=$('#presOv');if(document.fullscreenElement)document.exitFullscreen();else if(o.requestFullscreen)o.requestFullscreen();};
+ $('#presClose').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();$('#presOv').classList.remove('on');};
+ document.addEventListener('keydown',e=>{if(!$('#presOv').classList.contains('on')||!slides.length||e.target.isContentEditable)return;if(e.key==='ArrowRight')$('#presNext').click();if(e.key==='ArrowLeft')$('#presPrev').click();if(e.key==='Escape')$('#presClose').click();});
+})();
 /* ---------- 다른 기기에서 로그인해도 제출한 결과 불러오기 (빈 칸만 채움) ---------- */
 async function pullServer(){if(PREVIEW||!API_URL||!user||!user.pin||user.legacy)return;let j;try{j=await api({action:'mine'});}catch(e){return;}
  const D=(j&&j.data)||{};let n=0;
