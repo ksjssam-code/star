@@ -871,7 +871,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
       <div><div class="q c" style="margin-top:0">우리 모둠 번호</div><div class="btns predict" data-f="계획-모둠"><button>1모둠</button><button>2모둠</button><button>3모둠</button><button>4모둠</button><button>5모둠</button><button>6모둠</button><button>7모둠</button><button>8모둠</button></div></div>
       <div><div class="q c" style="margin-top:0">모둠원 이름</div><textarea data-f="계획-모둠원" placeholder="예: 김민준, 이서연, 박지호, 최유나" style="min-height:44px"></textarea></div>
     </div>
-    <div class="btns"><button id="grpLoad">👥 우리 모둠 계획 불러오기</button><span class="small muted" id="grpMsg">모둠 대표가 계획을 제출하면, 같은 모둠 번호를 고른 친구도 불러올 수 있음</span></div>
+    <div class="q c" style="margin-top:0">나의 역할</div><div class="btns predict" data-f="계획-모둠 대표"><button>👑 모둠 대표 (계획을 써서 제출)</button><button>🙋 모둠원 (대표 계획 불러오기)</button></div>
+    <div class="btns"><button id="grpLoad">👥 우리 모둠 계획 불러오기</button><span class="small muted" id="grpMsg">모둠 대표가 계획을 제출하면, 같은 모둠 번호를 고른 모둠원이 불러올 수 있음</span></div>
     <div class="dests" id="destCards"></div>
     <div class="tlcard" id="destInfo"><p class="muted" style="margin:0">목적지를 눌러 보세요.</p></div>
     <div class="q c">우리 모둠의 탐사 목적지</div>
@@ -1223,10 +1224,10 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
   if(PREVIEW||!user||!user.pin){m.textContent='로그인한 학생 화면에서 불러올 수 있음';return;}
   m.style.color='#9ba6d4';m.textContent='불러오는 중…';
   try{const j=await api({action:'groupPlan',group:g});const o=j.fields||{};let n=0;
-   Object.keys(o).forEach(k=>{const el=F(k),v=o[k];if(!el||!v||k==='계획-모둠')return;
+   Object.keys(o).forEach(k=>{const el=F(k),v=o[k];if(!el||!v||k==='계획-모둠'||k==='계획-모둠 대표')return;
     if(el.classList.contains('predict')){const b=[...el.querySelectorAll('button')].find(b=>b.textContent===v);if(b){el.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');n++;}}
     else if(el.tagName==='TEXTAREA'&&!el.value.trim()){el.value=v;n++;}});
-   save();ppSync();m.style.color=n?'#63e6a3':'#ffd166';m.textContent=j.from?(n?`✔ ${j.from}이(가) 제출한 ${g} 계획을 불러왔어요 (빈 칸만 채움)`:'이미 모두 채워져 있어요'):`아직 ${g}에서 제출한 계획이 없어요. 대표가 먼저 제출하기`;}
+   save();ppSync();m.style.color=n?'#63e6a3':'#ffd166';m.textContent=j.from?(n?`✔ ${j.leader?'👑 대표 ':''}${j.from}이(가) 제출한 ${g} 계획을 불러왔어요 (빈 칸만 채움)`:'이미 모두 채워져 있어요'):`아직 ${g}에서 제출한 계획이 없어요. 대표가 먼저 제출하기`;}
   catch(e){m.style.color='#ff7a90';m.textContent=e.message==='알 수 없는 요청'?'선생님께: 서버 업데이트가 필요해요':'불러오기 실패: 인터넷 연결 확인';}};
  const E=(t,ph)=>t?esc(t).replace(/\n/g,'<br>'):`<span class="empty">(${ph})</span>`;
  const ed=(t,ph)=>`<span contenteditable="true">${E(t,ph)}</span>`;

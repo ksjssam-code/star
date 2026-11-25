@@ -289,9 +289,9 @@ function groupPlan_(d) {
   const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName_('6'));
   if (!g || !s || s.getLastRow() < 2) return { ok: true, fields: {} };
   const v = s.getRange(1, 1, s.getLastRow(), s.getLastColumn()).getValues();
-  const h = v[0].map(String), gi = h.indexOf('계획-모둠');
+  const h = v[0].map(String), gi = h.indexOf('계획-모둠'), li = h.indexOf('계획-모둠 대표');
   if (gi < 0) return { ok: true, fields: {} };
-  let best = null, bestLen = 0;
+  let best = null, bestLen = 0; // 대표로 체크한 학생의 계획을 먼저, 없으면 가장 많이 쓴 계획
   for (let i = 1; i < v.length; i++) {
     if (String(v[i][1]).replace(/^'/, '') !== d.cls || String(v[i][gi]).replace(/^'/, '') !== g) continue;
     const o = {}; let len = 0;
@@ -300,9 +300,11 @@ function groupPlan_(d) {
       const x = String(v[i][j] === null ? '' : v[i][j]).replace(/^'/, '');
       if (x) { o[h[j]] = x; len += x.length; }
     }
-    if (len > bestLen) { bestLen = len; best = { fields: o, from: String(v[i][3]).replace(/^'/, '') }; }
+    const leader = li >= 0 && String(v[i][li]).indexOf('모둠 대표') >= 0;
+    const score = len + (leader ? 1e6 : 0);
+    if (len > 0 && score > bestLen) { bestLen = score; best = { fields: o, from: String(v[i][3]).replace(/^'/, ''), leader: leader }; }
   }
-  return best ? { ok: true, fields: best.fields, from: best.from } : { ok: true, fields: {} };
+  return best ? { ok: true, fields: best.fields, from: best.from, leader: best.leader } : { ok: true, fields: {} };
 }
 
 function submit_(d) {
