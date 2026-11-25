@@ -163,6 +163,10 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);fon
 #lgMsg{white-space:pre-line}
 .penRec{display:inline-block;font-size:13px;font-weight:700;color:#ff7a90;border:1px solid #ff7a90;border-radius:999px;padding:1px 10px;margin:0 6px;background:#ff7a901a}
 .pp.off{display:none}.pp{border:1px dashed #3a4a8a;border-radius:14px;padding:6px 14px 12px;margin:8px 0}
+.basebox{border:2px solid #e3e7f5;border-radius:12px;padding:8px;background:#fff;display:flex;flex-direction:column;gap:6px}.baseimg svg{width:100%;height:auto;display:block;border-radius:8px}
+.baseph img{width:100%;border-radius:8px;display:block}.basecap{font-size:13px;color:#7a83a6;text-align:center}.basebtn{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.basebtn button,.basebtn .bbtn{font-size:13px;padding:4px 10px;border-radius:8px;border:1px solid #c9cfe6;background:#f4f6fd;color:#2e3f8f;cursor:pointer;font-weight:700}
+@media print{.noprint{display:none!important}}
 #presOv{position:fixed;inset:0;z-index:80;background:#05081499;backdrop-filter:blur(6px);display:none;flex-direction:column}
 #presOv.on{display:flex}#presBar{display:flex;gap:8px;align-items:center;padding:10px 14px;background:#0b1229;border-bottom:1px solid #2a3666;flex-wrap:wrap}
 #presBar b{color:#ffd166}#presBar .sp{flex:1}#presBody{flex:1;overflow:auto;padding:18px}
@@ -1218,6 +1222,42 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  catch(e){st.style.color='#ff7a90';st.textContent=e.message==='NOAPI'?'아직 제출 기능이 설정되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':e.message==='차시 오류'?'아직 이 차시 제출 기능이 준비되지 않음 (선생님께 알리기). 작성 내용은 이 기기에 저장되어 있음.':'제출 실패: 인터넷 연결 확인 후 다시 시도하기';}
  b.disabled=false;});
 
+/* 기지 그림 자동 생성 (목적지 + 학생 글의 낱말) */
+function baseSVG(dest,text){const T=String(text||''),has=re=>re.test(T),W=560,H=320;
+ const P={'화성':{sky:['#f2b88a','#c9713f'],gnd:'#b4552b',g2:'#8f3f1d',sun:'#fff3d6'},'달':{sky:['#05070f','#0b1229'],gnd:'#9b9ea6',g2:'#6c7079',earth:1},'유로파':{sky:['#05070f','#111a33'],gnd:'#d7e8f0',g2:'#a86b4c',jup:1},'타이탄':{sky:['#e9b25f','#c98a3a'],gnd:'#8a6a3a',g2:'#5e4524',lake:1}};
+ const iss=/정거장|ISS/.test(dest);const c=P[Object.keys(P).find(k=>String(dest).startsWith(k))]||{sky:['#0b1229','#1b2a5c'],gnd:'#7d8597',g2:'#596071'};
+ let g=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard,sans-serif"><defs><linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.sky[0]}"/><stop offset="1" stop-color="${c.sky[1]}"/></linearGradient><radialGradient id="bdome" cx=".4" cy=".3"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9c6dc"/></radialGradient></defs><rect width="${W}" height="${H}" fill="url(#bsky)"/>`;
+ const r=rng(T.length+7);const dark=c.sky[0].startsWith('#0');if(dark||iss)for(let i=0;i<70;i++)g+=`<circle cx="${r()*W}" cy="${r()*H*.6}" r="${r()*1.3+.3}" fill="#fff" opacity="${.4+r()*.6}"/>`;
+ const L=[];const tag=(x,y,t)=>L.push(`<g><rect x="${x-t.length*6.5-8}" y="${y-13}" width="${t.length*13+16}" height="22" rx="11" fill="#14204a" opacity=".85"/><text x="${x}" y="${y+3}" font-size="13" font-weight="700" fill="#ffd166" text-anchor="middle">${t}</text></g>`);
+ if(iss){g+=`<ellipse cx="${W/2}" cy="${H+330}" rx="520" ry="420" fill="#2f6fb3"/><ellipse cx="${W/2}" cy="${H+330}" rx="520" ry="420" fill="none" stroke="#9fd0ff" stroke-width="6" opacity=".5"/>`;
+  g+=`<rect x="120" y="128" width="320" height="10" fill="#c9ced8"/><rect x="235" y="112" width="90" height="42" rx="18" fill="url(#bdome)" stroke="#8090b0"/>`;
+  [140,190,370,420].forEach(x=>g+=`<rect x="${x-18}" y="60" width="36" height="66" fill="#2a4d8f" stroke="#9fb8ff"/><rect x="${x-18}" y="140" width="36" height="66" fill="#2a4d8f" stroke="#9fb8ff"/>`);
+  tag(280,98,'우주 정거장 모듈');tag(140,228,'태양 전지판');}
+ else{if(c.earth)g+=`<circle cx="470" cy="62" r="26" fill="#2f6fb3"/><path d="M455 55q10-8 22 0t10 14" stroke="#4caf50" stroke-width="7" fill="none"/>`+`<text x="470" y="104" font-size="12" fill="#cfe0ff" text-anchor="middle">지구</text>`;
+  if(c.jup){g+=`<circle cx="455" cy="70" r="58" fill="#d9a066"/>`;[48,62,76,90].forEach((y,i)=>g+=`<rect x="397" y="${y}" width="116" height="6" fill="${i%2?'#b5703e':'#f0c48e'}" opacity=".8"/>`);g+=`<text x="455" y="146" font-size="12" fill="#cfe0ff" text-anchor="middle">목성</text>`;}
+  if(c.sun)g+=`<circle cx="470" cy="58" r="16" fill="${c.sun}" opacity=".9"/>`;
+  g+=`<path d="M0 ${H-95} Q140 ${H-120} 280 ${H-100} T${W} ${H-108} V${H} H0Z" fill="${c.gnd}"/><path d="M0 ${H-70} Q160 ${H-82} 320 ${H-66} T${W} ${H-74} V${H} H0Z" fill="${c.g2}" opacity=".55"/>`;
+  for(let i=0;i<9;i++){const x=r()*W,y=H-60+r()*45,w=10+r()*22;g+=`<ellipse cx="${x}" cy="${y}" rx="${w}" ry="${w*.32}" fill="${c.g2}" opacity=".7"/>`;}
+  if(c.lake)g+=`<ellipse cx="90" cy="${H-40}" rx="70" ry="14" fill="#2b2a3a" opacity=".85"/><text x="90" y="${H-14}" font-size="12" fill="#fff3d6" text-anchor="middle">메테인 호수</text>`;
+  if(c.jup)for(let i=0;i<5;i++){const x=40+r()*480,y=H-80+r()*60;g+=`<path d="M${x} ${y}l${20+r()*30} ${r()*8-4}" stroke="${c.g2}" stroke-width="2"/>`;}
+  const gy=H-100,under=has(/지하|땅속|동굴/),printed=has(/3D|3d|프린/),shield=has(/방사선|폭풍|두꺼운|보호|벽/);
+  // 본 기지 돔
+  if(under){g+=`<rect x="200" y="${gy+18}" width="150" height="58" rx="10" fill="#2a1a10" opacity=".55" stroke="#ffd166" stroke-dasharray="5 4"/><rect x="214" y="${gy+30}" width="122" height="34" rx="8" fill="url(#bdome)"/>`;tag(275,gy+92,'지하 거주 공간');}
+  g+=`<path d="M200 ${gy+6} A75 62 0 0 1 350 ${gy+6} Z" fill="url(#bdome)" stroke="${shield?'#5b6b8f':'#8090b0'}" stroke-width="${shield?7:2}"/>`;
+  if(printed)for(let k=1;k<6;k++)g+=`<path d="M${200+k*4} ${gy+6-k*10} A${75-k*4} ${62-k*10} 0 0 1 ${350-k*4} ${gy+6-k*10}" fill="none" stroke="#9aa6c0" stroke-width="1" opacity=".7"/>`;
+  g+=`<rect x="262" y="${gy-20}" width="26" height="26" rx="4" fill="#5a6c96"/><circle cx="240" cy="${gy-24}" r="7" fill="#9fd0ff"/><circle cx="310" cy="${gy-24}" r="7" fill="#9fd0ff"/>`;
+  tag(275,gy-72,printed?'3D 프린팅 기지':shield?'두꺼운 벽의 기지':'우리 기지');
+  const want={solar:has(/태양|전지|발전|에너지|전기/),robot:has(/로봇|로버|탐사차|드론/),dish:has(/통신|안테나|신호|위성|지구와 연락/),green:has(/온실|식물|농장|채소|재배|식량|먹/),ice:has(/얼음|식수|(?<![식생동괴곡])물(?!체|질)/),o2:has(/산소|공기|숨/),rocket:has(/로켓|우주선|착륙|귀환|발사/),nuke:has(/원자력|핵융합|원자로/)};
+  if(!Object.values(want).some(Boolean)){want.solar=want.robot=want.dish=true;}
+  if(want.solar){[40,92].forEach(x=>g+=`<g transform="translate(${x} ${gy-20}) rotate(-18)"><rect width="46" height="30" fill="#24457e" stroke="#9fb8ff"/><path d="M15 0v30M31 0v30M0 15h46" stroke="#9fb8ff" stroke-width="1"/></g><rect x="${x+20}" y="${gy+8}" width="4" height="22" fill="#9aa6c0"/>`);tag(90,gy-40,'태양 전지판');}
+  if(want.nuke){g+=`<rect x="140" y="${gy+2}" width="40" height="34" rx="6" fill="#d9dde6"/><circle cx="160" cy="${gy+19}" r="9" fill="#ffd166"/>`;tag(160,gy+52,'원자력 발전');}
+  if(want.dish){g+=`<path d="M380 ${gy-30} q20 26 46 6" fill="#e6e9f2" stroke="#8090b0"/><line x1="403" y1="${gy-14}" x2="403" y2="${gy+22}" stroke="#9aa6c0" stroke-width="4"/><path d="M412 ${gy-36} q10 -8 20 0 M408 ${gy-46} q16 -14 32 0" stroke="#ffd166" fill="none" stroke-width="2"/>`;tag(405,gy-64,'통신 안테나');}
+  if(want.green){g+=`<path d="M360 ${gy+30} A34 28 0 0 1 428 ${gy+30} Z" fill="#bff0c8" opacity=".85" stroke="#5fae75"/>`;for(let k=0;k<4;k++)g+=`<path d="M${372+k*14} ${gy+30} q-4 -12 0 -16 q4 4 0 16" fill="#2f9e55"/>`;tag(394,gy+50,'온실 농장');}
+  if(want.ice){g+=`<path d="M455 ${gy+40} l14 -18 14 18z" fill="#dff3ff" stroke="#8fc3e0"/><rect x="465" y="${gy-12}" width="6" height="40" fill="#9aa6c0"/><rect x="458" y="${gy-18}" width="20" height="8" fill="#5a6c96"/>`;tag(want.rocket?440:486,gy-36,'얼음 캐기 → 물');}
+  if(want.o2){g+=`<rect x="160" y="${gy-6}" width="20" height="40" rx="9" fill="#e9f2ff" stroke="#8090b0"/><text x="170" y="${gy+18}" font-size="10" font-weight="800" fill="#2e3f8f" text-anchor="middle">O₂</text>`;if(!want.nuke)tag(170,gy+52,'산소 탱크');}
+  if(want.robot){const x=want.ice?505:470,y=H-42;g+=`<rect x="${x-24}" y="${y-18}" width="48" height="16" rx="4" fill="#e6e9f2" stroke="#5a6c96"/><circle cx="${x-14}" cy="${y}" r="7" fill="#3a4766"/><circle cx="${x+14}" cy="${y}" r="7" fill="#3a4766"/><line x1="${x+12}" y1="${y-18}" x2="${x+20}" y2="${y-32}" stroke="#5a6c96" stroke-width="3"/><circle cx="${x+20}" cy="${y-34}" r="4" fill="#ff7a90"/>`;tag(x-10,y+26>H-6?y-48:y+24,'탐사 로봇');}
+  if(want.rocket){g+=`<path d="M520 ${gy-60} q10 18 10 60 h-20 q0-42 10-60z" fill="#f1f3f8" stroke="#8090b0"/><path d="M510 ${gy} l-8 12 h8z M530 ${gy} l8 12 h-8z" fill="#ff7a90"/>`;tag(505,gy-80,'우주선');}}
+ return g+L.join('')+'</svg>';}
 /* ---------- 6차시: 모둠 계획 불러오기 · 발표 자료 만들기 ---------- */
 (function(){const sec=$('#m-t6');if(!sec||!$('#presMake'))return;
  const F=k=>sec.querySelector(`[data-f="${k}"]`);
@@ -1268,7 +1308,7 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
    const ft=I?`<table class="ft"><tr><th>지구에서 거리</th><td>${esc(I[2])}</td></tr><tr><th>가는 데 걸리는 시간</th><td>${esc(I[3])}</td></tr><tr><th>통신 지연</th><td>${esc(I[4])}</td></tr><tr><th>중력</th><td>${esc(I[5])}</td></tr><tr><th>표면 온도</th><td>${esc(I[6])}</td></tr><tr><th>대기</th><td>${esc(I[7])}</td></tr></table><p style="font-size:15px;margin:8px 0 0">📌 ${esc(I[8])}</p>`:'<p class="empty">(목적지를 고르면 환경 정보가 들어감)</p>';
    const bn=val('계획-기지 이름'),sl=val('계획-포스터 문구'),gc=val('계획-기지 그림 구성'),pr=val('계획-포스터 역할');
    html=`<div class="paper"><h1 contenteditable="true">${I?I[0]+' ':''}${bn?esc(bn)+' · ':''}${esc(d.name)} 탐사 기지 계획</h1>${sl?`<p contenteditable="true" style="font-size:24px;font-weight:800;color:#c0392b;margin:0 0 6px">“${esc(sl)}”</p>`:''}<div class="sub">${esc(team)}${nm?' · '+esc(nm):''}${pr?' · '+esc(pr):''}</div>
-   <div class="pgrid"><div class="draw"><div>🖍 여기에 우리 기지 그림을 그리거나 붙이기<br><span style="font-size:14px">${gc?"그림에 넣을 것: "+esc(gc).replace(/\n/g," · "):"(인쇄한 뒤 직접 그리기 · 기지의 모양, 에너지, 물, 통신 장치 표시)"}</span></div></div><div class="pbox"><h3>🌍 목적지 환경</h3>${ft}</div>
+   <div class="pgrid"><div class="basebox"><div class="baseimg">${baseSVG(d.name,[gc,P.방법,P.어려움,P.목적,P.성과,val('계획-포스터 문구')].join(' '))}</div><div class="baseblank" style="display:none"><div class="draw"><div>🖍 여기에 우리 기지 그림을 그리거나 붙이기<br><span style="font-size:14px">${gc?"그림에 넣을 것: "+esc(gc).replace(/\n/g," · "):"(기지의 모양, 에너지, 물, 통신 장치 표시)"}</span></div></div></div><div class="baseph" style="display:none"></div><div class="basecap">우리 모둠이 쓴 내용으로 그린 기지 그림</div><div class="basebtn noprint"><button data-base="auto">🎨 자동 그림</button><button data-base="blank">🖍 직접 그릴 빈 칸</button><label class="bbtn">📷 우리 그림 사진 넣기<input type="file" accept="image/*" data-base="photo" hidden></label></div></div><div class="pbox"><h3>🌍 목적지 환경</h3>${ft}</div>
    <div class="pbox"><h3>🎯 탐사 목적</h3>${ed(P.목적,'탐사 목적')}</div><div class="pbox"><h3>🛠 탐사 방법 · 장비</h3>${ed(P.방법,'탐사 방법·장비')}</div>
    <div class="pbox"><h3>⚠️ 어려움과 해결</h3>${ed(P.어려움,'어려움과 해결')}</div><div class="pbox"><h3>✨ 기대 성과</h3>${ed(P.성과,'기대 성과')}</div></div></div>`;}
   else if(how.startsWith('우주 기업')){const cn=val('계획-회사 이름').split(/[·\-–|]/),co=cn[0].trim()?esc(cn[0].trim()):`${esc(d.name)} 스페이스`,slog=cn.slice(1).join(' ').trim(),st=val('계획-투자 강점'),iq=qa(val('계획-투자 질문')),ir=val('계획-투자 역할');
@@ -1300,6 +1340,11 @@ $$('.submitBtn').forEach(b=>b.onclick=async()=>{if(PREVIEW){$('#st'+b.dataset.le
  $('#presNext').onclick=()=>{if(si<slides.length-1){slides[si]=$('#presBody .slide16').innerHTML;si++;showSlide();}};
  $('#presPrint').onclick=()=>{if(slides.length){slides[si]=$('#presBody .slide16').innerHTML;$('#presBody').innerHTML=slides.map(x=>`<div class="slide16">${x}</div>`).join('');window.print();showSlide();}else window.print();};
  $('#presFull').onclick=()=>{const o=$('#presOv');if(document.fullscreenElement)document.exitFullscreen();else if(o.requestFullscreen)o.requestFullscreen();};
+ $('#presBody').addEventListener('click',e=>{const b=e.target.closest('button[data-base]');if(!b)return;const box=b.closest('.basebox');const m=b.dataset.base;
+  box.querySelector('.baseimg').style.display=m==='auto'?'':'none';box.querySelector('.baseblank').style.display=m==='blank'?'':'none';box.querySelector('.baseph').style.display='none';
+  box.querySelector('.basecap').textContent=m==='auto'?'우리 모둠이 쓴 내용으로 그린 기지 그림':'인쇄한 뒤 직접 그리기';});
+ $('#presBody').addEventListener('change',e=>{const f=e.target.closest('input[data-base="photo"]');if(!f||!f.files[0])return;const box=f.closest('.basebox');const rd=new FileReader();
+  rd.onload=()=>{const ph=box.querySelector('.baseph');ph.innerHTML=`<img src="${rd.result}" alt="우리 기지 그림">`;ph.style.display='';box.querySelector('.baseimg').style.display='none';box.querySelector('.baseblank').style.display='none';box.querySelector('.basecap').textContent='우리 모둠이 그린 기지 그림';};rd.readAsDataURL(f.files[0]);});
  $('#presClose').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();$('#presOv').classList.remove('on');};
  document.addEventListener('keydown',e=>{if(!$('#presOv').classList.contains('on')||!slides.length||e.target.isContentEditable)return;if(e.key==='ArrowRight')$('#presNext').click();if(e.key==='ArrowLeft')$('#presPrev').click();if(e.key==='Escape')$('#presClose').click();});
 })();
