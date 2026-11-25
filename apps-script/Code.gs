@@ -44,7 +44,7 @@ const PTS = { post: 2, answer: 3, good: 5, dailyBoardCap: 10, minLen: 10 };
 
 function doGet(e) {
   const p = (e && e.parameter) || {};
-  if (p.action === 'list') return json_(listQuestions_(String(p.lesson || 'all')));
+  if (p.action === 'list') return json_(listQuestionsCached_(String(p.lesson || 'all')));
   if (p.action === 'track') { const t = trackState_(); return json_({ ok: true, track: t.on ? { on: true, cls: t.cls, until: t.until } : { on: false } }); }
   if (p.action === 'settrack') return json_(setTrack_(String(p.key || ''), String(p.on || ''), String(p.cls || ''), String(p.min || '')));
   if (p.action === 'away') return json_(awayList_(String(p.key || ''), String(p.cls || '')));
@@ -58,9 +58,13 @@ function doPost(e) {
   let d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: '잘못된 요청' }); }
   if (!isValidStudent_(d)) return json_({ ok: false, error: '반·번호·이름을 확인하기' });
-  if (d.action === 'ping' || d.action === 'leave' || d.action === 'back') return json_(trackEvent_(d));
+  if (d.action === 'ping' || d.action === 'leave' || d.action === 'back') {
+    try { return json_(trackEvent_(d)); } catch (err) { return json_({ ok: true, track: { on: false } }); }
+  }
+  // 시트에 줄을 고쳐 쓰는 일(제출·첫 로그인 등록)만 잠금 → 게시판 글쓰기는 기다리지 않음
+  const needLock = d.action === 'submit' || d.action === 'login';
   const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
+  if (needLock && !lock.tryLock(28000)) return json_({ ok: false, busy: true, error: '지금 사용하는 친구가 많음. 잠시 후 다시 누르기' });
   try {
     const pen = penaltyIn_(penaltySheet_(), d);
     if (pen) return json_({ ok: false, penalty: true, relogin: d.action !== 'login', error: penaltyMsg_(pen) });
@@ -75,11 +79,14 @@ function doPost(e) {
     else if (d.action === 'mine') res = mine_(d);
     else if (d.action === 'groupPlan') res = groupPlan_(d);
     else return json_({ ok: false, error: '알 수 없는 요청' });
-    if (res.ok) { const p = pointsOf_(d.cls, d.num); res.points = p; res.level = level_(p); }
+    if (needLock) { lock.releaseLock(); }
+    if (res.ok) { try { const p = pointsOf_(d.cls, d.num); res.points = p; res.level = level_(p); } catch (err) { } }
     if (res.ok && (d.action === 'mine' || d.action === 'me')) res.penHist = penaltyHistory_(d);
     return json_(res);
+  } catch (err) {
+    return json_({ ok: false, busy: true, error: '서버가 잠시 바쁨. 잠시 후 다시 누르기 (' + String(err && err.message || err).slice(0, 60) + ')' });
   } finally {
-    lock.releaseLock();
+    try { lock.releaseLock(); } catch (err) { }
   }
 }
 
@@ -361,10 +368,28 @@ function addQuestion_(d, me) {
   if (LESSONS.indexOf(L) < 0 || !text) return { ok: false, error: '내용 확인' };
   const s = sheet_('질문', Q_HEAD);
   ensureHead_(s, Q_HEAD);
+  boxCols_(s, 'CB_Q', [8, 10, 11]);
   s.appendRow([safe_(newId_()), new Date(), L, safe_(d.cls), Number(d.num), safe_(clip_(d.name, 20)), safe_(text), false, safe_(tag), (tag === '궁금해요' && d.anon === true), false]);
-  const r = s.getLastRow();
-  s.getRange(r, 8).insertCheckboxes(); s.getRange(r, 10).insertCheckboxes(); s.getRange(r, 11).insertCheckboxes();
+  qaCacheClear_();
   return { ok: true };
+}
+
+// 체크 칸: 줄마다 넣지 않고 열 전체(2~3000행)에 한 번만 설정 → 동시에 글을 써도 안전·빠름
+function boxCols_(s, flag, cols) {
+  const props = PropertiesService.getScriptProperties();
+  if (props.getProperty(flag) === 'done') return;
+  const rule = SpreadsheetApp.newDataValidation().requireCheckbox().build();
+  cols.forEach(function (c) { s.getRange(2, c, 2999, 1).setDataValidation(rule); });
+  props.setProperty(flag, 'done');
+}
+// 게시판 목록은 15초 동안 저장해 두고 같이 씀 (새 글이 올라오면 바로 지움)
+function qaCacheClear_() { try { CacheService.getScriptCache().removeAll(['qa_all', 'qa_1', 'qa_2', 'qa_3', 'qa_4', 'qa_5', 'qa_6', 'qa_7']); } catch (e) { } }
+function listQuestionsCached_(lesson) {
+  const c = CacheService.getScriptCache(), k = 'qa_' + lesson;
+  try { const hit = c.get(k); if (hit) return JSON.parse(hit); } catch (e) { }
+  const out = listQuestions_(lesson);
+  try { const t = JSON.stringify(out); if (t.length < 95000) c.put(k, t, 15); } catch (e) { }
+  return out;
 }
 
 function addAnswer_(d) {
@@ -373,9 +398,9 @@ function addAnswer_(d) {
   if (!text || !qid) return { ok: false, error: '내용 확인' };
   const s = sheet_('답변', A_HEAD);
   ensureHead_(s, A_HEAD);
+  boxCols_(s, 'CB_A', [8, 9]);
   s.appendRow([safe_(newId_()), safe_(qid), new Date(), safe_(d.cls), Number(d.num), safe_(clip_(d.name, 20)), safe_(text), false, false]);
-  const r = s.getLastRow();
-  s.getRange(r, 8).insertCheckboxes(); s.getRange(r, 9).insertCheckboxes();
+  qaCacheClear_();
   return { ok: true };
 }
 
@@ -569,8 +594,8 @@ function trackEvent_(d) {
   return { ok: true, track: { on: true, cls: t.cls, until: t.until } };
 }
 function awWrite_(fn) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
+  const lock = LockService.getDocumentLock(); // 제출·로그인과 다른 잠금 → 서로 기다리지 않음
+  if (!lock.tryLock(8000)) return;
   try {
     const s = sheet_('이탈 기록', AW_HEAD);
     fn(s);

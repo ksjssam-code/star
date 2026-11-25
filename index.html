@@ -1194,7 +1194,13 @@ function quiz(el,lesson,items){const root=document.getElementById(el);QZ[lesson]
   it.o.forEach((t,j)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{if(QZ[lesson][i]===null)QZ[lesson][i]=j===it.a;o.querySelectorAll('button').forEach(x=>x.classList.remove('ok','no'));b.classList.add(j===it.a?'ok':'no');fb.innerHTML=j===it.a?'⭕ 정답! '+it.e:'❌ 다시 생각해 보기';fb.classList.add('show');};o.appendChild(b);});root.appendChild(d);});}
 
 /* ---------- API ---------- */
-async function api(payload){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const j=await r.json();if(!j.ok){if(j.relogin){openLogin();if(j.penalty){const m=$('#lgMsg');m.style.color='#e5484d';m.textContent=j.error;}}throw new Error(j.error||'오류');}if(user&&Array.isArray(j.penHist)){user.penHist=j.penHist;try{saveUser();}catch(e){}if(j.points==null)showWho();}setPoints(j);return j;}
+async function api(payload,tries){if(!API_URL)throw new Error('NOAPI');if(user)payload=Object.assign({cls:user.cls,num:user.num,name:user.name,pin:user.pin},payload);
+ tries=tries==null?((payload.action==='question'||payload.action==='answer'||payload.action==='submit')?3:1):tries;let j=null,lastErr='';
+ for(let t=0;t<tries;t++){if(t)await new Promise(r=>setTimeout(r,1500+Math.random()*2500));
+  try{const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(payload)});const tx=await r.text();try{j=JSON.parse(tx);}catch(e){j={ok:false,busy:true,error:'지금 사용하는 친구가 많음. 잠시 후 다시 누르기'};}}
+  catch(e){j={ok:false,busy:true,error:'인터넷 연결이 불안정함. 잠시 후 다시 누르기'};}
+  if(j.ok||!j.busy)break;lastErr=j.error;}
+ if(!j.ok){if(j.relogin){openLogin();if(j.penalty){const m=$('#lgMsg');m.style.color='#e5484d';m.textContent=j.error;}}throw new Error(j.error||'오류');}if(user&&Array.isArray(j.penHist)){user.penHist=j.penHist;try{saveUser();}catch(e){}if(j.points==null)showWho();}setPoints(j);return j;}
 async function apiGet(params){if(!API_URL)throw new Error('NOAPI');const r=await fetch(API_URL+'?'+new URLSearchParams(params));return r.json();}
 
 /* ---------- submit ---------- */
@@ -1330,7 +1336,7 @@ async function loadQA(){clearTimeout(qaTimer);const list=$('#qaList');
  if(typing){qaTimer=setTimeout(loadQA,15000);return;}
  try{const j=await apiGet({action:'list',lesson:qaL});qaData=(j.questions||[]).map(q=>Object.assign({cls:(String(q.who).match(/^2-\d/)||[''])[0],tag:'궁금해요',icon:'💬',lesson:qaL==='all'?'1':qaL},q,{tag:TAG_OLD[q.tag]||q.tag||'궁금해요',answers:(q.answers||[]).map(a=>Object.assign({icon:'💬'},a))}));renderQA();}
  catch(e){list.innerHTML='<div class="notice">게시판을 불러오지 못함. 🔄 새로고침 누르기</div>';}
- if($('#m-qa').classList.contains('on'))qaTimer=setTimeout(loadQA,30000);}
+ if($('#m-qa').classList.contains('on'))qaTimer=setTimeout(loadQA,document.hidden?60000:30000);}
 function renderQA(){const list=$('#qaList');list.innerHTML='';const qs=qaData.filter(q=>qaT==='all'||q.tag===qaT);
  CLS.forEach(c=>{const mine=c===myCls();const col=document.createElement('div');col.className='qacol'+(mine?' mine':'');const items=qs.filter(q=>q.cls===c);
   col.innerHTML=`<h3>${c}반 ${mine?'<span class="ltag" style="background:#ffd16633;color:#ffd166">우리 반</span>':''}<span class="cnt">글 ${items.length}</span></h3>`+(items.length?'':'<p class="muted small" style="padding:4px 6px">아직 글 없음</p>');
