@@ -49,6 +49,7 @@ function doGet(e) {
   if (p.action === 'settrack') return json_(setTrack_(String(p.key || ''), String(p.on || ''), String(p.cls || ''), String(p.min || '')));
   if (p.action === 'away') return json_(awayList_(String(p.key || ''), String(p.cls || '')));
   if (p.action === 'graphs') return json_(teacherGraphs_(String(p.key || '')));
+  if (p.action === 'ranks') return json_(teacherRanks_(String(p.key || '')));
   if (p.action === 'open') return json_({ ok: true, open: openLessons_() });
   if (p.action === 'setopen') return json_(setOpen_(String(p.key || ''), String(p.open || '')));
   return json_({ ok: true, msg: '별 탐구실 API 작동 중' });
@@ -150,6 +151,28 @@ function setOpen_(key, open) {
 }
 
 /* ---------------- 교사용: 학생 실험 데이터 ---------------- */
+/* 교사용: 반별 학생 점수·등급 (호기심 은하 활동 수 포함) */
+function teacherRanks_(key) {
+  if (!teacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
+  const pts = allPoints_(), cnt = {};
+  const tally = function (rows, iCls, iNum, iHide, iGood, f) {
+    rows.forEach(function (r) {
+      if (!r[0] || r[iHide] === true || String(r[iCls]) === '교사') return;
+      const k = key_(r[iCls], r[iNum]); const c = cnt[k] = cnt[k] || { q: 0, a: 0, good: 0 };
+      c[f]++; if (r[iGood] === true) c.good++;
+    });
+  };
+  tally(rows_(sheet_('질문', Q_HEAD), Q_HEAD.length), 3, 4, 7, 10, 'q');
+  tally(rows_(sheet_('답변', A_HEAD), A_HEAD.length), 3, 4, 7, 8, 'a');
+  const s = sheet_('학생 명부', R_HEAD), out = [];
+  if (s.getLastRow() >= 2) s.getRange(2, 1, s.getLastRow() - 1, 6).getValues().forEach(function (r) {
+    if (!r[0]) return;
+    const cls = String(r[0]).replace(/^'/, ''), k = key_(r[0], r[1]), p = pts[k] || 0, lv = level_(p), c = cnt[k] || { q: 0, a: 0, good: 0 };
+    out.push({ cls: cls, num: Number(r[1]), name: String(r[2]).replace(/^'/, ''), nick: String(r[3]).replace(/^'/, ''), points: p, level: lv.name, icon: lv.icon, idx: lv.idx, q: c.q, a: c.a, good: c.good, bonus: Number(r[5]) || 0 });
+  });
+  return { ok: true, students: out, levels: LEVELS.map(function (l) { return { min: l[0], name: l[1], icon: l[2] }; }) };
+}
+
 function teacherGraphs_(key) {
   if (!teacherOk_(key)) return { ok: false, error: '비밀번호가 맞지 않음', badKey: true };
   const s = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('2차시 탐구');

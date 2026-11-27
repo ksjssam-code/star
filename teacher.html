@@ -1784,6 +1784,26 @@ const TEACHER_HASH='1fa58357';
  </div>
  <div id="grBody" style="flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start"></div>
 </div>
+<div id="rkOv" style="position:fixed;inset:0 0 52px 0;z-index:27;background:#0a0f1f;display:none;flex-direction:column;font-family:'Noto Sans KR',sans-serif">
+ <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid #2a3666;background:#0c1328;flex-wrap:wrap">
+  <b style="color:#ffd166;font-size:17px">⭐ 반별 학생 등급 (호기심 은하 활동)</b>
+  <button class="rkSort on" data-s="pts">점수 높은 순</button><button class="rkSort" data-s="num">번호 순</button>
+  <label style="color:#9ba6d4;font-size:14px;display:flex;align-items:center;gap:4px">상 후보: 반별 상위 <select id="rkTop" style="font-size:14px;background:#18224a;color:#eef1ff;border:1px solid #2a3666;border-radius:6px;padding:3px"><option>3</option><option selected>5</option><option>10</option></select>명</label>
+  <button id="rkLoad">🔄 불러오기</button><button id="rkPrint">🖨 인쇄</button><span id="rkMsg" style="color:#9ba6d4;font-size:14px"></span>
+  <span id="rkKeyBox" style="display:none;align-items:center;gap:6px"><input id="rkKey" type="password" placeholder="교사용 페이지 비밀번호" style="font-size:14px;padding:5px 8px;border-radius:8px;border:1px solid #2a3666;background:#18224a;color:#eef1ff"><button id="rkKeyGo">확인</button></span>
+  <button id="rkClose" style="margin-left:auto;background:#ffd166;color:#1a1300;border-color:#ffd166;font-weight:700">✕ 수업 화면으로</button>
+ </div>
+ <div id="rkLegend" style="padding:6px 14px;color:#9ba6d4;font-size:13px;border-bottom:1px solid #1c2650"></div>
+ <div id="rkBody" style="flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start"></div>
+</div>
+<style>
+#rkOv button{font-size:14px;padding:6px 11px}.rkSort.on{background:#ffd166!important;color:#1a1300!important;border-color:#ffd166!important;font-weight:700}
+.rkCol{background:#111934;border:1px solid #2a3666;border-radius:12px;padding:8px}.rkCol h3{margin:2px 4px 8px;font-size:18px;color:#eef1ff}.rkCol h3 small{color:#9ba6d4;font-weight:500;font-size:13px}
+.rkRow{display:grid;grid-template-columns:28px 1fr auto;gap:6px;align-items:center;padding:6px 8px;border-radius:9px;margin-bottom:4px;background:#050913;border:1px solid #1c2650;font-size:14px;color:#eef1ff}
+.rkRow.top{border-color:#ffd166;background:#2a2410}.rkRow .md{font-size:16px;text-align:center}.rkRow .nm b{font-size:15px}.rkRow .nm small{display:block;color:#9ba6d4;font-size:12px}
+.rkRow .pt{text-align:right;white-space:nowrap}.rkRow .pt b{font-size:17px;color:#ffd166}.rkRow .pt small{display:block;color:#9ba6d4;font-size:12px}
+@media print{body>*{display:none!important}#rkOv{display:flex!important;position:static;background:#fff}#rkOv>div:first-child{display:none!important}#rkBody{overflow:visible;grid-template-columns:repeat(2,1fr)}.rkCol{background:#fff;border-color:#999;break-inside:avoid}.rkCol h3,.rkRow{color:#000}.rkRow{background:#fff;border-color:#ccc}.rkRow.top{background:#fff6d6}.rkRow .pt b{color:#b07a00}#rkLegend{color:#333}}
+</style>
 <div id="grBig" style="position:fixed;inset:0;z-index:60;background:#03060fee;display:none;align-items:center;justify-content:center;padding:20px;font-family:'Noto Sans KR',sans-serif">
  <div style="background:#111934;border:1px solid #ffd166;border-radius:16px;padding:16px 18px;width:min(1200px,96vw);max-height:94vh;overflow:auto">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><b id="grBigT" style="font-size:22px;color:#ffd166"></b><button id="grBigX" style="margin-left:auto;font-size:15px;padding:6px 12px">✕ 닫기</button></div>
@@ -1826,6 +1846,7 @@ const TEACHER_HASH='1fa58357';
   <button id="bFull">⛶ 전체 화면</button>
   <button id="bStu" style="color:#6ad1ff">🧑‍🎓 학생 탐구</button>
   <button id="bGraph" style="color:#63e6a3">📊 학생 그래프</button>
+  <button id="bRank" style="color:#ffb86b">⭐ 학생 등급</button>
   <button id="bOpen" style="color:#ffd166">🔒 차시 공개</button>
   <a id="bWatch" href="watch.html" target="_blank" rel="noopener" style="font-size:15px;padding:7px 12px;border:1px solid #ff7a90;border-radius:10px;color:#ff7a90;text-decoration:none;white-space:nowrap" title="휴대폰에서 열면 학생 이름이 화면에 비치지 않아요">👀 이탈 감지</a>
   <button id="bHelp">?</button>
@@ -1891,7 +1912,7 @@ tb.addEventListener('pointerup',()=>{if(tPress){clearTimeout(tPress);tToggle();}
 $('#bNext').onclick=next;$('#bPrev').onclick=prev;$('#bNotes').onclick=toggleNotes;$('#bMenu').onclick=toggleMenu;$('#bFull').onclick=full;
 $('#bHelp').onclick=()=>$('#help').classList.toggle('on');$('#helpClose').onclick=()=>$('#help').classList.remove('on');
 $$('#bar .les button').forEach(b=>b.onclick=()=>show(b.dataset.l,0,'fwd'));
-document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;const so=document.getElementById('stuOv');if(so&&so.style.display==='flex')return;const go=document.getElementById('grOv');if(go&&go.style.display==='flex')return;
+document.addEventListener('keydown',e=>{const t=e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;const so=document.getElementById('stuOv');if(so&&so.style.display==='flex')return;const go=document.getElementById('grOv');if(go&&go.style.display==='flex')return;const ro=document.getElementById('rkOv');if(ro&&ro.style.display==='flex')return;
  if(['ArrowRight','PageDown','Enter'].includes(e.key)||(e.key===' '&&t!=='BUTTON')){e.preventDefault();next();}
  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
  else if(e.key==='n'||e.key==='N'||e.key==='ㅜ')toggleNotes();
@@ -2383,6 +2404,30 @@ let __b=false;function __go(){if(__b)return;__b=true;__boot();}
  document.getElementById('bStu').onclick=()=>{const L=(document.querySelector('.lesson.on')||{}).id||'L1';const h='#t'+L.slice(1);
   if(!fr.src)fr.src='./?preview=1'+h;else{try{fr.contentWindow.location.hash=h;}catch(e){}}ov.style.display='flex';};
  document.getElementById('stuClose').onclick=()=>{ov.style.display='none';};})();
+</script>
+<script>
+/* ---------- 교사용: 반별 학생 등급 ---------- */
+(function(){const API_URL='https://script.google.com/macros/s/AKfycbwVO_lDia_o3fxS-EMlgSYQ-qIsqAYlu4HZzlGGnp0u9xTUz_CLxq8wp8zPSaR3stmY/exec';const $=s=>document.querySelector(s);const ov=$('#rkOv');if(!ov)return;let data=null,sort='pts';
+ const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ function render(){if(!data)return;const top=+$('#rkTop').value,body=$('#rkBody');body.innerHTML='';
+  $('#rkLegend').innerHTML='등급: '+(data.levels||[]).map(l=>`${l.icon} ${l.name} ${l.min}점`).join(' · ')+' &nbsp;|&nbsp; 점수 = 글 +2 · 답글 +3 (하루 최대 10점) · 좋은 글 +5 · 선생님 보정';
+  ['2-1','2-2','2-3','2-4'].forEach(c=>{const st=data.students.filter(x=>x.cls===c);const byPts=[...st].sort((a,b)=>b.points-a.points||a.num-b.num);
+   const rankOf={};let rk=0,prev=null;byPts.forEach((x,i)=>{if(x.points!==prev){rk=i+1;prev=x.points;}rankOf[x.num]=rk;});
+   const list=sort==='pts'?byPts:[...st].sort((a,b)=>a.num-b.num);
+   const col=document.createElement('div');col.className='rkCol';const act=st.filter(x=>x.points>0).length;
+   col.innerHTML=`<h3>${c}반 <small>${st.length}명 · 활동 ${act}명</small></h3>`+list.map(x=>{const r=rankOf[x.num],isTop=x.points>0&&r<=top;const md=r===1&&x.points>0?'🥇':r===2&&x.points>0?'🥈':r===3&&x.points>0?'🥉':(sort==='pts'?r:x.num);
+    return `<div class="rkRow${isTop?' top':''}"><div class="md">${md}</div><div class="nm"><b>${x.num}. ${esc(x.name)}</b><small>${esc(x.nick||'')} · 글 ${x.q} · 답글 ${x.a}${x.good?` · 좋은 글 ${x.good}`:''}${x.bonus?` · 보정 ${x.bonus>0?'+':''}${x.bonus}`:''}</small></div><div class="pt"><b>${x.points}</b>점<small>${x.icon} ${esc(x.level)}</small></div></div>`;}).join('')||'<p style="color:#9ba6d4">학생 없음</p>';
+   body.appendChild(col);});}
+ async function load(){let key='';try{key=localStorage.getItem('starlab_tkey')||'';}catch(e){}const msg=$('#rkMsg');
+  if(!key){msg.textContent='교사용 페이지 비밀번호를 한 번 더 입력하기';$('#rkKeyBox').style.display='inline-flex';return;}
+  msg.textContent='불러오는 중…';try{const j=await (await fetch(API_URL+'?action=ranks&key='+encodeURIComponent(key))).json();
+   if(!j.ok){msg.textContent=j.error==='알 수 없는 요청'||!j.error?'서버 업데이트가 필요해요':j.error;if(j.badKey){try{localStorage.removeItem('starlab_tkey');}catch(e){}$('#rkKeyBox').style.display='inline-flex';}return;}
+   data=j;$('#rkKeyBox').style.display='none';msg.textContent='불러온 시각 '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});render();}
+  catch(e){msg.textContent='불러오기 실패 (인터넷 연결 확인)';}}
+ $('#bRank').onclick=()=>{ov.style.display='flex';load();};$('#rkClose').onclick=()=>{ov.style.display='none';};$('#rkLoad').onclick=load;$('#rkPrint').onclick=()=>window.print();
+ $('#rkTop').onchange=render;document.querySelectorAll('.rkSort').forEach(b=>b.onclick=()=>{sort=b.dataset.s;document.querySelectorAll('.rkSort').forEach(x=>x.classList.toggle('on',x===b));render();});
+ $('#rkKeyGo').onclick=()=>{const v=$('#rkKey').value.trim();if(!v)return;try{localStorage.setItem('starlab_tkey',v);}catch(e){}load();};
+})();
 </script>
 <script>
 (function(){
